@@ -657,66 +657,100 @@
     }
 
     .letter-card {
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto;
-      background: #f7f6f3;
-      border-radius: 3px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       overflow: hidden;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.1);
       text-align: left;
-    }
-
-    .letter-left,
-    .letter-right {
-      padding: 48px 44px;
+      transform: rotate(-0.6deg);
     }
 
     .letter-left {
-      border-right: 1px solid #e0ddd8;
+      background: #eceae5;
+      padding: 52px 44px;
+    }
+
+    .letter-right {
+      background: #f7f6f3;
+      padding: 52px 44px;
     }
 
     .letter-body p {
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 16px;
-      line-height: 1.75;
-      color: #3a3a3a;
-      margin-bottom: 18px;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 20px;
     }
 
     .letter-body p:last-child {
       margin-bottom: 0;
     }
 
+    .letter-body strong {
+      color: #111;
+      font-weight: 700;
+    }
+
     .letter-highlight {
       font-weight: 700;
       color: #111 !important;
+      font-size: 17px !important;
     }
 
-    .letter-closer {
-      font-weight: 700;
-      font-style: italic;
-      color: #111 !important;
+    .letter-link {
+      color: #5e6ad2;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .letter-link:hover {
+      color: #4a54b8;
     }
 
     .letter-sig {
-      margin-top: 32px !important;
+      margin-top: 36px !important;
       margin-bottom: 0 !important;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .letter-sig-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #555;
+      flex-shrink: 0;
+    }
+
+    .letter-sig-info {
+      display: flex;
+      flex-direction: column;
     }
 
     .letter-sig-name {
       font-family: Georgia, 'Times New Roman', serif;
       font-weight: 700;
-      font-size: 18px;
+      font-size: 16px;
       color: #111;
     }
 
     .letter-sig-title {
       font-family: Georgia, 'Times New Roman', serif;
-      font-size: 14px;
+      font-size: 13px;
       color: #888;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     /* ================================ */
@@ -1595,11 +1629,10 @@
 
       .letter-card {
         grid-template-columns: 1fr;
+        transform: rotate(0);
       }
 
       .letter-left {
-        border-right: none;
-        border-bottom: 1px solid #e0ddd8;
         padding: 36px 28px;
       }
 
@@ -1749,18 +1782,21 @@
       <p class="section-label">Why we're building this</p>
       <div class="letter-card">
         <div class="letter-left letter-body">
-          <p>A brand pays $8k/month to an agency. The agency sends a report. The numbers don't move. The brand pays again next month.</p>
-          <p>Meanwhile, there's an operator who could genuinely beat that funnel. But they can't get a meeting. They don't have the connections or a pitch deck polished enough to get past the gatekeeper.</p>
+          <p>A brand pays <strong>$8k/month</strong> to an agency. The agency sends a report. The numbers don't move. The brand pays again next month. <strong>Nobody's accountable.</strong></p>
+          <p>Meanwhile, there's an operator who could genuinely beat that funnel. But they <strong>can't get a meeting.</strong> They don't have the connections or a pitch deck polished enough to get past the gatekeeper.</p>
           <p>So the brand keeps paying for mediocre. And the operator keeps being invisible.</p>
           <p class="letter-highlight">It's time to flip the model.</p>
         </div>
         <div class="letter-right letter-body">
           <p><strong>Beat My Funnel is the fix.</strong> A brand posts their metric and locks prize money in escrow. Operators apply. The brand picks a few finalists. One submission gets tested live. If it wins, the money moves. If not, full refund.</p>
-          <p>No retainers. No pitch decks. No handshake deals. Just: can you beat this number? Prove it.</p>
-          <p>The best operators shouldn't have to sell themselves. They should show their work and let the results talk.</p>
+          <p><strong>No retainers. No pitch decks. No handshake deals.</strong> Just: can you beat this number? Prove it.</p>
+          <p>The best operators shouldn't have to sell themselves. They should show their work and let the results talk. I'm glad you're here, and I'd love to have you <a href="#get-started" class="letter-link">join the beta</a>.</p>
           <div class="letter-sig">
-            <div class="letter-sig-name">— Kosta</div>
-            <div class="letter-sig-title">Founder, Beat My Funnel</div>
+            <div class="letter-sig-avatar">K</div>
+            <div class="letter-sig-info">
+              <div class="letter-sig-name">Kosta Hantzis</div>
+              <div class="letter-sig-title">Founder, Beat My Funnel</div>
+            </div>
           </div>
         </div>
       </div>
