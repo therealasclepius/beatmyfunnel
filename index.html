@@ -361,9 +361,24 @@
       font-weight: 500;
       color: var(--text-tertiary);
       text-decoration: none;
-      transition: color 0.15s ease;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
     }
-    .nav-cta:hover { color: var(--text-primary); }
+    .nav-cta:hover {
+      color: var(--text-primary);
+      border-color: var(--border-secondary);
+    }
+    .nav-cta-primary {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.06);
+      border-color: var(--border-secondary);
+    }
+    .nav-cta-primary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--text-quaternary);
+    }
 
     /* ================================ */
     /* HERO                             */
@@ -1482,8 +1497,8 @@
     <div class="nav-inner">
       <div class="logo">Beat My Funnel</div>
       <div class="nav-links">
-        <a href="#get-started" class="nav-cta">Post a Challenge</a>
         <a href="#get-started" class="nav-cta">Enter a Challenge</a>
+        <a href="#get-started" class="nav-cta nav-cta-primary">Post a Challenge</a>
       </div>
     </div>
   </nav>
