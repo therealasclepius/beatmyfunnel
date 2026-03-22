@@ -52,7 +52,9 @@ export default function Navbar({ profile }: NavbarProps) {
           </div>
         </div>
         <div style={styles.right}>
-          <span style={styles.userName}>{profile.display_name}</span>
+          <Link href="/profile" style={{ ...styles.userName, textDecoration: 'none', cursor: 'pointer' }}>
+            {profile.display_name}
+          </Link>
           <button onClick={handleSignOut} style={styles.signOut}>
             Sign out
           </button>

@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["http-server", "/Users/kostahantzis/Desktop/Beat My Funnel/public", "-p", "8080", "-c-1"],
       "port": 8080
+    },
+    {
+      "name": "app",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "--port", "3000"],
+      "port": 3000
     }
   ]
 }
