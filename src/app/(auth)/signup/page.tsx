@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import type { UserRole } from '@/types/database'
@@ -25,28 +26,41 @@ export default function SignupPage() {
 
     setLoading(true)
 
-    const supabase = createClient()
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, displayName, role }),
+      })
 
-    const { error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?redirect=/dashboard`,
-        data: {
-          role,
-          display_name: displayName,
-        },
-      },
-    })
+      const data = await res.json()
 
-    if (signUpError) {
-      setError(signUpError.message)
+      if (!res.ok) {
+        setError(data.error || 'Something went wrong')
+        setLoading(false)
+        return
+      }
+
+      // Now sign in the user client-side
+      const supabase = createClient()
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (signInError) {
+        // Account created but sign-in failed — tell them to log in
+        setError('Account created! Please log in.')
+        setLoading(false)
+        return
+      }
+
       setLoading(false)
-      return
+      setSuccess(true)
+    } catch {
+      setError('Something went wrong. Please try again.')
+      setLoading(false)
     }
-
-    setLoading(false)
-    setSuccess(true)
   }
 
   if (success) {
@@ -58,11 +72,13 @@ export default function SignupPage() {
           </Link>
 
           <div style={styles.card}>
-            <h1 style={styles.title}>Check your email</h1>
-            <p style={{ ...styles.subtitle, marginBottom: 0 }}>
-              We sent a confirmation link to <strong style={{ color: 'var(--text-primary)' }}>{email}</strong>.
-              Click it to activate your account.
+            <h1 style={styles.title}>You&apos;re in!</h1>
+            <p style={{ ...styles.subtitle, marginBottom: 16 }}>
+              Your account has been created.
             </p>
+            <Link href="/dashboard" style={{ ...styles.button, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
+              Go to Dashboard
+            </Link>
           </div>
         </div>
       </div>
