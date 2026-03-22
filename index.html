@@ -683,52 +683,9 @@
     .side.brand-side .check { color: var(--accent); }
     .side.operator-side .check { color: var(--green); }
 
-    .side form {
-      display: flex;
-      gap: 8px;
-    }
-
-    .side input[type="email"] {
-      flex: 1;
-      height: 36px;
-      padding: 0 12px;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-secondary);
-      border-radius: 6px;
-      color: var(--text-primary);
-      font-size: 13px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.15s ease;
-    }
-    .side input[type="email"]:focus {
-      border-color: var(--text-quaternary);
-    }
-    .side input[type="email"]::placeholder {
-      color: var(--text-quaternary);
-    }
-
-    .side .btn-sm {
-      height: 36px;
-      padding: 0 16px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: inherit;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: opacity 0.15s ease;
-    }
-    .side .btn-sm:hover { opacity: 0.85; }
-
-    .side.brand-side .btn-sm {
-      background: var(--accent);
-      color: white;
-    }
-    .side.operator-side .btn-sm {
-      background: var(--green);
-      color: white;
+    .typeform-embed {
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     /* ================================ */
@@ -985,8 +942,8 @@
         grid-template-columns: 1fr;
       }
 
-      .side form {
-        flex-direction: column;
+      .typeform-embed {
+        height: 280px;
       }
 
       .challenge-metrics {
@@ -1207,10 +1164,7 @@
             <li><span class="check">&#10003;</span> Review every submission before it goes live</li>
             <li><span class="check">&#10003;</span> Full refund if nobody beats your numbers</li>
           </ul>
-          <form class="waitlist-form" data-type="brand">
-            <input type="email" name="email" placeholder="you@company.com" required>
-            <button type="submit" class="btn-sm">Post a Challenge</button>
-          </form>
+          <div class="typeform-embed" data-tf-widget="i0ixw2ftxir/brands" data-tf-opacity="100" data-tf-inline-on-mobile data-tf-medium="snippet" style="width:100%;height:320px;"></div>
         </div>
 
         <div id="enter-challenge" class="side operator-side">
@@ -1222,10 +1176,7 @@
             <li><span class="check">&#10003;</span> Build a verified win record</li>
             <li><span class="check">&#10003;</span> Get paid automatically when you win</li>
           </ul>
-          <form class="waitlist-form" data-type="operator">
-            <input type="email" name="email" placeholder="you@company.com" required>
-            <button type="submit" class="btn-sm">Enter a Challenge</button>
-          </form>
+          <div class="typeform-embed" data-tf-widget="i0ixw2ftxir/operators" data-tf-opacity="100" data-tf-inline-on-mobile data-tf-medium="snippet" style="width:100%;height:320px;"></div>
         </div>
       </div>
     </div>
@@ -1300,6 +1251,9 @@
     </div>
   </footer>
 
+  <!-- Typeform Embed SDK -->
+  <script src="//embed.typeform.com/next/embed.js"></script>
+
   <!-- JS -->
   <script>
     const observer = new IntersectionObserver((entries) => {
@@ -1308,22 +1262,6 @@
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-    document.querySelectorAll('.waitlist-form').forEach(form => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = form.querySelector('input[name="email"]').value;
-        const type = form.dataset.type;
-        const button = form.querySelector('button');
-
-        button.textContent = "You're in";
-        button.disabled = true;
-        button.style.opacity = '0.5';
-        form.querySelector('input').disabled = true;
-
-        console.log('Waitlist:', { email, type });
-      });
-    });
   </script>
 
 </body>
