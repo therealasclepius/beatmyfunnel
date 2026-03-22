@@ -763,6 +763,15 @@
 
     .two-sided {
       padding: var(--section-padding) 0;
+      scroll-margin-top: 80px;
+    }
+
+    .two-sided-headline {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 48px;
     }
 
     .two-sided-grid {
@@ -1133,7 +1142,7 @@
   <nav>
     <div class="nav-inner">
       <div class="logo">Beat My Funnel</div>
-      <a href="#join" class="nav-cta">Get early access</a>
+      <a href="#get-started" class="nav-cta">Get early access</a>
     </div>
   </nav>
 
@@ -1194,14 +1203,14 @@
       </div>
 
       <!-- CTA -->
-      <div id="join" class="hero-cta-group hero-anim hero-anim-6">
+      <div class="hero-cta-group hero-anim hero-anim-6">
         <div class="dual-cta">
           <div class="cta-path">
-            <a href="#post-challenge" class="btn-primary">Post a Challenge</a>
+            <a href="#get-started" class="btn-primary">Post a Challenge</a>
             <span class="cta-micro">For brands &amp; founders</span>
           </div>
           <div class="cta-path">
-            <a href="#enter-challenge" class="btn-secondary">Enter a Challenge</a>
+            <a href="#get-started" class="btn-secondary">Enter a Challenge</a>
             <span class="cta-micro">For operators &amp; builders</span>
           </div>
         </div>
@@ -1320,10 +1329,12 @@
   <hr class="divider">
 
   <!-- TWO-SIDED VALUE -->
-  <section class="two-sided reveal">
+  <section id="get-started" class="two-sided reveal">
     <div class="container">
+      <p class="section-label">Get started</p>
+      <h2 class="two-sided-headline">Which side are you on?</h2>
       <div class="two-sided-grid">
-        <div id="post-challenge" class="side brand-side">
+        <div class="side brand-side">
           <p class="side-label brand">For Brands & Founders</p>
           <h3>Stop paying for effort. Start paying for wins.</h3>
           <ul>
@@ -1336,7 +1347,7 @@
           <p class="side-trust">Free to post. You only pay if someone beats your numbers.</p>
         </div>
 
-        <div id="enter-challenge" class="side operator-side">
+        <div class="side operator-side">
           <p class="side-label operator">For CRO Experts & Operators</p>
           <h3>Your track record is your pitch deck.</h3>
           <ul>
@@ -1407,11 +1418,11 @@
       <p>First 5 challenges launching soon.</p>
       <div class="btn-group">
         <div class="cta-path">
-          <a href="#post-challenge" class="btn-primary">Post a Challenge</a>
+          <a href="#get-started" class="btn-primary">Post a Challenge</a>
           <span class="cta-micro">For brands &amp; founders</span>
         </div>
         <div class="cta-path">
-          <a href="#enter-challenge" class="btn-secondary">Enter a Challenge</a>
+          <a href="#get-started" class="btn-secondary">Enter a Challenge</a>
           <span class="cta-micro">For operators &amp; builders</span>
         </div>
       </div>
