@@ -27,11 +27,15 @@ export default function SignupPage() {
 
     const supabase = createClient()
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?redirect=/dashboard`,
+        data: {
+          role,
+          display_name: displayName,
+        },
       },
     })
 
@@ -39,21 +43,6 @@ export default function SignupPage() {
       setError(signUpError.message)
       setLoading(false)
       return
-    }
-
-    // Insert profile row
-    if (data.user) {
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: data.user.id,
-        role,
-        display_name: displayName,
-      })
-
-      if (profileError) {
-        setError(profileError.message)
-        setLoading(false)
-        return
-      }
     }
 
     setLoading(false)
