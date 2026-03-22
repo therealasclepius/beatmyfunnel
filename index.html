@@ -1299,57 +1299,68 @@
     }
 
     /* ================================ */
-    /* FLOATING PILLS                   */
+    /* PILL SLIDER                      */
     /* ================================ */
 
-    .floating-pills {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+    .pill-slider {
+      position: relative;
       overflow: hidden;
       pointer-events: none;
-      z-index: 0;
+      margin: 0 auto 32px;
+      max-width: 100%;
+    }
+
+    .pill-slider::before,
+    .pill-slider::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .pill-slider::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg-primary), transparent);
+    }
+
+    .pill-slider::after {
+      right: 0;
+      background: linear-gradient(270deg, var(--bg-primary), transparent);
+    }
+
+    .pill-track {
+      display: flex;
+      gap: 10px;
+      width: max-content;
+      animation: pillScroll 20s linear infinite;
+    }
+
+    @keyframes pillScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
     }
 
     .pill {
-      position: absolute;
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 7px 14px;
+      padding: 6px 14px;
       border: 1px solid var(--pill-clr, rgba(255,255,255,0.1));
       border-radius: 99px;
       font-size: 12px;
       font-weight: 500;
-      color: var(--pill-clr, rgba(255,255,255,0.25));
+      color: var(--pill-clr, rgba(255,255,255,0.35));
       background: var(--pill-bg, rgba(255,255,255,0.03));
       white-space: nowrap;
-      opacity: 0.28;
-      backdrop-filter: blur(4px);
-      animation: float var(--duration) ease-in-out infinite;
-      animation-delay: var(--delay);
+      flex-shrink: 0;
     }
 
     .pill-icon {
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1;
-    }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0) translateX(0);
-      }
-      25% {
-        transform: translateY(var(--drift-y)) translateX(var(--drift-x));
-      }
-      50% {
-        transform: translateY(calc(var(--drift-y) * -0.5)) translateX(calc(var(--drift-x) * -1));
-      }
-      75% {
-        transform: translateY(calc(var(--drift-y) * 0.7)) translateX(calc(var(--drift-x) * 0.5));
-      }
     }
 
     /* ================================ */
@@ -1452,21 +1463,6 @@
 
   <!-- HERO -->
   <section class="hero">
-      <!-- Floating category pills -->
-      <div class="floating-pills">
-        <span class="pill" style="top: 12%; left: 8%; --duration: 18s; --delay: 0s; --drift-y: -15px; --drift-x: 10px; --pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">📄</span> Landing Pages</span>
-        <span class="pill" style="top: 22%; right: 10%; --duration: 22s; --delay: -3s; --drift-y: 12px; --drift-x: -8px; --pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">🎨</span> Ad Creative</span>
-        <span class="pill" style="top: 45%; left: 4%; --duration: 20s; --delay: -7s; --drift-y: -10px; --drift-x: 15px; --pill-clr: #f0bf00; --pill-bg: rgba(240,191,0,0.06);"><span class="pill-icon">✉️</span> Email Flows</span>
-        <span class="pill" style="top: 58%; right: 6%; --duration: 24s; --delay: -2s; --drift-y: 18px; --drift-x: -12px; --pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">💰</span> Pricing Pages</span>
-        <span class="pill" style="top: 35%; left: 14%; --duration: 19s; --delay: -5s; --drift-y: -12px; --drift-x: -8px; --pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">🏠</span> Homepage</span>
-        <span class="pill" style="top: 70%; right: 14%; --duration: 21s; --delay: -9s; --drift-y: 10px; --drift-x: 14px; --pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">📈</span> ROAS</span>
-        <span class="pill" style="top: 18%; left: 75%; --duration: 23s; --delay: -4s; --drift-y: -14px; --drift-x: -10px; --pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">🎯</span> CVR</span>
-        <span class="pill" style="top: 50%; right: 3%; --duration: 17s; --delay: -8s; --drift-y: 16px; --drift-x: 8px; --pill-clr: #eb5757; --pill-bg: rgba(235,87,87,0.06);"><span class="pill-icon">💵</span> CPA</span>
-        <span class="pill" style="top: 75%; left: 10%; --duration: 25s; --delay: -1s; --drift-y: -8px; --drift-x: 12px; --pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">📬</span> Open Rate</span>
-        <span class="pill" style="top: 65%; left: 78%; --duration: 20s; --delay: -6s; --drift-y: 14px; --drift-x: -15px; --pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">🛒</span> Add to Cart</span>
-        <span class="pill" style="top: 30%; right: 2%; --duration: 22s; --delay: -10s; --drift-y: -16px; --drift-x: -6px; --pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">💳</span> Checkout</span>
-        <span class="pill" style="top: 82%; left: 25%; --duration: 19s; --delay: -3s; --drift-y: 10px; --drift-x: -10px; --pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">⚡</span> A/B Test</span>
-      </div>
 
     <div class="container">
       <p class="hero-eyebrow hero-anim hero-anim-1">Private Beta</p>
@@ -1477,8 +1473,39 @@
         Beat My Funnel is a performance marketplace where brands post challenges and operators compete to prove they're better. Winners get paid — and often get the client.
       </p>
 
+      <!-- Pill slider -->
+      <div class="pill-slider hero-anim hero-anim-4">
+        <div class="pill-track">
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">📄</span> Landing Pages</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">🎨</span> Ad Creative</span>
+          <span class="pill" style="--pill-clr: #f0bf00; --pill-bg: rgba(240,191,0,0.06);"><span class="pill-icon">✉️</span> Email Flows</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">💰</span> Pricing Pages</span>
+          <span class="pill" style="--pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">🏠</span> Homepage</span>
+          <span class="pill" style="--pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">📈</span> ROAS</span>
+          <span class="pill" style="--pill-clr: #eb5757; --pill-bg: rgba(235,87,87,0.06);"><span class="pill-icon">🎯</span> CVR</span>
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">💵</span> CPA</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">📬</span> Open Rate</span>
+          <span class="pill" style="--pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">🛒</span> Add to Cart</span>
+          <span class="pill" style="--pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">💳</span> Checkout</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">⚡</span> A/B Test</span>
+          <!-- duplicate for seamless loop -->
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">📄</span> Landing Pages</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">🎨</span> Ad Creative</span>
+          <span class="pill" style="--pill-clr: #f0bf00; --pill-bg: rgba(240,191,0,0.06);"><span class="pill-icon">✉️</span> Email Flows</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">💰</span> Pricing Pages</span>
+          <span class="pill" style="--pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">🏠</span> Homepage</span>
+          <span class="pill" style="--pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">📈</span> ROAS</span>
+          <span class="pill" style="--pill-clr: #eb5757; --pill-bg: rgba(235,87,87,0.06);"><span class="pill-icon">🎯</span> CVR</span>
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">💵</span> CPA</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">📬</span> Open Rate</span>
+          <span class="pill" style="--pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">🛒</span> Add to Cart</span>
+          <span class="pill" style="--pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">💳</span> Checkout</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">⚡</span> A/B Test</span>
+        </div>
+      </div>
+
       <!-- THE LIVE CHALLENGE CARD — this IS the design -->
-      <div class="challenge-card hero-anim hero-anim-4">
+      <div class="challenge-card hero-anim hero-anim-5">
         <div class="challenge-header">
           <div class="challenge-status">
             <div class="status-dot"></div>
@@ -1517,7 +1544,7 @@
       </div>
 
       <!-- CTA -->
-      <div class="hero-cta-group hero-anim hero-anim-5">
+      <div class="hero-cta-group hero-anim hero-anim-6">
         <div class="dual-cta">
           <div class="cta-path">
             <a href="#get-started" class="btn-primary">Post a Challenge</a>
@@ -1796,7 +1823,7 @@
   <section class="final-cta reveal">
     <div class="container">
       <h2>The best operators are waiting.<br>Give them something to beat.</h2>
-      <p>First 5 challenges are free to post.</p>
+      <p>Free to post. Free to enter. You only pay if someone wins.</p>
       <div class="btn-group">
         <div class="cta-path">
           <a href="#get-started" class="btn-primary">Post a Challenge</a>
