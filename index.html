@@ -1432,16 +1432,17 @@
   <!-- JS: Animation Engine -->
   <script>
     // ── Count-up with easing ──
-    function countUp(el, target, prefix, suffix, duration) {
+    function countUp(el, target, prefix, suffix, duration, from) {
       const start = performance.now();
+      const startVal = from || 0;
       const isFloat = String(target).includes('.');
       function tick(now) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
         const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
         const current = isFloat
-          ? (target * eased).toFixed(1)
-          : Math.floor(target * eased).toLocaleString();
+          ? (startVal + (target - startVal) * eased).toFixed(1)
+          : Math.floor(startVal + (target - startVal) * eased).toLocaleString();
         el.textContent = prefix + current + suffix;
         if (progress < 1) requestAnimationFrame(tick);
       }
@@ -1492,7 +1493,7 @@
       entries.forEach(e => {
         if (e.isIntersecting && !prizeDone) {
           prizeDone = true;
-          countUp(prizeEl, 10000, '$', '', 1800);
+          countUp(prizeEl, 10000, '$', '', 1800, 100);
           const metrics = document.querySelectorAll('.metric-value');
           metrics.forEach((m, i) => {
             setTimeout(() => {
@@ -1506,7 +1507,7 @@
         }
       });
     }, { threshold: 0.3 });
-    if (prizeEl) { prizeEl.textContent = '$0'; prizeObs.observe(prizeEl); }
+    if (prizeEl) { prizeEl.textContent = '$100'; prizeObs.observe(prizeEl); }
 
     // ── Smooth scroll for anchors ──
     document.querySelectorAll('a[href^="#"]').forEach(a => {
