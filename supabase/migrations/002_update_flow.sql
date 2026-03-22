@@ -1,3 +1,7 @@
+-- Drop defaults before type cast
+ALTER TABLE challenges ALTER COLUMN status DROP DEFAULT;
+ALTER TABLE submissions ALTER COLUMN status DROP DEFAULT;
+
 -- Drop and recreate challenge_status with new values
 ALTER TYPE challenge_status RENAME TO challenge_status_old;
 CREATE TYPE challenge_status AS ENUM ('draft', 'open', 'accepting_submissions', 'testing', 'verifying', 'completed', 'refunded', 'cancelled');
@@ -7,9 +11,12 @@ DROP TYPE challenge_status_old;
 -- Drop and recreate submission_status with new values
 ALTER TYPE submission_status RENAME TO submission_status_old;
 CREATE TYPE submission_status AS ENUM ('pending', 'submitted', 'selected_for_testing', 'tested', 'winner', 'runner_up');
-ALTER TABLE challenges ALTER COLUMN status SET DEFAULT 'draft';
 ALTER TABLE submissions ALTER COLUMN status TYPE submission_status USING status::text::submission_status;
 DROP TYPE submission_status_old;
+
+-- Re-add defaults
+ALTER TABLE challenges ALTER COLUMN status SET DEFAULT 'draft';
+ALTER TABLE submissions ALTER COLUMN status SET DEFAULT 'pending';
 
 -- Add new fields to challenges
 ALTER TABLE challenges ADD COLUMN IF NOT EXISTS metric_unit text DEFAULT '%';
