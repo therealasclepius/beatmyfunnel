@@ -683,9 +683,31 @@
     .side.brand-side .check { color: var(--accent); }
     .side.operator-side .check { color: var(--green); }
 
-    .typeform-embed {
+    .btn-side {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 24px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      letter-spacing: -0.01em;
       border-radius: 8px;
-      overflow: hidden;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      width: 100%;
+    }
+    .btn-side:hover { opacity: 0.85; }
+
+    .btn-side-brand {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-side-operator {
+      background: var(--green);
+      color: white;
     }
 
     /* ================================ */
@@ -942,8 +964,8 @@
         grid-template-columns: 1fr;
       }
 
-      .typeform-embed {
-        height: 280px;
+      .btn-side {
+        height: 40px;
       }
 
       .challenge-metrics {
@@ -1164,7 +1186,7 @@
             <li><span class="check">&#10003;</span> Review every submission before it goes live</li>
             <li><span class="check">&#10003;</span> Full refund if nobody beats your numbers</li>
           </ul>
-          <div class="typeform-embed" data-tf-live="01KMB6WMJ5JZ2X5ZJF2F1TXTXG"></div>
+          <button class="btn-side btn-side-brand" data-tf-popup="01KMB6WMJ5JZ2X5ZJF2F1TXTXG" data-tf-size="70" data-tf-medium="snippet">Post a Challenge</button>
         </div>
 
         <div id="enter-challenge" class="side operator-side">
@@ -1176,7 +1198,7 @@
             <li><span class="check">&#10003;</span> Build a verified win record</li>
             <li><span class="check">&#10003;</span> Get paid automatically when you win</li>
           </ul>
-          <div class="typeform-embed" data-tf-live="01KMB6Y117ZVAN6CQZ8TC45W4G"></div>
+          <button class="btn-side btn-side-operator" data-tf-popup="01KMB6Y117ZVAN6CQZ8TC45W4G" data-tf-size="70" data-tf-medium="snippet">Enter a Challenge</button>
         </div>
       </div>
     </div>
