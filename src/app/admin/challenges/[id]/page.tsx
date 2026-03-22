@@ -83,6 +83,11 @@ export default function AdminChallengeDetailPage() {
   const [statusOverride, setStatusOverride] = useState<ChallengeStatus | ''>('')
   const [savingOverride, setSavingOverride] = useState(false)
 
+  // Escrow state
+  const [escrowStatus, setEscrowStatus] = useState<string | null>(null)
+  const [escrowLoading, setEscrowLoading] = useState(false)
+  const [escrowError, setEscrowError] = useState('')
+
   const loadData = useCallback(async () => {
     const supabase = createClient()
 
@@ -130,7 +135,98 @@ export default function AdminChallengeDetailPage() {
 
     setSubmissions((subsData || []) as unknown as SubmissionWithProfile[])
     setLoading(false)
+
+    // Fetch escrow status if transaction exists
+    if (c.escrow_transaction_id) {
+      fetchEscrowStatus(c.id)
+    }
   }, [id])
+
+  const fetchEscrowStatus = async (challengeId: string) => {
+    try {
+      const res = await fetch('/api/escrow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'status', challengeId }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setEscrowStatus(data.status)
+      }
+    } catch {
+      // Silently fail — escrow status is supplementary
+    }
+  }
+
+  const createEscrow = async () => {
+    if (!challenge) return
+    setEscrowLoading(true)
+    setEscrowError('')
+    try {
+      const res = await fetch('/api/escrow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', challengeId: challenge.id }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setEscrowError(data.error || 'Failed to create escrow')
+      } else {
+        setEscrowStatus(data.status)
+        await loadData()
+      }
+    } catch {
+      setEscrowError('Network error creating escrow')
+    }
+    setEscrowLoading(false)
+  }
+
+  const disburseEscrow = async () => {
+    if (!challenge) return
+    setEscrowLoading(true)
+    setEscrowError('')
+    try {
+      const res = await fetch('/api/escrow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'disburse', challengeId: challenge.id }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setEscrowError(data.error || 'Failed to disburse escrow')
+      } else {
+        setEscrowStatus(data.status)
+        await loadData()
+      }
+    } catch {
+      setEscrowError('Network error disbursing escrow')
+    }
+    setEscrowLoading(false)
+  }
+
+  const cancelEscrow = async () => {
+    if (!challenge) return
+    if (!confirm('Cancel escrow and refund the buyer?')) return
+    setEscrowLoading(true)
+    setEscrowError('')
+    try {
+      const res = await fetch('/api/escrow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'cancel', challengeId: challenge.id }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setEscrowError(data.error || 'Failed to cancel escrow')
+      } else {
+        setEscrowStatus(data.status)
+        await loadData()
+      }
+    } catch {
+      setEscrowError('Network error cancelling escrow')
+    }
+    setEscrowLoading(false)
+  }
 
   useEffect(() => {
     loadData()
@@ -180,6 +276,20 @@ export default function AdminChallengeDetailPage() {
 
     triggerEmail('winner_confirmed', { challengeId: id, winnerId: selectedSub.operator_id })
 
+    // Disburse escrow funds to winner if escrow exists
+    if (challenge.escrow_transaction_id) {
+      try {
+        await fetch('/api/escrow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'disburse', challengeId: id }),
+        })
+      } catch {
+        // Non-blocking — admin can manually disburse later
+        console.error('Failed to auto-disburse escrow on winner confirmation')
+      }
+    }
+
     await loadData()
     setSaving(false)
   }
@@ -206,6 +316,20 @@ export default function AdminChallengeDetailPage() {
       .eq('id', id)
 
     triggerEmail('refund', { challengeId: id })
+
+    // Cancel escrow and refund buyer if escrow exists
+    if (challenge.escrow_transaction_id) {
+      try {
+        await fetch('/api/escrow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'cancel', challengeId: id }),
+        })
+      } catch {
+        // Non-blocking — admin can manually cancel later
+        console.error('Failed to auto-cancel escrow on refund')
+      }
+    }
 
     await loadData()
     setSaving(false)
@@ -480,6 +604,70 @@ export default function AdminChallengeDetailPage() {
             {savingOverride ? 'Saving...' : 'Save'}
           </button>
         </div>
+      </div>
+
+      {/* Escrow */}
+      <div style={{ ...styles.card, marginTop: '24px' }}>
+        <h2 style={styles.sectionTitle}>Escrow Payment</h2>
+
+        {challenge.escrow_transaction_id ? (
+          <div style={{ marginTop: '16px' }}>
+            <div style={styles.detailsGrid}>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Transaction ID</span>
+                <span style={styles.detailValue}>{challenge.escrow_transaction_id}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Payment Status</span>
+                <span style={styles.detailValue}>{challenge.payment_status || 'unknown'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Escrow Status</span>
+                <span style={styles.detailValue}>{escrowStatus || 'loading...'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Amount</span>
+                <span style={styles.detailValue}>{formatCurrency(challenge.prize_amount)}</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+              <button
+                onClick={disburseEscrow}
+                disabled={escrowLoading}
+                style={styles.successButton}
+              >
+                {escrowLoading ? 'Processing...' : 'Disburse Funds'}
+              </button>
+              <button
+                onClick={cancelEscrow}
+                disabled={escrowLoading}
+                style={styles.dangerButton}
+              >
+                {escrowLoading ? 'Processing...' : 'Cancel & Refund'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ marginTop: '16px' }}>
+            <p style={{ fontSize: '14px', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
+              No escrow transaction has been created for this challenge yet.
+            </p>
+            <button
+              onClick={createEscrow}
+              disabled={escrowLoading}
+              style={styles.ghostButton}
+            >
+              {escrowLoading ? 'Creating...' : 'Create Escrow Transaction'}
+            </button>
+          </div>
+        )}
+
+        {escrowError && (
+          <p style={{ fontSize: '13px', color: '#eb5757', marginTop: '12px' }}>
+            {escrowError}
+          </p>
+        )}
       </div>
 
       {/* Applications */}

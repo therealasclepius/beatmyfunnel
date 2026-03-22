@@ -184,6 +184,10 @@ export default function NewChallengePage() {
             </div>
           </div>
 
+          <p style={{ fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '8px' }}>
+            Escrow will be set up when your challenge goes live. Funds are held securely by Escrow.com and only released when a winner is confirmed.
+          </p>
+
           <div style={styles.publishActions}>
             <button onClick={handlePublish} disabled={publishing} style={styles.button}>
               {publishing ? 'Publishing...' : 'Publish Challenge'}
