@@ -1490,7 +1490,7 @@
     const prizeEl = document.querySelector('.challenge-prize');
     if (prizeEl) {
       prizeEl.textContent = '$100';
-      // Wait for hero card animation to finish (0.6s delay + 1s anim), then count
+      // Start counting as soon as card fades in
       setTimeout(() => {
         countUp(prizeEl, 10000, '$', '', 2000, 100);
         const metrics = document.querySelectorAll('.metric-value');
@@ -1503,7 +1503,7 @@
           }, 600 + i * 300);
         });
         setTimeout(() => prizeEl.classList.add('prize-counted'), 2100);
-      }, 1200);
+      }, 300);
     }
 
     // ── Smooth scroll for anchors ──
