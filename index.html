@@ -936,6 +936,7 @@
 
     .faq {
       padding: var(--section-padding) 0;
+      text-align: center;
     }
 
     .faq h2 {
@@ -943,11 +944,19 @@
       font-weight: 500;
       line-height: 1.2;
       letter-spacing: -0.022em;
+      margin-bottom: 16px;
+    }
+
+    .faq-sub {
+      font-size: 15px;
+      color: var(--text-tertiary);
       margin-bottom: 48px;
     }
 
     .faq-list {
       max-width: 640px;
+      margin: 0 auto;
+      text-align: left;
     }
 
     .faq-item {
@@ -1799,7 +1808,9 @@
   <!-- FAQ -->
   <section class="faq reveal">
     <div class="container">
-      <h2>Questions</h2>
+      <p class="section-label">FAQ</p>
+      <h2>Everything you need to know</h2>
+      <p class="faq-sub">How challenges work, how you get paid, and why this isn't spec work.</p>
 
       <div class="faq-list">
         <details class="faq-item" open>
