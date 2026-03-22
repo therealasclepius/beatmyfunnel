@@ -6,6 +6,14 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import type { Profile, Application, Submission, Challenge } from '@/types/database'
 
+function triggerEmail(type: string, data: Record<string, string>) {
+  fetch('/api/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, data }),
+  }).catch(() => {}) // Fire and forget
+}
+
 export default function SubmitWorkPage() {
   const router = useRouter()
   const params = useParams()
@@ -121,6 +129,8 @@ export default function SubmitWorkPage() {
       .update({ status: 'submitted' })
       .eq('challenge_id', id)
       .eq('operator_id', user.id)
+
+    triggerEmail('new_submission', { challengeId: id, operatorId: user.id })
 
     router.push(`/challenges/${id}`)
   }

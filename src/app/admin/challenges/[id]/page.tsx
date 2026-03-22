@@ -58,6 +58,14 @@ const ALL_SUBMISSION_STATUSES: SubmissionStatus[] = [
   'pending', 'submitted', 'selected_for_testing', 'tested', 'winner', 'runner_up',
 ]
 
+function triggerEmail(type: string, data: Record<string, string>) {
+  fetch('/api/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, data }),
+  }).catch(() => {}) // Fire and forget
+}
+
 export default function AdminChallengeDetailPage() {
   const params = useParams()
   const id = params.id as string
@@ -170,6 +178,8 @@ export default function AdminChallengeDetailPage() {
       })
       .eq('id', id)
 
+    triggerEmail('winner_confirmed', { challengeId: id, winnerId: selectedSub.operator_id })
+
     await loadData()
     setSaving(false)
   }
@@ -194,6 +204,8 @@ export default function AdminChallengeDetailPage() {
         admin_verification_notes: adminNotes || null,
       })
       .eq('id', id)
+
+    triggerEmail('refund', { challengeId: id })
 
     await loadData()
     setSaving(false)

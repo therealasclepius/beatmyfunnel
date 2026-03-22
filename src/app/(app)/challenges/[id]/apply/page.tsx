@@ -7,6 +7,14 @@ import { createClient } from '@/lib/supabase/client'
 import StatusBadge from '@/components/status-badge'
 import type { Challenge, Profile, Application } from '@/types/database'
 
+function triggerEmail(type: string, data: Record<string, string>) {
+  fetch('/api/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, data }),
+  }).catch(() => {}) // Fire and forget
+}
+
 export default function ApplyToChallengePage() {
   const router = useRouter()
   const params = useParams()
@@ -102,6 +110,8 @@ export default function ApplyToChallengePage() {
       setSubmitting(false)
       return
     }
+
+    triggerEmail('new_application', { challengeId: id, operatorId: user.id })
 
     router.push(`/challenges/${id}`)
   }

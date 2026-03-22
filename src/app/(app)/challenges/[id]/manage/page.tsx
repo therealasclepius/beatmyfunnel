@@ -38,6 +38,14 @@ const FLOW_STEPS: { status: ChallengeStatus; label: string }[] = [
   { status: 'completed', label: 'Completed' },
 ]
 
+function triggerEmail(type: string, data: Record<string, string>) {
+  fetch('/api/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, data }),
+  }).catch(() => {}) // Fire and forget
+}
+
 export default function ManageChallengePage() {
   const router = useRouter()
   const params = useParams()
@@ -114,6 +122,13 @@ export default function ManageChallengePage() {
       .update({ status })
       .eq('id', applicationId)
 
+    if (status === 'finalist' && challenge) {
+      const app = applications.find((a) => a.id === applicationId)
+      if (app) {
+        triggerEmail('finalist_selected', { challengeId: challenge.id, operatorId: app.operator_id })
+      }
+    }
+
     await loadData()
     setUpdating(null)
   }
@@ -154,6 +169,13 @@ export default function ManageChallengePage() {
       .from('challenges')
       .update({ status: 'testing' })
       .eq('id', id)
+
+    if (challenge) {
+      const submission = submissions.find((s) => s.id === submissionId)
+      if (submission) {
+        triggerEmail('selected_for_testing', { challengeId: challenge.id, operatorId: submission.operator_id })
+      }
+    }
 
     await loadData()
     setUpdating(null)
