@@ -1348,6 +1348,78 @@
     }
 
     /* ================================ */
+    /* COMPETITION FLOW                 */
+    /* ================================ */
+
+    .competition-flow {
+      padding: var(--section-padding) 0;
+    }
+
+    .competition-flow h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 16px;
+    }
+
+    .competition-intro {
+      font-size: 16px;
+      color: var(--text-tertiary);
+      max-width: 540px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .flow-steps {
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .flow-step:first-child {
+      border-top: 1px solid var(--border-primary);
+    }
+
+    .flow-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(138, 143, 255, 0.1);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .flow-step p {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .competition-kicker {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-top: 32px;
+      max-width: 540px;
+    }
+
+    /* ================================ */
     /* PILL SLIDER                      */
     /* ================================ */
 
@@ -1775,6 +1847,50 @@
           <p>We verify the result via your Shopify or GA4 data. If they beat you, the prize transfers automatically. The best brands go further — they hire the winner.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- HOW THE COMPETITION WORKS -->
+  <section class="competition-flow reveal">
+    <div class="container">
+      <p class="section-label">The full process</p>
+      <h2>How the competition actually works</h2>
+      <p class="competition-intro">Posting a challenge doesn't mean 10 strangers get access to your store. Here's the exact sequence:</p>
+
+      <div class="flow-steps">
+        <div class="flow-step">
+          <span class="flow-number">1</span>
+          <p>You post your metric and lock your prize in escrow</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">2</span>
+          <p>Operators apply in 2 minutes — no work done yet</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">3</span>
+          <p>You review applicants and pick 3–5 finalists</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">4</span>
+          <p>Finalists submit their version — you review everything before it touches your site</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">5</span>
+          <p>You choose one submission to run as a live test</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">6</span>
+          <p>We verify the result directly via Shopify or GA4</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">7</span>
+          <p>They beat your number → prize releases automatically. Nobody beats it → full refund.</p>
+        </div>
+      </div>
+
+      <p class="competition-kicker">One submission goes live at a time. You stay in control at every step. You only pay if someone is actually better.</p>
     </div>
   </section>
 
