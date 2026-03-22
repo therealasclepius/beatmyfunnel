@@ -93,10 +93,18 @@
       },
       {
         "@type": "Question",
-        "name": "Is Beat My Funnel free to join?",
+        "name": "What does Beat My Funnel cost?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Beat My Funnel is free to join during the private beta. Brands only pay the challenge prize if someone beats their metrics. Operators compete for free and get paid when they win."
+          "text": "Free to post a challenge. Free to enter a challenge. Brands only pay the prize if someone beats their metrics — if nobody wins, you get a full refund. Operators receive the full advertised prize amount when they win. A small platform fee is charged on top of the prize, only when a challenge is won."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if nobody beats my funnel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You get a full refund. Your escrow is returned in full. Beat My Funnel takes nothing. If your funnel is already the best, you lose nothing by proving it."
         }
       }
     ]
@@ -701,6 +709,13 @@
     }
     .btn-side:hover { opacity: 0.85; }
 
+    .side-trust {
+      font-size: 12px;
+      color: var(--text-quaternary);
+      margin-top: 10px;
+      text-align: center;
+    }
+
     .btn-side-brand {
       background: var(--accent);
       color: white;
@@ -1186,6 +1201,7 @@
             <li><span class="check">&#10003;</span> Full refund if nobody beats your numbers</li>
           </ul>
           <button class="btn-side btn-side-brand" data-tf-popup="QdRhZ5Ik" data-tf-size="70" data-tf-medium="snippet">Post a Challenge</button>
+          <p class="side-trust">Free to post. You only pay if someone beats your numbers.</p>
         </div>
 
         <div id="enter-challenge" class="side operator-side">
@@ -1198,6 +1214,7 @@
             <li><span class="check">&#10003;</span> Get paid automatically when you win</li>
           </ul>
           <button class="btn-side btn-side-operator" data-tf-popup="nuvgiyXg" data-tf-size="70" data-tf-medium="snippet">Enter a Challenge</button>
+          <p class="side-trust">Free to enter. The full prize amount is yours if you win.</p>
         </div>
       </div>
     </div>
@@ -1237,8 +1254,13 @@
         </details>
 
         <details class="faq-item">
-          <summary>Is it free? <span class="icon">+</span></summary>
-          <div class="answer">Free to join during the private beta. Brands only pay the challenge prize if someone beats their metrics. Operators compete for free and get paid when they win.</div>
+          <summary>What does it cost? <span class="icon">+</span></summary>
+          <div class="answer">Free to post a challenge. Free to enter a challenge. Brands only pay the prize if someone beats their metrics — if nobody wins, you get a full refund. Operators receive the full advertised prize amount when they win. We charge a small platform fee on top of the prize, only when a challenge is won.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What happens if nobody beats my numbers? <span class="icon">+</span></summary>
+          <div class="answer">You get a full refund. Your escrow is returned in full. We take nothing. If your funnel is already the best, you lose nothing by proving it.</div>
         </details>
       </div>
     </div>
