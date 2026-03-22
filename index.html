@@ -648,94 +648,75 @@
     }
 
     /* ================================ */
-    /* MANIFESTO                        */
+    /* FOUNDER LETTER                   */
     /* ================================ */
 
-    .manifesto {
+    .founder-letter {
       padding: var(--section-padding) 0;
       text-align: center;
-      background: var(--bg-secondary);
-      border-top: 1px solid var(--border-primary);
-      border-bottom: 1px solid var(--border-primary);
     }
 
-    .manifesto-inner {
-      max-width: 640px;
+    .letter-card {
+      max-width: 900px;
       margin: 0 auto;
+      background: #f7f6f3;
+      border-radius: 3px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.08);
+      text-align: left;
     }
 
-    .manifesto h2 {
-      font-size: clamp(28px, 4vw, 36px);
-      font-weight: 500;
-      line-height: 1.2;
-      letter-spacing: -0.022em;
-      margin-bottom: 32px;
+    .letter-left,
+    .letter-right {
+      padding: 48px 44px;
     }
 
-    .manifesto-body {
+    .letter-left {
+      border-right: 1px solid #e0ddd8;
+    }
+
+    .letter-body p {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 16px;
+      line-height: 1.75;
+      color: #3a3a3a;
+      margin-bottom: 18px;
+    }
+
+    .letter-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .letter-highlight {
+      font-weight: 700;
+      color: #111 !important;
+    }
+
+    .letter-closer {
+      font-weight: 700;
+      font-style: italic;
+      color: #111 !important;
+    }
+
+    .letter-sig {
+      margin-top: 32px !important;
+      margin-bottom: 0 !important;
+    }
+
+    .letter-sig-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight: 700;
       font-size: 18px;
-      line-height: 1.8;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
+      color: #111;
     }
 
-    .manifesto-body + .manifesto-body {
-      margin-bottom: 12px;
-    }
-
-    .manifesto-body:last-of-type {
-      margin-bottom: 40px;
-    }
-
-    .manifesto-kicker {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: -0.015em;
-    }
-
-    /* ================================ */
-    /* PROBLEM                          */
-    /* ================================ */
-
-    .problem {
-      padding: var(--section-padding) 0;
-      text-align: center;
-    }
-
-    .problem .container {
-      max-width: 720px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-primary);
-      border-radius: 16px;
-      padding: 56px 48px;
-    }
-
-    .problem h2 {
-      font-size: clamp(28px, 4vw, 36px);
-      font-weight: 500;
-      line-height: 1.2;
-      letter-spacing: -0.022em;
-      margin-bottom: 24px;
-      max-width: 620px;
-      margin-left: auto;
-      margin-right: auto;
-      text-wrap: balance;
-    }
-
-    .problem p {
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text-tertiary);
-      max-width: 540px;
-      margin: 0 auto 16px;
-    }
-
-    .problem .kicker-accent {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--accent);
-      margin-top: 32px;
+    .letter-sig-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 14px;
+      color: #888;
+      margin-top: 4px;
     }
 
     /* ================================ */
@@ -1612,16 +1593,18 @@
         align-items: center;
       }
 
-      .manifesto-inner {
-        padding-left: 0;
+      .letter-card {
+        grid-template-columns: 1fr;
       }
 
-      .manifesto-body {
-        font-size: 16px;
+      .letter-left {
+        border-right: none;
+        border-bottom: 1px solid #e0ddd8;
+        padding: 36px 28px;
       }
 
-      .manifesto-kicker {
-        font-size: 18px;
+      .letter-right {
+        padding: 36px 28px;
       }
 
       .footer-inner {
@@ -1760,35 +1743,26 @@
     </div>
   </section>
 
-  <hr class="divider">
-
-  <!-- PROBLEM -->
-  <section class="problem reveal">
+  <!-- FOUNDER LETTER -->
+  <section class="founder-letter reveal">
     <div class="container">
-      <h2>The way performance work gets hired is broken.</h2>
-      <p>
-        Brands pay retainers before seeing a single result. Operators pitch with decks instead of proof. Everyone loses except the agencies.
-      </p>
-      <p>
-        Beat My Funnel flips it — you set the bar, you only pay if someone clears it.
-      </p>
-      <p class="kicker kicker-accent">
-        Trust isn't a handshake — it's $10,000 in escrow.
-      </p>
-    </div>
-  </section>
-
-
-  <!-- MANIFESTO -->
-  <section class="manifesto reveal">
-    <div class="container">
-      <div class="manifesto-inner">
-        <h2>A new wave of work is coming.</h2>
-        <p class="manifesto-body">The pitch deck era is over.</p>
-        <p class="manifesto-body">The best operators in the world shouldn't have to sell themselves with decks and proposals. They should prove it with results.</p>
-        <p class="manifesto-body">And the best brands shouldn't have to gamble on retainers. They should pay for performance.</p>
-        <p class="manifesto-body">Beat My Funnel is how the next generation of operators breaks in — and how smart brands find the talent everyone else missed.</p>
-        <p class="manifesto-kicker">Show your work. Win the room.</p>
+      <p class="section-label">Why we're building this</p>
+      <div class="letter-card">
+        <div class="letter-left letter-body">
+          <p>A brand pays $8k/month to an agency. The agency sends a report. The numbers don't move. The brand pays again next month.</p>
+          <p>Meanwhile, there's an operator who could genuinely beat that funnel. But they can't get a meeting. They don't have the connections or a pitch deck polished enough to get past the gatekeeper.</p>
+          <p>So the brand keeps paying for mediocre. And the operator keeps being invisible.</p>
+          <p class="letter-highlight">It's time to flip the model.</p>
+        </div>
+        <div class="letter-right letter-body">
+          <p><strong>Beat My Funnel is the fix.</strong> A brand posts their metric and locks prize money in escrow. Operators apply. The brand picks a few finalists. One submission gets tested live. If it wins, the money moves. If not, full refund.</p>
+          <p>No retainers. No pitch decks. No handshake deals. Just: can you beat this number? Prove it.</p>
+          <p>The best operators shouldn't have to sell themselves. They should show their work and let the results talk.</p>
+          <div class="letter-sig">
+            <div class="letter-sig-name">— Kosta</div>
+            <div class="letter-sig-title">Founder, Beat My Funnel</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
