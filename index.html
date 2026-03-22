@@ -653,12 +653,14 @@
 
     .manifesto {
       padding: var(--section-padding) 0;
+      text-align: center;
     }
 
     .manifesto-inner {
       max-width: 640px;
       border-left: 2px solid var(--accent);
       padding-left: 32px;
+      margin: 0 auto;
     }
 
     .manifesto h2 {
@@ -697,6 +699,7 @@
 
     .problem {
       padding: var(--section-padding) 0;
+      text-align: center;
     }
 
     .problem h2 {
@@ -706,6 +709,8 @@
       letter-spacing: -0.022em;
       margin-bottom: 24px;
       max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
       text-wrap: balance;
     }
 
@@ -714,7 +719,7 @@
       line-height: 1.7;
       color: var(--text-tertiary);
       max-width: 540px;
-      margin-bottom: 16px;
+      margin: 0 auto 16px;
     }
 
     .problem .kicker-accent {
@@ -730,6 +735,7 @@
 
     .how-it-works {
       padding: var(--section-padding) 0;
+      text-align: center;
     }
 
     .section-label {
@@ -739,6 +745,7 @@
       letter-spacing: 0.05em;
       color: var(--text-quaternary);
       margin-bottom: 16px;
+      text-align: center;
     }
 
     .how-it-works h2 {
@@ -747,6 +754,7 @@
       line-height: 1.2;
       letter-spacing: -0.022em;
       margin-bottom: 64px;
+      text-align: center;
     }
 
     .steps {
@@ -762,6 +770,7 @@
     .step {
       background: var(--bg-card);
       padding: 32px 28px;
+      text-align: left;
     }
 
     .step-number {
@@ -792,6 +801,7 @@
 
     .challenge-types {
       padding: var(--section-padding) 0;
+      text-align: center;
     }
 
     .challenge-types h2 {
@@ -800,6 +810,7 @@
       line-height: 1.2;
       letter-spacing: -0.022em;
       margin-bottom: 12px;
+      text-align: center;
     }
 
     .challenge-types .section-sub {
@@ -807,6 +818,8 @@
       color: var(--text-tertiary);
       margin-bottom: 48px;
       max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .types-grid {
@@ -822,6 +835,7 @@
     .type-item {
       background: var(--bg-card);
       padding: 24px;
+      text-align: left;
     }
 
     .type-name {
@@ -843,6 +857,7 @@
     .two-sided {
       padding: var(--section-padding) 0;
       scroll-margin-top: 80px;
+      text-align: center;
     }
 
     .two-sided-headline {
@@ -851,6 +866,7 @@
       line-height: 1.2;
       letter-spacing: -0.022em;
       margin-bottom: 48px;
+      text-align: center;
     }
 
     .two-sided-grid {
@@ -866,6 +882,7 @@
     .side {
       background: var(--bg-card);
       padding: 40px 36px;
+      text-align: left;
     }
 
     .side-label {
@@ -1375,43 +1392,66 @@
     .flow-steps {
       max-width: 600px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
+      position: relative;
       text-align: left;
+    }
+
+    /* Vertical connector line */
+    .flow-steps::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 16px;
+      bottom: 16px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--border-primary) 30%, var(--border-primary) 70%, var(--accent));
     }
 
     .flow-step {
       display: flex;
       align-items: flex-start;
-      gap: 16px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border-primary);
+      gap: 20px;
+      padding: 14px 0;
+      position: relative;
     }
 
     .flow-step:first-child {
-      border-top: 1px solid var(--border-primary);
+      border-top: none;
     }
 
     .flow-number {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: rgba(138, 143, 255, 0.1);
-      color: var(--accent);
+      background: var(--bg-primary);
+      border: 2px solid var(--border-secondary);
+      color: var(--text-secondary);
       font-size: 13px;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 1px;
+      position: relative;
+      z-index: 1;
+      transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .flow-step:hover .flow-number {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 12px rgba(138, 143, 255, 0.2);
     }
 
     .flow-step p {
       font-size: 15px;
       line-height: 1.5;
       color: var(--text-secondary);
+      padding-top: 5px;
+    }
+
+    .flow-step:hover p {
+      color: var(--text-primary);
     }
 
     .competition-kicker {
