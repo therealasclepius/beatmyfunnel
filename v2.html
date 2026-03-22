@@ -1126,6 +1126,136 @@
     }
 
     /* ================================ */
+    /* OPERATOR BUZZ MARQUEE            */
+    /* ================================ */
+
+    .operator-buzz {
+      padding: 64px 0;
+    }
+
+    .marquee-container {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .marquee-container::before,
+    .marquee-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .marquee-container::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg-primary), transparent);
+    }
+
+    .marquee-container::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg-primary), transparent);
+    }
+
+    .marquee-container:hover .marquee-row {
+      animation-play-state: paused;
+    }
+
+    .marquee-row {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      padding: 8px 0;
+    }
+
+    .marquee-row--left {
+      animation: marqueeLeft 25s linear infinite;
+    }
+
+    .marquee-row--right {
+      animation: marqueeRight 25s linear infinite;
+    }
+
+    @keyframes marqueeLeft {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @keyframes marqueeRight {
+      from { transform: translateX(-50%); }
+      to { transform: translateX(0); }
+    }
+
+    .marquee-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      min-width: fit-content;
+      white-space: nowrap;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 8px;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .marquee-card:hover {
+      opacity: 1;
+    }
+
+    .marquee-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .marquee-avatar--accent {
+      background: var(--accent);
+    }
+
+    .marquee-avatar--green {
+      background: var(--green);
+    }
+
+    .marquee-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .marquee-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .marquee-card-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .marquee-card-handle {
+      font-size: 12px;
+      color: var(--text-quaternary);
+    }
+
+    .marquee-card-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* ================================ */
     /* RESPONSIVE                       */
     /* ================================ */
 
@@ -1353,6 +1483,39 @@
       <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
       <p class="social-proof-kicker">$45,000 in public challenges posted this week — with no platform, no escrow, and no verification. Until now.</p>
+    </div>
+  </section>
+
+  <!-- OPERATOR BUZZ MARQUEE -->
+  <section class="operator-buzz reveal">
+    <div class="container">
+      <p class="section-label">The operators responded</p>
+    </div>
+    <div class="marquee-container">
+      <!-- Row 1: scrolls left -->
+      <div class="marquee-row marquee-row--left">
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">B</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Brandon Doyle</span><span class="marquee-card-handle">@Brandondoyle</span></div><span class="marquee-card-text">"I'm ready Jacob!"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">J</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Jason Applebaum</span><span class="marquee-card-handle">@Jason______A</span></div><span class="marquee-card-text">"I love this!"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">D</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Dave</span><span class="marquee-card-handle">@DaveDiederen</span></div><span class="marquee-card-text">"Let's freaking get it! Just messaged &#x1F64F;&#x1F3FD;"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">S</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Stefan Georgi</span><span class="marquee-card-handle">@StefanGeorgi</span></div><span class="marquee-card-text">"I'll take a crack"</span></div></div>
+        <!-- Duplicate for seamless loop -->
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">B</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Brandon Doyle</span><span class="marquee-card-handle">@Brandondoyle</span></div><span class="marquee-card-text">"I'm ready Jacob!"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">J</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Jason Applebaum</span><span class="marquee-card-handle">@Jason______A</span></div><span class="marquee-card-text">"I love this!"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">D</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Dave</span><span class="marquee-card-handle">@DaveDiederen</span></div><span class="marquee-card-text">"Let's freaking get it! Just messaged &#x1F64F;&#x1F3FD;"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">S</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Stefan Georgi</span><span class="marquee-card-handle">@StefanGeorgi</span></div><span class="marquee-card-text">"I'll take a crack"</span></div></div>
+      </div>
+      <!-- Row 2: scrolls right -->
+      <div class="marquee-row marquee-row--right">
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">B</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Brandon Doyle</span><span class="marquee-card-handle">@Brandondoyle</span></div><span class="marquee-card-text">"I'd love to try"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">D</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Daniel</span><span class="marquee-card-handle">@DanielDoor8</span></div><span class="marquee-card-text">"Interested"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">P</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Paddy</span><span class="marquee-card-handle">@paddymedia</span></div><span class="marquee-card-text">"Messaged"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">T</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">The Funnel Professor</span><span class="marquee-card-handle">@DTC_Quizbuilder</span></div><span class="marquee-card-text">"&#x1F9E1;"</span></div></div>
+        <!-- Duplicate for seamless loop -->
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">B</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Brandon Doyle</span><span class="marquee-card-handle">@Brandondoyle</span></div><span class="marquee-card-text">"I'd love to try"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">D</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Daniel</span><span class="marquee-card-handle">@DanielDoor8</span></div><span class="marquee-card-text">"Interested"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">P</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">Paddy</span><span class="marquee-card-handle">@paddymedia</span></div><span class="marquee-card-text">"Messaged"</span></div></div>
+        <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">T</div><div class="marquee-card-body"><div class="marquee-card-meta"><span class="marquee-card-name">The Funnel Professor</span><span class="marquee-card-handle">@DTC_Quizbuilder</span></div><span class="marquee-card-text">"&#x1F9E1;"</span></div></div>
+      </div>
     </div>
   </section>
 
