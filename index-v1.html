@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Beat My Funnel — Post a Performance Challenge. Pay Only If Someone Beats You.</title>
+  <meta name="description" content="Post your funnel metrics, put real money in escrow, and challenge the best operators to beat your numbers. If nobody wins, you get your money back.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://beatmyfunnel.com/">
+  <meta property="og:title" content="Beat My Funnel — Pay Only If Someone Beats Your Funnel">
+  <meta property="og:description" content="Post a performance challenge. Real money in escrow. CRO experts, copywriters, and funnel builders compete to beat your numbers. You only pay if they win.">
+  <meta property="og:image" content="https://beatmyfunnel.com/og-image.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beat My Funnel — Pay Only If Someone Beats Your Funnel">
+  <meta name="twitter:description" content="Post a performance challenge. Real money in escrow. You only pay if someone beats your numbers.">
+  <meta name="twitter:image" content="https://beatmyfunnel.com/og-image.png">
+
+  <link rel="canonical" href="https://beatmyfunnel.com/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+
+  <!-- Fonts: Inter Variable -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- AI SEO: Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Beat My Funnel",
+    "url": "https://beatmyfunnel.com",
+    "description": "A pay-for-performance marketplace where brands post funnel challenges with real money in escrow, and top CRO operators compete to beat their metrics."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Beat My Funnel",
+    "url": "https://beatmyfunnel.com",
+    "description": "Pay-for-performance funnel challenge marketplace",
+    "foundingDate": "2026"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Beat My Funnel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Beat My Funnel is a pay-for-performance marketplace where brands post funnel challenges with real money in escrow. CRO experts, copywriters, and funnel builders compete to beat the brand's current metrics. If someone beats your numbers, they get paid. If nobody does, you get your money back."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do funnel challenges work on Beat My Funnel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A brand defines their metric (conversion rate, ROAS, CPA, etc.), sets a prize amount, and deposits funds into escrow. Top operators submit their version of the funnel. The brand reviews entries before anything goes live. Results are verified via Shopify or GA4 data. If someone beats the metric, the money transfers automatically. If nobody does, the brand gets a full refund."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What types of funnel challenges can you post?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can challenge on landing page or funnel conversion rate, ad creative CPA or ROAS, email open rate and click rate, homepage add-to-cart rate, and pricing page checkout conversion. Every challenge has a preset win condition defined before anyone starts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does escrow work on Beat My Funnel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When you post a challenge, your prize money is deposited into escrow and locked until the challenge resolves. If an operator beats your metric, the funds transfer to them automatically. If nobody beats it, you get a full refund. No exceptions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How are results verified on Beat My Funnel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Results are verified directly through your analytics platform — Shopify, GA4, or other connected data sources. No screenshots, no self-reporting. The data speaks for itself."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does Beat My Funnel cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Free to post a challenge. Free to enter a challenge. Brands only pay the prize if someone beats their metrics — if nobody wins, you get a full refund. Operators receive the full advertised prize amount when they win. A small platform fee is charged on top of the prize, only when a challenge is won."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if nobody beats my funnel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You get a full refund. Your escrow is returned in full. Beat My Funnel takes nothing. If your funnel is already the best, you lose nothing by proving it."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Linear-inspired dark palette */
+      --bg-primary: #08090a;
+      --bg-secondary: #111113;
+      --bg-tertiary: #191a1c;
+      --bg-card: #141416;
+
+      /* Borders */
+      --border-primary: #23252a;
+      --border-secondary: #2e3035;
+      --border-subtle: rgba(255,255,255,0.06);
+
+      /* Text - Linear hierarchy */
+      --text-primary: #f7f8f8;
+      --text-secondary: #b4b8c0;
+      --text-tertiary: #6e7279;
+      --text-quaternary: #484b52;
+
+      /* Accent */
+      --accent: #ff4500;
+      --accent-muted: rgba(255, 69, 0, 0.12);
+      --accent-subtle: rgba(255, 69, 0, 0.06);
+      --green: #27a644;
+      --green-muted: rgba(39, 166, 68, 0.12);
+
+      /* Sizing */
+      --max-width: 1080px;
+      --section-padding: 128px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      letter-spacing: -0.011em;
+    }
+
+    /* ================================ */
+    /* UTILITY CLASSES                  */
+    /* ================================ */
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ================================ */
+    /* ANIMATION SYSTEM                 */
+    /* ================================ */
+
+    /* Scroll-triggered reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children inside a reveal group */
+    .reveal-group .reveal { transition-delay: calc(var(--i, 0) * 0.08s); }
+
+    /* Hero entrance */
+    @keyframes heroIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+        filter: blur(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    .hero-anim {
+      opacity: 0;
+      animation: heroIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-anim-1 { animation-delay: 0.05s; }
+    .hero-anim-2 { animation-delay: 0.15s; }
+    .hero-anim-3 { animation-delay: 0.3s; }
+    .hero-anim-4 { animation-delay: 0.45s; }
+    .hero-anim-5 { animation-delay: 0.6s; }
+    .hero-anim-6 { animation-delay: 0.8s; }
+
+    /* Prize count-up glow pulse */
+    @keyframes prizeGlow {
+      0% { text-shadow: none; }
+      50% { text-shadow: 0 0 40px rgba(255, 69, 0, 0.3), 0 0 80px rgba(255, 69, 0, 0.1); }
+      100% { text-shadow: none; }
+    }
+
+    .prize-counted {
+      animation: prizeGlow 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+    }
+
+    /* Card hover glow */
+    .challenge-card {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.4s ease,
+                  box-shadow 0.4s ease;
+    }
+    .challenge-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-secondary);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 60px rgba(255, 69, 0, 0.04);
+    }
+
+    /* Steps stagger on scroll */
+    .step {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .step.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Metric values scale in */
+    @keyframes metricPop {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .metric-value {
+      opacity: 0;
+    }
+    .metric-value.counted {
+      animation: metricPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Type items stagger */
+    .type-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .type-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Two-sided cards slide in from edges */
+    .side {
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .brand-side {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    .operator-side {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    .brand-side.in-view,
+    .operator-side.in-view {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* FAQ items */
+    .faq-item {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .faq-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Smooth accordion */
+    .faq-item .answer {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* ================================ */
+    /* NAV                              */
+    /* ================================ */
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(8, 9, 10, 0.8);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .logo span { color: var(--text-tertiary); }
+
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .nav-cta:hover { color: var(--text-primary); }
+
+    /* ================================ */
+    /* HERO                             */
+    /* ================================ */
+
+    .hero {
+      padding: 80px 0 0;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Subtle radial glow behind the challenge card */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -40%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(255, 69, 0, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-quaternary);
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 500;
+      line-height: 1.0;
+      letter-spacing: -0.022em;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      text-wrap: balance;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-tertiary);
+      max-width: 480px;
+      margin: 0 auto 56px;
+      text-wrap: balance;
+    }
+
+    /* ================================ */
+    /* LIVE CHALLENGE CARD — THE HERO   */
+    /* ================================ */
+
+    .challenge-card {
+      position: relative;
+      z-index: 1;
+      max-width: 560px;
+      margin: 0 auto 64px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .challenge-header {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .challenge-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(39, 166, 68, 0.5);
+    }
+
+    .challenge-type {
+      font-size: 12px;
+      color: var(--text-quaternary);
+    }
+
+    .challenge-body {
+      padding: 32px 24px;
+    }
+
+    .challenge-prize {
+      font-size: clamp(56px, 10vw, 80px);
+      font-weight: 600;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .challenge-label {
+      font-size: 13px;
+      color: var(--text-quaternary);
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+    }
+
+    .challenge-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--border-primary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .metric {
+      background: var(--bg-secondary);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-quaternary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .challenge-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .escrow-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-quaternary);
+    }
+
+    .escrow-icon {
+      width: 14px;
+      height: 14px;
+      opacity: 0.5;
+    }
+
+    .entries-count {
+      font-size: 12px;
+      color: var(--text-quaternary);
+    }
+
+    /* ================================ */
+    /* PRIMARY CTA                      */
+    /* ================================ */
+
+    .hero-cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: var(--section-padding);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      height: 40px;
+      padding: 0 20px;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      height: 40px;
+      padding: 0 20px;
+      background: transparent;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      border-radius: 8px;
+      border: 1px solid var(--border-secondary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .btn-secondary:hover {
+      border-color: var(--text-quaternary);
+      color: var(--text-secondary);
+    }
+
+    .dual-cta {
+      display: flex;
+      gap: 24px;
+    }
+
+    .cta-path {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-micro {
+      font-size: 12px;
+      color: var(--text-quaternary);
+    }
+
+    .hero-micro {
+      font-size: 12px;
+      color: var(--text-quaternary);
+      margin-top: 4px;
+    }
+
+    /* ================================ */
+    /* DIVIDER                          */
+    /* ================================ */
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border-primary);
+    }
+
+    /* ================================ */
+    /* PROBLEM                          */
+    /* ================================ */
+
+    .problem {
+      padding: var(--section-padding) 0;
+    }
+
+    .problem h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 24px;
+      max-width: 620px;
+      text-wrap: balance;
+    }
+
+    .problem p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-tertiary);
+      max-width: 540px;
+      margin-bottom: 16px;
+    }
+
+    .problem .kicker-accent {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-top: 32px;
+    }
+
+    /* ================================ */
+    /* HOW IT WORKS                     */
+    /* ================================ */
+
+    .how-it-works {
+      padding: var(--section-padding) 0;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-quaternary);
+      margin-bottom: 16px;
+    }
+
+    .how-it-works h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 64px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .step {
+      background: var(--bg-card);
+      padding: 32px 28px;
+    }
+
+    .step-number {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-quaternary);
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-tertiary);
+    }
+
+    /* ================================ */
+    /* CHALLENGE TYPES                  */
+    /* ================================ */
+
+    .challenge-types {
+      padding: var(--section-padding) 0;
+    }
+
+    .challenge-types h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 12px;
+    }
+
+    .challenge-types .section-sub {
+      font-size: 15px;
+      color: var(--text-tertiary);
+      margin-bottom: 48px;
+      max-width: 520px;
+    }
+
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .type-item {
+      background: var(--bg-card);
+      padding: 24px;
+    }
+
+    .type-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .type-metric {
+      font-size: 13px;
+      color: var(--text-quaternary);
+    }
+
+    /* ================================ */
+    /* TWO-SIDED VALUE                  */
+    /* ================================ */
+
+    .two-sided {
+      padding: var(--section-padding) 0;
+      scroll-margin-top: 80px;
+    }
+
+    .two-sided-headline {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 48px;
+    }
+
+    .two-sided-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .side {
+      background: var(--bg-card);
+      padding: 40px 36px;
+    }
+
+    .side-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+
+    .side-label.brand { color: var(--accent); }
+    .side-label.operator { color: var(--green); }
+
+    .side h3 {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+
+    .side ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 32px;
+    }
+
+    .side li {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      padding: 6px 0;
+    }
+
+    .side li .check {
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 13px;
+    }
+
+    .side.brand-side .check { color: var(--accent); }
+    .side.operator-side .check { color: var(--green); }
+
+    .btn-side {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 24px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      letter-spacing: -0.01em;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      width: 100%;
+    }
+    .btn-side:hover { opacity: 0.85; }
+
+    .side-trust {
+      font-size: 12px;
+      color: var(--text-quaternary);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .btn-side-brand {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-side-operator {
+      background: var(--green);
+      color: white;
+    }
+
+    /* ================================ */
+    /* FAQ                              */
+    /* ================================ */
+
+    .faq {
+      padding: var(--section-padding) 0;
+    }
+
+    .faq h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 48px;
+    }
+
+    .faq-list {
+      max-width: 640px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .faq-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 20px 0;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      list-style: none;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary .icon {
+      color: var(--text-quaternary);
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .faq-item[open] summary .icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-item .answer {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-tertiary);
+      padding-bottom: 20px;
+      max-width: 540px;
+    }
+
+    /* ================================ */
+    /* FINAL CTA                        */
+    /* ================================ */
+
+    .final-cta {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.022em;
+      margin-bottom: 16px;
+    }
+
+    .final-cta p {
+      font-size: 15px;
+      color: var(--text-tertiary);
+      margin-bottom: 32px;
+    }
+
+    .final-cta .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* ================================ */
+    /* FOOTER                           */
+    /* ================================ */
+
+    footer {
+      border-top: 1px solid var(--border-primary);
+      padding: 24px 0;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-quaternary);
+    }
+
+    .footer-right {
+      font-size: 12px;
+      color: var(--text-quaternary);
+    }
+
+    /* ================================ */
+    /* HERO SCOPE LINE                  */
+    /* ================================ */
+
+    .hero-scope {
+      font-size: 14px;
+      color: var(--text-quaternary);
+      line-height: 1.6;
+      margin: 0 auto 48px;
+      max-width: 480px;
+    }
+
+    /* ================================ */
+    /* SOCIAL PROOF / TWEETS            */
+    /* ================================ */
+
+    .social-proof {
+      padding: var(--section-padding) 0;
+    }
+
+    .social-proof h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 48px;
+      max-width: 680px;
+      text-wrap: balance;
+    }
+
+    .tweets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .tweets-grid-two {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 760px;
+    }
+
+    .tweet-embed-wrap {
+      min-width: 0;
+    }
+
+    .tweet-context {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-quaternary);
+      margin-bottom: 12px;
+      padding-left: 4px;
+    }
+
+    .tweet-context-winner {
+      color: var(--green);
+    }
+
+    .tweet-embed-winner {
+      position: relative;
+    }
+
+    /* Make Twitter embeds fill their container */
+    .tweet-embed-wrap .twitter-tweet {
+      margin: 0 !important;
+    }
+
+    /* Fallback styling for blockquotes before JS loads */
+    .tweet-embed-wrap blockquote.twitter-tweet {
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .tweet-embed-wrap blockquote.twitter-tweet a {
+      color: var(--text-quaternary);
+    }
+
+    .social-proof-kicker {
+      font-size: 15px;
+      color: var(--text-tertiary);
+      margin-top: 32px;
+      max-width: 640px;
+    }
+
+    /* ================================ */
+    /* RESPONSIVE                       */
+    /* ================================ */
+
+    @media (max-width: 768px) {
+      :root {
+        --section-padding: 80px;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .tweets-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .two-sided-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .types-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .challenge-metrics {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .challenge-prize {
+        font-size: 56px;
+      }
+
+      .side {
+        padding: 28px 24px;
+      }
+
+      .final-cta .btn-group {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .types-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-side {
+        height: 40px;
+      }
+
+      .challenge-metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">Beat My Funnel</div>
+      <a href="#get-started" class="nav-cta">Get early access</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <p class="hero-eyebrow hero-anim hero-anim-1">Private Beta</p>
+
+      <h1 class="hero-anim hero-anim-2">Let the best operators compete<br>to beat your funnel.</h1>
+
+      <p class="hero-sub hero-anim hero-anim-3">
+        Brands post challenges with real money in escrow.<br>
+        Operators compete to win it.
+      </p>
+
+      <p class="hero-scope hero-anim hero-anim-4">
+        Landing pages. Ad creative. Emails. Pricing pages.<br>
+        If it has a metric, it can be challenged.
+      </p>
+
+      <!-- THE LIVE CHALLENGE CARD — this IS the design -->
+      <div class="challenge-card hero-anim hero-anim-5">
+        <div class="challenge-header">
+          <div class="challenge-status">
+            <div class="status-dot"></div>
+            <span style="color: var(--green);">Live</span>
+          </div>
+          <span class="challenge-type">Landing Page CVR</span>
+        </div>
+
+        <div class="challenge-body">
+          <div class="challenge-prize">$10,000</div>
+          <div class="challenge-label">Prize in escrow — verified via Shopify</div>
+
+          <div class="challenge-metrics">
+            <div class="metric">
+              <div class="metric-value">3.2%</div>
+              <div class="metric-label">Current CVR</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">5,000</div>
+              <div class="metric-label">Sessions</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">14d</div>
+              <div class="metric-label">Time Left</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="challenge-footer">
+          <div class="escrow-status">
+            <svg class="escrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            Funds locked in escrow
+          </div>
+          <span class="entries-count">3 entries</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="hero-cta-group hero-anim hero-anim-6">
+        <div class="dual-cta">
+          <div class="cta-path">
+            <a href="#get-started" class="btn-primary">Post a Challenge</a>
+            <span class="cta-micro">For brands &amp; founders</span>
+          </div>
+          <div class="cta-path">
+            <a href="#get-started" class="btn-secondary">Enter a Challenge</a>
+            <span class="cta-micro">For operators &amp; builders</span>
+          </div>
+        </div>
+        <p class="hero-micro">First 5 challenges launching soon</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PROBLEM -->
+  <section class="problem reveal">
+    <div class="container">
+      <h2>You're paying for effort,<br>not outcomes.</h2>
+      <p>
+        Agencies charge retainers whether they win or lose.
+        Beat My Funnel flips the model — you set the bar,
+        you only pay if someone clears it.
+      </p>
+      <p class="kicker kicker-accent">
+        Trust isn't a handshake — it's $10,000 in escrow.
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SOCIAL PROOF — THIS IS ALREADY HAPPENING -->
+  <section class="social-proof reveal">
+    <div class="container">
+      <p class="section-label">This is already happening</p>
+      <h2>Founders are posting these challenges on Twitter.<br>We're building the platform.</h2>
+
+      <div class="tweets-grid tweets-grid-two">
+        <!-- Tweet 1: Jacob's $15k challenge -->
+        <div class="tweet-embed-wrap">
+          <div class="tweet-context">$15k Challenge</div>
+          <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none"><p lang="en" dir="ltr">Will pay any landing page builder $15k if they can beat the performance of our current main landing page (which is a pdp) <br><br>Can be any style you wish (listicle, advertorial, sales page, pdp)<br><br>If it doesn&#39;t beat our current page I will pay $0<br><br>If your up for it, dm me</p>&mdash; Jacob (@jforjacob) <a href="https://twitter.com/jforjacob/status/2027396509768003780?ref_src=twsrc%5Etfw">February 27, 2026</a></blockquote>
+        </div>
+
+        <!-- Tweet 2: Zach's $30k challenge -->
+        <div class="tweet-embed-wrap">
+          <div class="tweet-context">$30k Challenge</div>
+          <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none"><p lang="en" dir="ltr">Well <a href="https://twitter.com/jforjacob?ref_src=twsrc%5Etfw">@jforjacob</a> offered $15k, so I&#39;ll offer double.<br><br>$30k to whoever can beat our top compression sock funnel for <a href="https://t.co/kzNaufCawt">https://t.co/kzNaufCawt</a><br><br>If your page can hit 100k sessions at a higher Northbeam 1DCROAS, the money is yours.<br><br>Could be as simple as a lander or pdp update.</p>&mdash; Zach Stuck (@zachmstuck) <a href="https://twitter.com/zachmstuck/status/2035504300332576914?ref_src=twsrc%5Etfw">March 21, 2026</a></blockquote>
+        </div>
+      </div>
+
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+      <p class="social-proof-kicker">$15k challenge. $30k challenge. Real money, real metrics, managed over DMs. We're building a better venue.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works reveal">
+    <div class="container">
+      <p class="section-label">How it works</p>
+      <h2>Three steps. You only pay if you lose.</h2>
+
+      <div class="steps">
+        <div class="step">
+          <p class="step-number">Step 01</p>
+          <h3>Post your challenge</h3>
+          <p>Define your metric, set your prize, deposit funds into escrow. Your money is locked until the challenge resolves — no exceptions.</p>
+        </div>
+        <div class="step">
+          <p class="step-number">Step 02</p>
+          <h3>The best operators compete</h3>
+          <p>CRO experts, copywriters, and funnel builders submit their version. You review entries before anything goes live.</p>
+        </div>
+        <div class="step">
+          <p class="step-number">Step 03</p>
+          <h3>Winner gets paid automatically</h3>
+          <p>We verify the result via your Shopify or GA4 data. If they beat you, the money transfers. If nobody does, you get it back.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CHALLENGE TYPES -->
+  <section class="challenge-types reveal">
+    <div class="container">
+      <p class="section-label">Challenge types</p>
+      <h2>What can you put up for a challenge?</h2>
+      <p class="section-sub">Every challenge has a preset win condition defined before anyone starts. No ambiguity. No disputes.</p>
+
+      <div class="types-grid">
+        <div class="type-item">
+          <p class="type-name">Landing Page / Funnel</p>
+          <p class="type-metric">Beat my CVR at X sessions</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Ad Creative</p>
+          <p class="type-metric">Beat my CPA or ROAS at $X spend</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Email</p>
+          <p class="type-metric">Beat my open + click rate on the same segment</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Homepage</p>
+          <p class="type-metric">Beat my add-to-cart rate at X sessions</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Pricing Page</p>
+          <p class="type-metric">Beat my checkout conversion at X sessions</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- TWO-SIDED VALUE -->
+  <section id="get-started" class="two-sided reveal">
+    <div class="container">
+      <p class="section-label">Get started</p>
+      <h2 class="two-sided-headline">Which side are you on?</h2>
+      <div class="two-sided-grid">
+        <div class="side brand-side">
+          <p class="side-label brand">For Brands & Founders</p>
+          <h3>Stop paying for effort. Start paying for wins.</h3>
+          <ul>
+            <li><span class="check">&#10003;</span> You define the metric and win condition</li>
+            <li><span class="check">&#10003;</span> Money stays in escrow until verified</li>
+            <li><span class="check">&#10003;</span> Review every submission before it goes live</li>
+            <li><span class="check">&#10003;</span> Full refund if nobody beats your numbers</li>
+          </ul>
+          <button class="btn-side btn-side-brand" data-tf-popup="QdRhZ5Ik" data-tf-size="70" data-tf-medium="snippet">Post a Challenge</button>
+          <p class="side-trust">Free to post. You only pay if someone beats your numbers.</p>
+        </div>
+
+        <div class="side operator-side">
+          <p class="side-label operator">For CRO Experts & Operators</p>
+          <h3>Your track record is your pitch deck.</h3>
+          <ul>
+            <li><span class="check">&#10003;</span> Browse open challenges with guaranteed payouts</li>
+            <li><span class="check">&#10003;</span> Compete on real metrics, not pitches</li>
+            <li><span class="check">&#10003;</span> Build a verified win record</li>
+            <li><span class="check">&#10003;</span> Get paid automatically when you win</li>
+          </ul>
+          <button class="btn-side btn-side-operator" data-tf-popup="nuvgiyXg" data-tf-size="70" data-tf-medium="snippet">Enter a Challenge</button>
+          <p class="side-trust">Free to enter. The full prize amount is yours if you win.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FAQ -->
+  <section class="faq reveal">
+    <div class="container">
+      <h2>Questions</h2>
+
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary>What is Beat My Funnel? <span class="icon">+</span></summary>
+          <div class="answer">A pay-for-performance marketplace where brands post funnel challenges with real money in escrow. CRO experts, copywriters, and funnel builders compete to beat the brand's current metrics. If someone beats your numbers, they get paid. If nobody does, you get your money back.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do challenges work? <span class="icon">+</span></summary>
+          <div class="answer">A brand defines their metric (conversion rate, ROAS, CPA, etc.), sets a prize amount, and deposits funds into escrow. Top operators submit their version. The brand reviews entries before anything goes live. Results are verified via Shopify or GA4 data. If someone beats the metric, the money transfers automatically. If nobody does, the brand gets a full refund.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How does escrow work? <span class="icon">+</span></summary>
+          <div class="answer">When you post a challenge, your prize money is deposited into escrow and locked until the challenge resolves. If an operator beats your metric, the funds transfer to them automatically. If nobody beats it, you get a full refund. No exceptions.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How are results verified? <span class="icon">+</span></summary>
+          <div class="answer">Results are verified directly through your analytics platform — Shopify, GA4, or other connected data sources. No screenshots, no self-reporting. The data speaks for itself.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What types of challenges can I post? <span class="icon">+</span></summary>
+          <div class="answer">Landing page and funnel conversion rate, ad creative CPA or ROAS, email open rate and click rate, homepage add-to-cart rate, and pricing page checkout conversion. Every challenge has a preset win condition defined before anyone starts.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What does it cost? <span class="icon">+</span></summary>
+          <div class="answer">Free to post a challenge. Free to enter a challenge. Brands only pay the prize if someone beats their metrics — if nobody wins, you get a full refund. Operators receive the full advertised prize amount when they win. We charge a small platform fee on top of the prize, only when a challenge is won.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What happens if nobody beats my numbers? <span class="icon">+</span></summary>
+          <div class="answer">You get a full refund. Your escrow is returned in full. We take nothing. If your funnel is already the best, you lose nothing by proving it.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FINAL CTA -->
+  <section class="final-cta reveal">
+    <div class="container">
+      <h2>Ready to put your number<br>on the line?</h2>
+      <p>First 5 challenges launching soon.</p>
+      <div class="btn-group">
+        <div class="cta-path">
+          <a href="#get-started" class="btn-primary">Post a Challenge</a>
+          <span class="cta-micro">For brands &amp; founders</span>
+        </div>
+        <div class="cta-path">
+          <a href="#get-started" class="btn-secondary">Enter a Challenge</a>
+          <span class="cta-micro">For operators &amp; builders</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">Beat My Funnel</div>
+      <div class="footer-right">Private beta — first 5 challenges launching soon</div>
+    </div>
+  </footer>
+
+  <!-- Typeform Embed SDK -->
+  <script src="//embed.typeform.com/next/embed.js"></script>
+
+  <!-- JS: Animation Engine -->
+  <script>
+    // ── Count-up with easing ──
+    function countUp(el, target, prefix, suffix, duration, from) {
+      const start = performance.now();
+      const startVal = from || 0;
+      const isFloat = String(target).includes('.');
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const current = isFloat
+          ? (startVal + (target - startVal) * eased).toFixed(1)
+          : Math.floor(startVal + (target - startVal) * eased).toLocaleString();
+        el.textContent = prefix + current + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ── Scroll observer: sections ──
+    const sectionObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => sectionObs.observe(el));
+
+    // ── Scroll observer: staggered children ──
+    const childObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const children = e.target.querySelectorAll('.type-item, .step, .faq-item');
+        children.forEach((child, i) => {
+          child.style.transitionDelay = (i * 0.07) + 's';
+          child.classList.add('in-view');
+        });
+        childObs.unobserve(e.target);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.types-grid, .steps, .faq-list').forEach(el => childObs.observe(el));
+
+    // ── Two-sided cards slide in ──
+    const sideObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.querySelectorAll('.side').forEach((side, i) => {
+          side.style.transitionDelay = (i * 0.15) + 's';
+          side.classList.add('in-view');
+        });
+        sideObs.unobserve(e.target);
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.two-sided-grid').forEach(el => sideObs.observe(el));
+
+    // ── Prize count-up + metric pop ──
+    const prizeEl = document.querySelector('.challenge-prize');
+    if (prizeEl) {
+      prizeEl.textContent = '$100';
+      // Start counting as soon as card fades in
+      setTimeout(() => {
+        countUp(prizeEl, 10000, '$', '', 2000, 100);
+        const metrics = document.querySelectorAll('.metric-value');
+        metrics.forEach((m, i) => {
+          setTimeout(() => {
+            m.classList.add('counted');
+            if (i === 0) countUp(m, 3.2, '', '%', 1200);
+            if (i === 1) countUp(m, 5000, '', '', 1400);
+            if (i === 2) m.textContent = '14d';
+          }, 600 + i * 300);
+        });
+        setTimeout(() => prizeEl.classList.add('prize-counted'), 2100);
+      }, 300);
+    }
+
+    // ── Smooth scroll for anchors ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+  </script>
+
+</body>
+</html>
