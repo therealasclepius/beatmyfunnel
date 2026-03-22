@@ -4,7 +4,7 @@
     {
       "name": "landing-page",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["http-server", "/Users/kostahantzis/Desktop/Beat My Funnel", "-p", "8080", "-c-1"],
+      "runtimeArgs": ["http-server", "/Users/kostahantzis/Desktop/Beat My Funnel/public", "-p", "8080", "-c-1"],
       "port": 8080
     }
   ]

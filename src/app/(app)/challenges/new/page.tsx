@@ -493,6 +493,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   publishActions: {
     display: 'flex',
-    gap: '12px',
+    gap: '16px',
+    marginTop: '32px',
   },
 }
