@@ -654,12 +654,13 @@
     .manifesto {
       padding: var(--section-padding) 0;
       text-align: center;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-primary);
+      border-bottom: 1px solid var(--border-primary);
     }
 
     .manifesto-inner {
       max-width: 640px;
-      border-left: 2px solid var(--accent);
-      padding-left: 32px;
       margin: 0 auto;
     }
 
@@ -700,6 +701,14 @@
     .problem {
       padding: var(--section-padding) 0;
       text-align: center;
+    }
+
+    .problem .container {
+      max-width: 720px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 16px;
+      padding: 56px 48px;
     }
 
     .problem h2 {
@@ -1604,7 +1613,7 @@
       }
 
       .manifesto-inner {
-        padding-left: 24px;
+        padding-left: 0;
       }
 
       .manifesto-body {
@@ -1769,7 +1778,6 @@
     </div>
   </section>
 
-  <hr class="divider">
 
   <!-- MANIFESTO -->
   <section class="manifesto reveal">
@@ -1785,7 +1793,6 @@
     </div>
   </section>
 
-  <hr class="divider">
 
   <!-- SOCIAL PROOF -->
   <section class="social-proof reveal">
