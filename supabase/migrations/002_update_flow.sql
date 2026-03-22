@@ -1,3 +1,7 @@
+-- Drop RLS policies that reference status column
+DROP POLICY IF EXISTS "Open challenges are viewable by everyone" ON challenges;
+DROP POLICY IF EXISTS "Admins can do anything on challenges" ON challenges;
+
 -- Drop defaults before type cast
 ALTER TABLE challenges ALTER COLUMN status DROP DEFAULT;
 ALTER TABLE submissions ALTER COLUMN status DROP DEFAULT;
@@ -17,6 +21,12 @@ DROP TYPE submission_status_old;
 -- Re-add defaults
 ALTER TABLE challenges ALTER COLUMN status SET DEFAULT 'draft';
 ALTER TABLE submissions ALTER COLUMN status SET DEFAULT 'pending';
+
+-- Recreate RLS policies
+CREATE POLICY "Open challenges are viewable by everyone" ON challenges FOR SELECT USING (status != 'draft' OR brand_id = auth.uid());
+CREATE POLICY "Admins can do anything on challenges" ON challenges FOR ALL TO authenticated USING (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+);
 
 -- Add new fields to challenges
 ALTER TABLE challenges ADD COLUMN IF NOT EXISTS metric_unit text DEFAULT '%';
