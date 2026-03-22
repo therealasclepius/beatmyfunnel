@@ -169,83 +169,146 @@
       padding: 0 24px;
     }
 
-    /* Linear-style easing */
-    --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    /* ================================ */
+    /* ANIMATION SYSTEM                 */
+    /* ================================ */
 
-    .fade-up {
+    /* Scroll-triggered reveal */
+    .reveal {
       opacity: 0;
-      transform: translateY(20px);
-      filter: blur(4px);
-      transition: opacity 0.7s var(--ease-out-expo),
-                  transform 0.7s var(--ease-out-expo),
-                  filter 0.7s var(--ease-out-expo);
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .fade-up.visible {
+    .reveal.in-view {
       opacity: 1;
       transform: translateY(0);
-      filter: blur(0);
     }
 
-    /* Hero staggered blur-reveal */
-    .hero-reveal {
+    /* Stagger children inside a reveal group */
+    .reveal-group .reveal { transition-delay: calc(var(--i, 0) * 0.08s); }
+
+    /* Hero entrance */
+    @keyframes heroIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+        filter: blur(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    .hero-anim {
       opacity: 0;
-      filter: blur(10px);
-      transform: translateY(20%);
-      transition: opacity 0.8s var(--ease-out-expo),
-                  filter 0.8s var(--ease-out-expo),
-                  transform 0.8s var(--ease-out-expo);
-    }
-    .hero-reveal.visible {
-      opacity: 1;
-      filter: blur(0);
-      transform: translateY(0);
+      animation: heroIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* Stagger delays */
-    .hero-reveal-1 { transition-delay: 0s; }
-    .hero-reveal-2 { transition-delay: 0.1s; }
-    .hero-reveal-3 { transition-delay: 0.2s; }
-    .hero-reveal-4 { transition-delay: 0.35s; }
-    .hero-reveal-5 { transition-delay: 0.5s; }
+    .hero-anim-1 { animation-delay: 0.05s; }
+    .hero-anim-2 { animation-delay: 0.15s; }
+    .hero-anim-3 { animation-delay: 0.3s; }
+    .hero-anim-4 { animation-delay: 0.45s; }
+    .hero-anim-5 { animation-delay: 0.6s; }
+    .hero-anim-6 { animation-delay: 0.8s; }
 
-    /* Grain texture overlay */
-    .grain {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.035;
-      mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 256px 256px;
+    /* Prize count-up glow pulse */
+    @keyframes prizeGlow {
+      0% { text-shadow: none; }
+      50% { text-shadow: 0 0 40px rgba(255, 69, 0, 0.3), 0 0 80px rgba(255, 69, 0, 0.1); }
+      100% { text-shadow: none; }
     }
 
-    /* Challenge card glow on hover */
+    .prize-counted {
+      animation: prizeGlow 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+    }
+
+    /* Card hover glow */
     .challenge-card {
-      transition: border-color 0.25s var(--ease-out-quad);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.4s ease,
+                  box-shadow 0.4s ease;
     }
     .challenge-card:hover {
+      transform: translateY(-4px);
       border-color: var(--border-secondary);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 60px rgba(255, 69, 0, 0.04);
     }
-    .card-glow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 50%);
-      pointer-events: none;
+
+    /* Steps stagger on scroll */
+    .step {
       opacity: 0;
-      transform: translate(-50%, -50%);
-      transition: opacity 0.25s ease;
-      z-index: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .challenge-card:hover .card-glow {
+    .step.in-view {
       opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Metric values scale in */
+    @keyframes metricPop {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .metric-value {
+      opacity: 0;
+    }
+    .metric-value.counted {
+      animation: metricPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Type items stagger */
+    .type-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .type-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Two-sided cards slide in from edges */
+    .side {
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .brand-side {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    .operator-side {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    .brand-side.in-view,
+    .operator-side.in-view {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* FAQ items */
+    .faq-item {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .faq-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Smooth accordion */
+    .faq-item .answer {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
     }
 
     /* ================================ */
@@ -1066,9 +1129,6 @@
 
 <body>
 
-  <!-- Grain texture overlay -->
-  <div class="grain"></div>
-
   <!-- NAV -->
   <nav>
     <div class="nav-inner">
@@ -1080,23 +1140,22 @@
   <!-- HERO -->
   <section class="hero">
     <div class="container">
-      <p class="hero-eyebrow hero-reveal hero-reveal-1">Private Beta</p>
+      <p class="hero-eyebrow hero-anim hero-anim-1">Private Beta</p>
 
-      <h1 class="hero-reveal hero-reveal-2">Let the best operators compete<br>to beat your funnel.</h1>
+      <h1 class="hero-anim hero-anim-2">Let the best operators compete<br>to beat your funnel.</h1>
 
-      <p class="hero-sub hero-reveal hero-reveal-3">
+      <p class="hero-sub hero-anim hero-anim-3">
         Brands post challenges with real money in escrow.<br>
         Operators compete to win it.
       </p>
 
-      <p class="hero-scope hero-reveal hero-reveal-4">
+      <p class="hero-scope hero-anim hero-anim-4">
         Landing pages. Ad creative. Emails. Pricing pages.<br>
         If it has a metric, it can be challenged.
       </p>
 
       <!-- THE LIVE CHALLENGE CARD — this IS the design -->
-      <div class="challenge-card hero-reveal hero-reveal-5">
-        <div class="card-glow"></div>
+      <div class="challenge-card hero-anim hero-anim-5">
         <div class="challenge-header">
           <div class="challenge-status">
             <div class="status-dot"></div>
@@ -1135,7 +1194,7 @@
       </div>
 
       <!-- CTA -->
-      <div id="join" class="hero-cta-group hero-reveal" style="transition-delay: 0.65s;">
+      <div id="join" class="hero-cta-group hero-anim hero-anim-6">
         <div class="dual-cta">
           <div class="cta-path">
             <a href="#post-challenge" class="btn-primary">Post a Challenge</a>
@@ -1154,7 +1213,7 @@
   <hr class="divider">
 
   <!-- PROBLEM -->
-  <section class="problem fade-up">
+  <section class="problem reveal">
     <div class="container">
       <h2>You're paying for effort,<br>not outcomes.</h2>
       <p>
@@ -1171,7 +1230,7 @@
   <hr class="divider">
 
   <!-- SOCIAL PROOF — THIS IS ALREADY HAPPENING -->
-  <section class="social-proof fade-up">
+  <section class="social-proof reveal">
     <div class="container">
       <p class="section-label">This is already happening</p>
       <h2>Founders are posting these challenges on Twitter.<br>We're building the platform.</h2>
@@ -1199,7 +1258,7 @@
   <hr class="divider">
 
   <!-- HOW IT WORKS -->
-  <section class="how-it-works fade-up">
+  <section class="how-it-works reveal">
     <div class="container">
       <p class="section-label">How it works</p>
       <h2>Three steps. You only pay if you lose.</h2>
@@ -1227,7 +1286,7 @@
   <hr class="divider">
 
   <!-- CHALLENGE TYPES -->
-  <section class="challenge-types fade-up">
+  <section class="challenge-types reveal">
     <div class="container">
       <p class="section-label">Challenge types</p>
       <h2>What can you put up for a challenge?</h2>
@@ -1261,7 +1320,7 @@
   <hr class="divider">
 
   <!-- TWO-SIDED VALUE -->
-  <section class="two-sided fade-up">
+  <section class="two-sided reveal">
     <div class="container">
       <div class="two-sided-grid">
         <div id="post-challenge" class="side brand-side">
@@ -1296,7 +1355,7 @@
   <hr class="divider">
 
   <!-- FAQ -->
-  <section class="faq fade-up">
+  <section class="faq reveal">
     <div class="container">
       <h2>Questions</h2>
 
@@ -1342,7 +1401,7 @@
   <hr class="divider">
 
   <!-- FINAL CTA -->
-  <section class="final-cta fade-up">
+  <section class="final-cta reveal">
     <div class="container">
       <h2>Ready to put your number<br>on the line?</h2>
       <p>First 5 challenges launching soon.</p>
@@ -1370,33 +1429,92 @@
   <!-- Typeform Embed SDK -->
   <script src="//embed.typeform.com/next/embed.js"></script>
 
-  <!-- JS -->
+  <!-- JS: Animation Engine -->
   <script>
-    // Scroll-triggered fade-ups
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+    // ── Count-up with easing ──
+    function countUp(el, target, prefix, suffix, duration) {
+      const start = performance.now();
+      const isFloat = String(target).includes('.');
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const current = isFloat
+          ? (target * eased).toFixed(1)
+          : Math.floor(target * eased).toLocaleString();
+        el.textContent = prefix + current + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ── Scroll observer: sections ──
+    const sectionObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => sectionObs.observe(el));
+
+    // ── Scroll observer: staggered children ──
+    const childObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const children = e.target.querySelectorAll('.type-item, .step, .faq-item');
+        children.forEach((child, i) => {
+          child.style.transitionDelay = (i * 0.07) + 's';
+          child.classList.add('in-view');
+        });
+        childObs.unobserve(e.target);
       });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    document.querySelectorAll('.types-grid, .steps, .faq-list').forEach(el => childObs.observe(el));
 
-    // Hero staggered reveal on load
-    window.addEventListener('load', () => {
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.hero-reveal').forEach(el => el.classList.add('visible'));
+    // ── Two-sided cards slide in ──
+    const sideObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.querySelectorAll('.side').forEach((side, i) => {
+          side.style.transitionDelay = (i * 0.15) + 's';
+          side.classList.add('in-view');
+        });
+        sideObs.unobserve(e.target);
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.two-sided-grid').forEach(el => sideObs.observe(el));
+
+    // ── Prize count-up + metric pop ──
+    const prizeEl = document.querySelector('.challenge-prize');
+    let prizeDone = false;
+    const prizeObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !prizeDone) {
+          prizeDone = true;
+          countUp(prizeEl, 10000, '$', '', 1800);
+          const metrics = document.querySelectorAll('.metric-value');
+          metrics.forEach((m, i) => {
+            setTimeout(() => {
+              m.classList.add('counted');
+              if (i === 0) countUp(m, 3.2, '', '%', 1200);
+              if (i === 1) countUp(m, 5000, '', '', 1400);
+              if (i === 2) m.textContent = '14d';
+            }, 400 + i * 250);
+          });
+          setTimeout(() => prizeEl.classList.add('prize-counted'), 1900);
+        }
+      });
+    }, { threshold: 0.3 });
+    if (prizeEl) { prizeEl.textContent = '$0'; prizeObs.observe(prizeEl); }
+
+    // ── Smooth scroll for anchors ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       });
     });
-
-    // Mouse-follow glow on challenge card
-    const card = document.querySelector('.challenge-card');
-    const glow = document.querySelector('.card-glow');
-    if (card && glow) {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        glow.style.left = (e.clientX - rect.left) + 'px';
-        glow.style.top = (e.clientY - rect.top) + 'px';
-      });
-    }
   </script>
 
 </body>
