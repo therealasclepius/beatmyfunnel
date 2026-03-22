@@ -1488,26 +1488,23 @@
 
     // ── Prize count-up + metric pop ──
     const prizeEl = document.querySelector('.challenge-prize');
-    let prizeDone = false;
-    const prizeObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting && !prizeDone) {
-          prizeDone = true;
-          countUp(prizeEl, 10000, '$', '', 1800, 100);
-          const metrics = document.querySelectorAll('.metric-value');
-          metrics.forEach((m, i) => {
-            setTimeout(() => {
-              m.classList.add('counted');
-              if (i === 0) countUp(m, 3.2, '', '%', 1200);
-              if (i === 1) countUp(m, 5000, '', '', 1400);
-              if (i === 2) m.textContent = '14d';
-            }, 400 + i * 250);
-          });
-          setTimeout(() => prizeEl.classList.add('prize-counted'), 1900);
-        }
-      });
-    }, { threshold: 0.3 });
-    if (prizeEl) { prizeEl.textContent = '$100'; prizeObs.observe(prizeEl); }
+    if (prizeEl) {
+      prizeEl.textContent = '$100';
+      // Wait for hero card animation to finish (0.6s delay + 1s anim), then count
+      setTimeout(() => {
+        countUp(prizeEl, 10000, '$', '', 2000, 100);
+        const metrics = document.querySelectorAll('.metric-value');
+        metrics.forEach((m, i) => {
+          setTimeout(() => {
+            m.classList.add('counted');
+            if (i === 0) countUp(m, 3.2, '', '%', 1200);
+            if (i === 1) countUp(m, 5000, '', '', 1400);
+            if (i === 2) m.textContent = '14d';
+          }, 600 + i * 300);
+        });
+        setTimeout(() => prizeEl.classList.add('prize-counted'), 2100);
+      }, 1200);
+    }
 
     // ── Smooth scroll for anchors ──
     document.querySelectorAll('a[href^="#"]').forEach(a => {
