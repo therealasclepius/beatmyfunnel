@@ -4,27 +4,27 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import type { Profile } from '@/types/database'
+import type { Profile, ChallengeType } from '@/types/database'
 
-const METRIC_TYPES = [
-  'CVR',
-  'ROAS',
-  'CPA',
-  'Email Open Rate',
-  'Email Click Rate',
-  'Add to Cart Rate',
-  'Checkout Rate',
+const METRIC_OPTIONS: { label: string; value: string; challengeType: ChallengeType }[] = [
+  { label: 'Landing Page CVR', value: 'Landing Page CVR', challengeType: 'landing_page' },
+  { label: 'Email Open Rate', value: 'Email Open Rate', challengeType: 'email_flow' },
+  { label: 'Email Click Rate', value: 'Email Click Rate', challengeType: 'email_flow' },
 ]
 
 export default function NewChallengePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [publishing, setPublishing] = useState(false)
   const [error, setError] = useState('')
   const [checkingRole, setCheckingRole] = useState(true)
+  const [savedId, setSavedId] = useState<string | null>(null)
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [metricType, setMetricType] = useState('')
+  const [challengeType, setChallengeType] = useState<ChallengeType>('landing_page')
+  const [metricUnit, setMetricUnit] = useState('%')
   const [baselineValue, setBaselineValue] = useState('')
   const [prizeAmount, setPrizeAmount] = useState('')
   const [maxFinalists, setMaxFinalists] = useState('5')
@@ -53,7 +53,15 @@ export default function NewChallengePage() {
     checkRole()
   }, [router])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleMetricChange = (value: string) => {
+    setMetricType(value)
+    const option = METRIC_OPTIONS.find((o) => o.value === value)
+    if (option) {
+      setChallengeType(option.challengeType)
+    }
+  }
+
+  const handleSaveDraft = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
@@ -98,7 +106,8 @@ export default function NewChallengePage() {
         prize_amount: prizeInCents,
         max_finalists: parseInt(maxFinalists, 10),
         deadline: deadline,
-        status: 'open',
+        metric_unit: metricUnit,
+        challenge_type: challengeType,
       })
       .select('id')
       .single()
@@ -109,13 +118,82 @@ export default function NewChallengePage() {
       return
     }
 
-    router.push(`/challenges/${data.id}/manage`)
+    setSavedId(data.id)
+    setLoading(false)
+  }
+
+  const handlePublish = async () => {
+    if (!savedId) return
+    setPublishing(true)
+    setError('')
+
+    const supabase = createClient()
+
+    const { error: updateError } = await supabase
+      .from('challenges')
+      .update({ status: 'open' })
+      .eq('id', savedId)
+
+    if (updateError) {
+      setError(updateError.message)
+      setPublishing(false)
+      return
+    }
+
+    router.push(`/challenges/${savedId}/manage`)
   }
 
   if (checkingRole) {
     return (
       <div style={{ padding: '80px 24px', textAlign: 'center' }}>
         <p style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>Loading...</p>
+      </div>
+    )
+  }
+
+  if (savedId) {
+    return (
+      <div style={styles.wrapper}>
+        <div style={styles.card}>
+          <h1 style={styles.title}>Challenge Saved as Draft</h1>
+          <p style={styles.subtitle}>
+            Your challenge has been saved. Publish it to start accepting applications from operators.
+          </p>
+
+          <div style={styles.draftSummary}>
+            <div style={styles.summaryRow}>
+              <span style={styles.summaryLabel}>Title</span>
+              <span style={styles.summaryValue}>{title}</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span style={styles.summaryLabel}>Metric</span>
+              <span style={styles.summaryValue}>{metricType} ({metricUnit})</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span style={styles.summaryLabel}>Baseline</span>
+              <span style={styles.summaryValue}>{baselineValue}{metricUnit}</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span style={styles.summaryLabel}>Prize</span>
+              <span style={styles.summaryValue}>${prizeAmount}</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span style={styles.summaryLabel}>Type</span>
+              <span style={styles.summaryValue}>{challengeType.replace(/_/g, ' ')}</span>
+            </div>
+          </div>
+
+          <div style={styles.publishActions}>
+            <button onClick={handlePublish} disabled={publishing} style={styles.button}>
+              {publishing ? 'Publishing...' : 'Publish Challenge'}
+            </button>
+            <Link href={`/challenges/${savedId}/manage`} style={styles.ghostButton}>
+              Keep as Draft
+            </Link>
+          </div>
+
+          {error && <p style={styles.error}>{error}</p>}
+        </div>
       </div>
     )
   }
@@ -132,7 +210,7 @@ export default function NewChallengePage() {
           Describe your funnel metric and set a prize for the operator who beats it.
         </p>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={handleSaveDraft} style={styles.form}>
           <div style={styles.field}>
             <label style={styles.label} htmlFor="title">Title</label>
             <input
@@ -165,17 +243,31 @@ export default function NewChallengePage() {
               <select
                 id="metricType"
                 value={metricType}
-                onChange={(e) => setMetricType(e.target.value)}
+                onChange={(e) => handleMetricChange(e.target.value)}
                 required
                 style={styles.select}
               >
                 <option value="">Select a metric...</option>
-                {METRIC_TYPES.map((m) => (
-                  <option key={m} value={m}>{m}</option>
+                {METRIC_OPTIONS.map((m) => (
+                  <option key={m.value} value={m.value}>{m.label}</option>
                 ))}
               </select>
             </div>
 
+            <div style={styles.field}>
+              <label style={styles.label} htmlFor="metricUnit">Metric Unit</label>
+              <input
+                id="metricUnit"
+                type="text"
+                value={metricUnit}
+                onChange={(e) => setMetricUnit(e.target.value)}
+                placeholder="%"
+                style={styles.input}
+              />
+            </div>
+          </div>
+
+          <div style={styles.row}>
             <div style={styles.field}>
               <label style={styles.label} htmlFor="baseline">Current Baseline Value</label>
               <input
@@ -187,6 +279,16 @@ export default function NewChallengePage() {
                 placeholder="e.g. 3.2"
                 required
                 style={styles.input}
+              />
+            </div>
+
+            <div style={styles.field}>
+              <label style={styles.label}>Challenge Type</label>
+              <input
+                type="text"
+                value={challengeType.replace(/_/g, ' ')}
+                readOnly
+                style={{ ...styles.input, color: 'var(--text-tertiary)', cursor: 'default' }}
               />
             </div>
           </div>
@@ -237,7 +339,7 @@ export default function NewChallengePage() {
           {error && <p style={styles.error}>{error}</p>}
 
           <button type="submit" disabled={loading} style={styles.button}>
-            {loading ? 'Creating...' : 'Post Challenge'}
+            {loading ? 'Saving...' : 'Save as Draft'}
           </button>
         </form>
       </div>
@@ -346,5 +448,50 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     fontFamily: 'inherit',
     marginTop: '4px',
+  },
+  ghostButton: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '44px',
+    padding: '0 24px',
+    fontSize: '15px',
+    fontWeight: 500,
+    color: 'var(--text-secondary)',
+    background: 'none',
+    border: '1px solid var(--border-primary)',
+    borderRadius: '8px',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+  },
+  draftSummary: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+    padding: '20px',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-primary)',
+    borderRadius: '8px',
+    marginBottom: '24px',
+  },
+  summaryRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  summaryLabel: {
+    fontSize: '13px',
+    color: 'var(--text-tertiary)',
+    fontWeight: 500,
+  },
+  summaryValue: {
+    fontSize: '14px',
+    color: 'var(--text-primary)',
+    fontWeight: 500,
+  },
+  publishActions: {
+    display: 'flex',
+    gap: '12px',
   },
 }

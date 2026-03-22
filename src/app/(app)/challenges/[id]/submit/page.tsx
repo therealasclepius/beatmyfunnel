@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import type { Profile, Application, Submission } from '@/types/database'
+import type { Profile, Application, Submission, Challenge } from '@/types/database'
 
 export default function SubmitWorkPage() {
   const router = useRouter()
@@ -19,7 +19,6 @@ export default function SubmitWorkPage() {
 
   const [description, setDescription] = useState('')
   const [evidenceUrl, setEvidenceUrl] = useState('')
-  const [claimedValue, setClaimedValue] = useState('')
 
   useEffect(() => {
     const load = async () => {
@@ -40,6 +39,18 @@ export default function SubmitWorkPage() {
 
       if (!profile || (profile as Pick<Profile, 'role'>).role !== 'operator') {
         router.push('/dashboard')
+        return
+      }
+
+      // Check challenge status is accepting_submissions
+      const { data: challengeData } = await supabase
+        .from('challenges')
+        .select('status')
+        .eq('id', id)
+        .single()
+
+      if (!challengeData || (challengeData as Pick<Challenge, 'status'>).status !== 'accepting_submissions') {
+        router.push(`/challenges/${id}`)
         return
       }
 
@@ -90,15 +101,12 @@ export default function SubmitWorkPage() {
       return
     }
 
-    const claimed = claimedValue ? parseFloat(claimedValue) : null
-
     const { error: insertError } = await supabase.from('submissions').insert({
       challenge_id: id,
       operator_id: user.id,
       application_id: application.id,
       description,
       evidence_url: evidenceUrl || null,
-      claimed_value: claimed,
     })
 
     if (insertError) {
@@ -106,6 +114,13 @@ export default function SubmitWorkPage() {
       setSubmitting(false)
       return
     }
+
+    // Update the submission status to 'submitted'
+    await supabase
+      .from('submissions')
+      .update({ status: 'submitted' })
+      .eq('challenge_id', id)
+      .eq('operator_id', user.id)
 
     router.push(`/challenges/${id}`)
   }
@@ -141,12 +156,6 @@ export default function SubmitWorkPage() {
                 </a>
               </div>
             )}
-            {existingSub.claimed_value !== null && (
-              <div style={styles.field}>
-                <span style={styles.previewLabel}>Claimed Value</span>
-                <p style={styles.previewValue}>{existingSub.claimed_value}</p>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -162,7 +171,7 @@ export default function SubmitWorkPage() {
       <div style={styles.card}>
         <h1 style={styles.title}>Submit Your Work</h1>
         <p style={styles.subtitle}>
-          Describe what you built and why it should beat the baseline.
+          Describe what you built and provide evidence. The platform will verify results during the testing phase.
         </p>
 
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -191,21 +200,6 @@ export default function SubmitWorkPage() {
               value={evidenceUrl}
               onChange={(e) => setEvidenceUrl(e.target.value)}
               placeholder="https://... (link to your work, screenshot, demo)"
-              style={styles.input}
-            />
-          </div>
-
-          <div style={styles.field}>
-            <label style={styles.label} htmlFor="claimedValue">
-              Claimed Metric Value
-            </label>
-            <input
-              id="claimedValue"
-              type="number"
-              step="any"
-              value={claimedValue}
-              onChange={(e) => setClaimedValue(e.target.value)}
-              placeholder="e.g. 4.1"
               style={styles.input}
             />
           </div>

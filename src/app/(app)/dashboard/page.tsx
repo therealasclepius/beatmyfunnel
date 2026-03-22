@@ -2,7 +2,22 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ChallengeCard from '@/components/challenge-card'
-import type { Profile, Challenge } from '@/types/database'
+import StatusBadge from '@/components/status-badge'
+import type { Profile, Challenge, Application } from '@/types/database'
+
+const ACTIVE_STATUSES = ['draft', 'open', 'accepting_submissions', 'testing', 'verifying']
+const COMPLETED_STATUSES = ['completed', 'refunded', 'cancelled']
+
+const STEP_LABELS: Record<string, string> = {
+  draft: 'Draft',
+  open: 'Accepting Applications',
+  accepting_submissions: 'Awaiting Submissions',
+  testing: 'Live Testing',
+  verifying: 'Verifying Results',
+  completed: 'Completed',
+  refunded: 'Refunded',
+  cancelled: 'Cancelled',
+}
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -27,7 +42,7 @@ export default async function DashboardPage() {
     return <BrandDashboard userId={user.id} />
   }
 
-  return <OperatorDashboard />
+  return <OperatorDashboard userId={user.id} />
 }
 
 async function BrandDashboard({ userId }: { userId: string }) {
@@ -40,6 +55,9 @@ async function BrandDashboard({ userId }: { userId: string }) {
     .order('created_at', { ascending: false })
 
   const typedChallenges = (challenges || []) as Challenge[]
+
+  const activeChallenges = typedChallenges.filter((c) => ACTIVE_STATUSES.includes(c.status))
+  const completedChallenges = typedChallenges.filter((c) => COMPLETED_STATUSES.includes(c.status))
 
   // Fetch application counts for each challenge
   const challengeIds = typedChallenges.map((c) => c.id)
@@ -75,23 +93,53 @@ async function BrandDashboard({ userId }: { userId: string }) {
           </Link>
         </div>
       ) : (
-        <div style={styles.grid}>
-          {typedChallenges.map((challenge) => (
-            <ChallengeCard
-              key={challenge.id}
-              challenge={challenge}
-              applicationCount={countMap[challenge.id] || 0}
-            />
-          ))}
-        </div>
+        <>
+          {/* Active Challenges */}
+          {activeChallenges.length > 0 && (
+            <div style={{ marginBottom: '40px' }}>
+              <h2 style={styles.sectionTitle}>Active Challenges</h2>
+              <div style={styles.grid}>
+                {activeChallenges.map((challenge) => (
+                  <div key={challenge.id} style={{ position: 'relative' }}>
+                    <ChallengeCard
+                      challenge={challenge}
+                      applicationCount={countMap[challenge.id] || 0}
+                    />
+                    <div style={styles.progressIndicator}>
+                      <StatusBadge status={challenge.status} variant="challenge" />
+                      <span style={styles.stepLabel}>{STEP_LABELS[challenge.status] || challenge.status}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Completed Challenges */}
+          {completedChallenges.length > 0 && (
+            <div>
+              <h2 style={styles.sectionTitle}>Completed</h2>
+              <div style={styles.grid}>
+                {completedChallenges.map((challenge) => (
+                  <ChallengeCard
+                    key={challenge.id}
+                    challenge={challenge}
+                    applicationCount={countMap[challenge.id] || 0}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   )
 }
 
-async function OperatorDashboard() {
+async function OperatorDashboard({ userId }: { userId: string }) {
   const supabase = await createClient()
 
+  // Fetch open challenges
   const { data: challenges } = await supabase
     .from('challenges')
     .select('*')
@@ -114,7 +162,7 @@ async function OperatorDashboard() {
     brandMap[p.id] = p.display_name
   })
 
-  // Fetch application counts
+  // Fetch application counts for open challenges
   const challengeIds = typedChallenges.map((c) => c.id)
   const { data: appCounts } = challengeIds.length > 0
     ? await supabase
@@ -128,34 +176,77 @@ async function OperatorDashboard() {
     countMap[a.challenge_id] = (countMap[a.challenge_id] || 0) + 1
   })
 
+  // Fetch user's applications with challenge info
+  const { data: userApps } = await supabase
+    .from('applications')
+    .select('*, challenges(*)')
+    .eq('operator_id', userId)
+    .order('created_at', { ascending: false })
+
+  const typedUserApps = (userApps || []) as (Application & { challenges: Challenge })[]
+
   return (
     <div>
-      <div style={styles.pageHeader}>
-        <h1 style={styles.pageTitle}>Open Challenges</h1>
-        <Link href="/challenges" style={styles.ghostButton}>
-          Browse All
-        </Link>
-      </div>
-
-      {typedChallenges.length === 0 ? (
-        <div style={styles.emptyState}>
-          <p style={styles.emptyTitle}>No open challenges</p>
-          <p style={styles.emptyDesc}>
-            Check back soon — brands are always posting new challenges.
-          </p>
-        </div>
-      ) : (
-        <div style={styles.grid}>
-          {typedChallenges.map((challenge) => (
-            <ChallengeCard
-              key={challenge.id}
-              challenge={challenge}
-              applicationCount={countMap[challenge.id] || 0}
-              brandName={brandMap[challenge.brand_id]}
-            />
-          ))}
+      {/* Your Applications Section */}
+      {typedUserApps.length > 0 && (
+        <div style={{ marginBottom: '48px' }}>
+          <div style={styles.pageHeader}>
+            <h1 style={styles.pageTitle}>Your Applications</h1>
+          </div>
+          <div style={styles.appList}>
+            {typedUserApps.map((app) => (
+              <Link
+                key={app.id}
+                href={`/challenges/${app.challenge_id}`}
+                style={styles.appRow}
+              >
+                <div style={{ flex: 1 }}>
+                  <span style={styles.appChallengeTitle}>{app.challenges?.title || 'Unknown Challenge'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+                    <StatusBadge status={app.status} variant="application" />
+                    {app.challenges && (
+                      <StatusBadge status={app.challenges.status} variant="challenge" />
+                    )}
+                  </div>
+                </div>
+                <span style={styles.appDate}>
+                  Applied {new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
+
+      {/* Open Challenges Section */}
+      <div>
+        <div style={styles.pageHeader}>
+          <h1 style={styles.pageTitle}>Open Challenges</h1>
+          <Link href="/challenges" style={styles.ghostButton}>
+            Browse All
+          </Link>
+        </div>
+
+        {typedChallenges.length === 0 ? (
+          <div style={styles.emptyState}>
+            <p style={styles.emptyTitle}>No open challenges</p>
+            <p style={styles.emptyDesc}>
+              Check back soon — brands are always posting new challenges.
+            </p>
+          </div>
+        ) : (
+          <div style={styles.grid}>
+            {typedChallenges.map((challenge) => (
+              <ChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+                applicationCount={countMap[challenge.id] || 0}
+                brandName={brandMap[challenge.brand_id]}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -172,6 +263,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     color: 'var(--text-primary)',
     letterSpacing: '-0.02em',
+  },
+  sectionTitle: {
+    fontSize: '18px',
+    fontWeight: 600,
+    color: 'var(--text-primary)',
+    letterSpacing: '-0.02em',
+    marginBottom: '16px',
   },
   primaryButton: {
     display: 'inline-flex',
@@ -231,5 +329,41 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-tertiary)',
     maxWidth: '360px',
     marginBottom: '8px',
+  },
+  progressIndicator: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginTop: '8px',
+    paddingLeft: '4px',
+  },
+  stepLabel: {
+    fontSize: '12px',
+    color: 'var(--text-tertiary)',
+    fontWeight: 500,
+  },
+  appList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+  },
+  appRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '16px 20px',
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-primary)',
+    borderRadius: '10px',
+    textDecoration: 'none',
+  },
+  appChallengeTitle: {
+    fontSize: '15px',
+    fontWeight: 500,
+    color: 'var(--text-primary)',
+  },
+  appDate: {
+    fontSize: '13px',
+    color: 'var(--text-quaternary)',
   },
 }

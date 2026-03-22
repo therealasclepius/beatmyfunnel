@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import StatusBadge from '@/components/status-badge'
-import type { Challenge, Profile, Application } from '@/types/database'
+import type { Challenge, Profile, Application, ChallengeStatus, Submission } from '@/types/database'
 
 const formatCurrency = (cents: number) =>
   new Intl.NumberFormat('en-US', {
@@ -17,6 +17,15 @@ const formatDate = (dateStr: string) =>
     day: 'numeric',
     year: 'numeric',
   })
+
+const FLOW_STEPS: { status: ChallengeStatus; label: string }[] = [
+  { status: 'draft', label: 'Draft' },
+  { status: 'open', label: 'Open' },
+  { status: 'accepting_submissions', label: 'Submissions' },
+  { status: 'testing', label: 'Testing' },
+  { status: 'verifying', label: 'Verifying' },
+  { status: 'completed', label: 'Completed' },
+]
 
 export default async function ChallengeDetailPage({
   params,
@@ -86,10 +95,21 @@ export default async function ChallengeDetailPage({
     .select('*', { count: 'exact', head: true })
     .eq('challenge_id', id)
 
+  // Check for winner submission
+  const { data: winnerSub } = await supabase
+    .from('submissions')
+    .select('*, profiles:operator_id(display_name)')
+    .eq('challenge_id', id)
+    .eq('status', 'winner')
+    .single()
+
+  const winnerSubmission = winnerSub as (Submission & { profiles: Pick<Profile, 'display_name'> }) | null
+
   const isOwner = user.id === typedChallenge.brand_id
   const isOperator = userRole === 'operator'
   const hasApplied = !!typedApplication
   const isFinalist = typedApplication?.status === 'finalist'
+  const currentStepIndex = FLOW_STEPS.findIndex((s) => s.status === typedChallenge.status)
 
   return (
     <div style={styles.wrapper}>
@@ -106,6 +126,43 @@ export default async function ChallengeDetailPage({
         <h1 style={styles.title}>{typedChallenge.title}</h1>
         <p style={styles.brandName}>by {brandName}</p>
 
+        {/* Progress Steps */}
+        <div style={styles.progressBar}>
+          {FLOW_STEPS.map((step, i) => {
+            const isActive = i === currentStepIndex
+            const isComplete = i < currentStepIndex
+            const isFuture = i > currentStepIndex
+            return (
+              <div
+                key={step.status}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column' as const,
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <div
+                  style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: isComplete ? '#2ed573' : isActive ? 'var(--accent, #8a8fff)' : 'var(--border-secondary, #333)',
+                  }}
+                />
+                <span style={{
+                  fontSize: '11px',
+                  fontWeight: isActive ? 600 : 400,
+                  color: isFuture ? 'var(--text-quaternary)' : 'var(--text-secondary)',
+                }}>
+                  {step.label}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+
         <p style={styles.description}>{typedChallenge.description}</p>
 
         <div style={styles.details}>
@@ -115,7 +172,7 @@ export default async function ChallengeDetailPage({
           </div>
           <div style={styles.detailItem}>
             <span style={styles.detailLabel}>Baseline</span>
-            <span style={styles.detailValue}>{typedChallenge.baseline_value}</span>
+            <span style={styles.detailValue}>{typedChallenge.baseline_value}{typedChallenge.metric_unit}</span>
           </div>
           <div style={styles.detailItem}>
             <span style={styles.detailLabel}>Prize</span>
@@ -135,6 +192,29 @@ export default async function ChallengeDetailPage({
           </div>
         </div>
 
+        {/* Winner Display */}
+        {typedChallenge.status === 'completed' && winnerSubmission && (
+          <div style={styles.winnerBox}>
+            <span style={{ fontSize: '11px', color: 'var(--text-quaternary)', textTransform: 'uppercase' as const, letterSpacing: '0.05em', fontWeight: 500 }}>Winner</span>
+            <span style={{ fontSize: '16px', fontWeight: 600, color: '#2ed573' }}>
+              {winnerSubmission.profiles?.display_name || 'Unknown'}
+            </span>
+            {typedChallenge.verified_result !== null && (
+              <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+                Verified result: {typedChallenge.verified_result}{typedChallenge.metric_unit} (baseline: {typedChallenge.baseline_value}{typedChallenge.metric_unit})
+              </span>
+            )}
+          </div>
+        )}
+
+        {typedChallenge.status === 'refunded' && (
+          <div style={{ ...styles.winnerBox, borderColor: 'var(--border-primary)' }}>
+            <span style={{ fontSize: '14px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+              Challenge refunded — nobody beat the baseline.
+            </span>
+          </div>
+        )}
+
         <div style={styles.actions}>
           {isOwner && (
             <Link href={`/challenges/${id}/manage`} style={styles.primaryButton}>
@@ -142,13 +222,14 @@ export default async function ChallengeDetailPage({
             </Link>
           )}
 
-          {isOperator && !hasApplied && typedChallenge.status === 'open' && (
+          {/* Operator CTAs based on status */}
+          {isOperator && typedChallenge.status === 'open' && !hasApplied && (
             <Link href={`/challenges/${id}/apply`} style={styles.primaryButton}>
               Apply to This Challenge
             </Link>
           )}
 
-          {isOperator && hasApplied && !isFinalist && (
+          {isOperator && typedChallenge.status === 'open' && hasApplied && !isFinalist && (
             <div style={styles.statusBox}>
               <p style={styles.statusText}>
                 You applied to this challenge.
@@ -157,7 +238,7 @@ export default async function ChallengeDetailPage({
             </div>
           )}
 
-          {isOperator && isFinalist && (
+          {isOperator && typedChallenge.status === 'accepting_submissions' && isFinalist && (
             <div style={styles.statusBox}>
               <p style={styles.statusText}>
                 You are a finalist!
@@ -165,6 +246,31 @@ export default async function ChallengeDetailPage({
               <Link href={`/challenges/${id}/submit`} style={styles.primaryButton}>
                 Submit Your Work
               </Link>
+            </div>
+          )}
+
+          {isOperator && typedChallenge.status === 'accepting_submissions' && !isFinalist && (
+            <div style={styles.statusBox}>
+              <p style={styles.statusText}>
+                Applications closed. {hasApplied ? 'You were not selected as a finalist.' : 'This challenge is no longer accepting applications.'}
+              </p>
+            </div>
+          )}
+
+          {isOperator && (typedChallenge.status === 'testing' || typedChallenge.status === 'verifying') && (
+            <div style={styles.statusBox}>
+              <p style={styles.statusText}>
+                Challenge in progress — {typedChallenge.status === 'testing' ? 'live testing underway' : 'results being verified'}.
+              </p>
+            </div>
+          )}
+
+          {isOperator && hasApplied && isFinalist && typedChallenge.status === 'open' && (
+            <div style={styles.statusBox}>
+              <p style={styles.statusText}>
+                You are a finalist! Waiting for the brand to close applications.
+              </p>
+              <StatusBadge status={typedApplication!.status} variant="application" />
             </div>
           )}
         </div>
@@ -216,6 +322,13 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-tertiary)',
     marginBottom: '20px',
   },
+  progressBar: {
+    display: 'flex',
+    gap: '4px',
+    marginBottom: '24px',
+    paddingBottom: '20px',
+    borderBottom: '1px solid var(--border-primary)',
+  },
   description: {
     fontSize: '15px',
     color: 'var(--text-secondary)',
@@ -247,6 +360,16 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '15px',
     color: 'var(--text-primary)',
     fontWeight: 500,
+  },
+  winnerBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    padding: '20px',
+    marginTop: '24px',
+    background: 'rgba(46, 213, 115, 0.05)',
+    border: '1px solid rgba(46, 213, 115, 0.2)',
+    borderRadius: '10px',
   },
   actions: {
     marginTop: '24px',

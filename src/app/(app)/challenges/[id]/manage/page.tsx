@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import StatusBadge from '@/components/status-badge'
-import type { Challenge, Application, Profile, Submission } from '@/types/database'
+import type { Challenge, Application, Profile, Submission, ChallengeStatus } from '@/types/database'
 
 const formatCurrency = (cents: number) =>
   new Intl.NumberFormat('en-US', {
@@ -29,6 +29,15 @@ interface SubmissionWithProfile extends Submission {
   profiles: Pick<Profile, 'display_name'>
 }
 
+const FLOW_STEPS: { status: ChallengeStatus; label: string }[] = [
+  { status: 'draft', label: 'Draft' },
+  { status: 'open', label: 'Open' },
+  { status: 'accepting_submissions', label: 'Submissions' },
+  { status: 'testing', label: 'Testing' },
+  { status: 'verifying', label: 'Verifying' },
+  { status: 'completed', label: 'Completed' },
+]
+
 export default function ManageChallengePage() {
   const router = useRouter()
   const params = useParams()
@@ -40,6 +49,8 @@ export default function ManageChallengePage() {
   const [loading, setLoading] = useState(true)
   const [expandedApp, setExpandedApp] = useState<string | null>(null)
   const [updating, setUpdating] = useState<string | null>(null)
+  const [feedbackText, setFeedbackText] = useState<Record<string, string>>({})
+  const [savingFeedback, setSavingFeedback] = useState<string | null>(null)
 
   const loadData = useCallback(async () => {
     const supabase = createClient()
@@ -77,7 +88,16 @@ export default function ManageChallengePage() {
       .eq('challenge_id', id)
       .order('created_at', { ascending: false })
 
-    setSubmissions((subsData || []) as unknown as SubmissionWithProfile[])
+    const subs = (subsData || []) as unknown as SubmissionWithProfile[]
+    setSubmissions(subs)
+
+    // Pre-populate feedback text
+    const fb: Record<string, string> = {}
+    subs.forEach((s) => {
+      if (s.brand_feedback) fb[s.id] = s.brand_feedback
+    })
+    setFeedbackText((prev) => ({ ...prev, ...fb }))
+
     setLoading(false)
   }, [id, router])
 
@@ -98,6 +118,60 @@ export default function ManageChallengePage() {
     setUpdating(null)
   }
 
+  const moveToAcceptingSubmissions = async () => {
+    setUpdating('move-submissions')
+    const supabase = createClient()
+
+    await supabase
+      .from('challenges')
+      .update({ status: 'accepting_submissions' })
+      .eq('id', id)
+
+    await loadData()
+    setUpdating(null)
+  }
+
+  const selectForTesting = async (submissionId: string) => {
+    setUpdating(submissionId)
+    const supabase = createClient()
+
+    // Set the selected submission to selected_for_testing
+    await supabase
+      .from('submissions')
+      .update({ status: 'selected_for_testing' })
+      .eq('id', submissionId)
+
+    // Set all other submissions to runner_up
+    await supabase
+      .from('submissions')
+      .update({ status: 'runner_up' })
+      .eq('challenge_id', id)
+      .neq('id', submissionId)
+      .in('status', ['submitted', 'pending'])
+
+    // Move challenge to testing
+    await supabase
+      .from('challenges')
+      .update({ status: 'testing' })
+      .eq('id', id)
+
+    await loadData()
+    setUpdating(null)
+  }
+
+  const saveFeedback = async (submissionId: string) => {
+    setSavingFeedback(submissionId)
+    const supabase = createClient()
+
+    await supabase
+      .from('submissions')
+      .update({ brand_feedback: feedbackText[submissionId] || '' })
+      .eq('id', submissionId)
+
+    await loadData()
+    setSavingFeedback(null)
+  }
+
   if (loading || !challenge) {
     return (
       <div style={{ padding: '80px 24px', textAlign: 'center' }}>
@@ -107,6 +181,10 @@ export default function ManageChallengePage() {
   }
 
   const finalistCount = applications.filter((a) => a.status === 'finalist').length
+  const finalists = applications.filter((a) => a.status === 'finalist')
+  const submittedSubs = submissions.filter((s) => s.status === 'submitted')
+  const selectedSub = submissions.find((s) => s.status === 'selected_for_testing' || s.status === 'winner')
+  const currentStepIndex = FLOW_STEPS.findIndex((s) => s.status === challenge.status)
 
   return (
     <div style={styles.wrapper}>
@@ -126,123 +204,405 @@ export default function ManageChallengePage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Applications */}
-      <div style={{ marginTop: '24px' }}>
-        <div style={styles.sectionHeader}>
-          <h2 style={styles.sectionTitle}>Applications</h2>
-          <span style={styles.finalistCount}>
-            {finalistCount}/{challenge.max_finalists} finalists selected
-          </span>
-        </div>
-
-        {applications.length === 0 ? (
-          <div style={styles.emptyCard}>
-            <p style={styles.emptyText}>No applications yet.</p>
-          </div>
-        ) : (
-          <div style={styles.list}>
-            {applications.map((app) => (
-              <div key={app.id} style={styles.appCard}>
+        {/* Progress Steps */}
+        <div style={styles.progressBar}>
+          {FLOW_STEPS.map((step, i) => {
+            const isActive = i === currentStepIndex
+            const isComplete = i < currentStepIndex
+            const isFuture = i > currentStepIndex
+            return (
+              <div
+                key={step.status}
+                style={{
+                  ...styles.progressStep,
+                  ...(isActive ? styles.progressStepActive : {}),
+                  ...(isComplete ? styles.progressStepComplete : {}),
+                  ...(isFuture ? styles.progressStepFuture : {}),
+                }}
+              >
                 <div
-                  style={styles.appHeader}
-                  onClick={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
-                >
-                  <div style={styles.appInfo}>
-                    <span style={styles.appName}>{app.profiles?.display_name || 'Unknown'}</span>
-                    <StatusBadge status={app.status} variant="application" />
-                  </div>
-                  <div style={styles.appActions}>
-                    {app.status === 'pending' && (
-                      <>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            updateApplicationStatus(app.id, 'finalist')
-                          }}
-                          disabled={updating === app.id || finalistCount >= challenge.max_finalists}
-                          style={styles.selectButton}
-                        >
-                          {updating === app.id ? '...' : 'Select as Finalist'}
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            updateApplicationStatus(app.id, 'rejected')
-                          }}
-                          disabled={updating === app.id}
-                          style={styles.rejectButton}
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
-                    <span style={styles.expandIcon}>
-                      {expandedApp === app.id ? '\u25B2' : '\u25BC'}
-                    </span>
-                  </div>
-                </div>
-
-                {expandedApp === app.id && (
-                  <div style={styles.appBody}>
-                    <div style={styles.appField}>
-                      <span style={styles.appFieldLabel}>Pitch</span>
-                      <p style={styles.appFieldValue}>{app.pitch}</p>
-                    </div>
-                    {app.background && (
-                      <div style={styles.appField}>
-                        <span style={styles.appFieldLabel}>Background</span>
-                        <p style={styles.appFieldValue}>{app.background}</p>
-                      </div>
-                    )}
-                    {app.relevant_wins && (
-                      <div style={styles.appField}>
-                        <span style={styles.appFieldLabel}>Relevant Wins</span>
-                        <p style={styles.appFieldValue}>{app.relevant_wins}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
+                  style={{
+                    ...styles.progressDot,
+                    background: isComplete ? '#2ed573' : isActive ? 'var(--accent)' : 'var(--border-secondary)',
+                  }}
+                />
+                <span style={{
+                  fontSize: '11px',
+                  fontWeight: isActive ? 600 : 400,
+                  color: isFuture ? 'var(--text-quaternary)' : 'var(--text-secondary)',
+                }}>
+                  {step.label}
+                </span>
               </div>
-            ))}
-          </div>
-        )}
+            )
+          })}
+        </div>
       </div>
 
-      {/* Submissions */}
-      {submissions.length > 0 && (
-        <div style={{ marginTop: '32px' }}>
-          <h2 style={styles.sectionTitle}>Submissions</h2>
-          <div style={{ ...styles.list, marginTop: '16px' }}>
-            {submissions.map((sub) => (
-              <div key={sub.id} style={styles.appCard}>
+      {/* Status: draft — Prompt to publish */}
+      {challenge.status === 'draft' && (
+        <div style={{ ...styles.statusSection, marginTop: '24px' }}>
+          <div style={styles.statusCard}>
+            <p style={styles.statusMessage}>This challenge is still a draft. Publish it to start accepting applications.</p>
+            <button
+              onClick={async () => {
+                setUpdating('publish')
+                const supabase = createClient()
+                await supabase.from('challenges').update({ status: 'open' }).eq('id', id)
+                await loadData()
+                setUpdating(null)
+              }}
+              disabled={updating === 'publish'}
+              style={styles.primaryButton}
+            >
+              {updating === 'publish' ? 'Publishing...' : 'Publish Challenge'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Status: open — Applications phase */}
+      {challenge.status === 'open' && (
+        <div style={{ marginTop: '24px' }}>
+          <div style={styles.statusCard}>
+            <p style={styles.statusMessage}>Applications are open. Waiting for operators to apply.</p>
+          </div>
+
+          <div style={{ marginTop: '24px' }}>
+            <div style={styles.sectionHeader}>
+              <h2 style={styles.sectionTitle}>Applications</h2>
+              <span style={styles.finalistCount}>
+                {finalistCount}/{challenge.max_finalists} finalists selected
+              </span>
+            </div>
+
+            {applications.length === 0 ? (
+              <div style={styles.emptyCard}>
+                <p style={styles.emptyText}>No applications yet.</p>
+              </div>
+            ) : (
+              <div style={styles.list}>
+                {applications.map((app) => (
+                  <div key={app.id} style={styles.appCard}>
+                    <div
+                      style={styles.appHeader}
+                      onClick={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
+                    >
+                      <div style={styles.appInfo}>
+                        <span style={styles.appName}>{app.profiles?.display_name || 'Unknown'}</span>
+                        <StatusBadge status={app.status} variant="application" />
+                      </div>
+                      <div style={styles.appActions}>
+                        {app.status === 'pending' && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                updateApplicationStatus(app.id, 'finalist')
+                              }}
+                              disabled={updating === app.id || finalistCount >= challenge.max_finalists}
+                              style={styles.selectButton}
+                            >
+                              {updating === app.id ? '...' : 'Select as Finalist'}
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                updateApplicationStatus(app.id, 'rejected')
+                              }}
+                              disabled={updating === app.id}
+                              style={styles.rejectButton}
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
+                        <span style={styles.expandIcon}>
+                          {expandedApp === app.id ? '\u25B2' : '\u25BC'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {expandedApp === app.id && (
+                      <div style={styles.appBody}>
+                        <div style={styles.appField}>
+                          <span style={styles.appFieldLabel}>Pitch</span>
+                          <p style={styles.appFieldValue}>{app.pitch}</p>
+                        </div>
+                        {app.background && (
+                          <div style={styles.appField}>
+                            <span style={styles.appFieldLabel}>Background</span>
+                            <p style={styles.appFieldValue}>{app.background}</p>
+                          </div>
+                        )}
+                        {app.relevant_wins && (
+                          <div style={styles.appField}>
+                            <span style={styles.appFieldLabel}>Relevant Wins</span>
+                            <p style={styles.appFieldValue}>{app.relevant_wins}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {finalistCount >= 1 && (
+              <button
+                onClick={moveToAcceptingSubmissions}
+                disabled={updating === 'move-submissions'}
+                style={{ ...styles.primaryButton, marginTop: '20px', width: '100%' }}
+              >
+                {updating === 'move-submissions'
+                  ? 'Moving...'
+                  : `Close Applications & Move to Submissions (${finalistCount} finalist${finalistCount !== 1 ? 's' : ''})`}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Status: accepting_submissions — Waiting for finalist submissions */}
+      {challenge.status === 'accepting_submissions' && (
+        <div style={{ marginTop: '24px' }}>
+          <div style={styles.statusCard}>
+            <p style={styles.statusMessage}>Waiting for finalist submissions.</p>
+          </div>
+
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={styles.sectionTitle}>Finalists</h2>
+            <div style={{ ...styles.list, marginTop: '16px' }}>
+              {finalists.map((app) => {
+                const sub = submissions.find((s) => s.operator_id === app.operator_id)
+                return (
+                  <div key={app.id} style={styles.appCard}>
+                    <div style={styles.appHeader}>
+                      <div style={styles.appInfo}>
+                        <span style={styles.appName}>{app.profiles?.display_name || 'Unknown'}</span>
+                        {sub ? (
+                          <StatusBadge status={sub.status} variant="submission" />
+                        ) : (
+                          <span style={{ fontSize: '12px', color: 'var(--text-quaternary)' }}>Awaiting submission</span>
+                        )}
+                      </div>
+                    </div>
+                    {sub && (
+                      <div style={styles.appBody}>
+                        <p style={styles.appFieldValue}>{sub.description}</p>
+                        {sub.evidence_url && (
+                          <a href={sub.evidence_url} target="_blank" rel="noopener noreferrer" style={styles.evidenceLink}>
+                            View Evidence
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Review submissions section */}
+          {submittedSubs.length > 0 && (
+            <div style={{ marginTop: '32px' }}>
+              <h2 style={styles.sectionTitle}>Review Submissions</h2>
+              <p style={{ fontSize: '13px', color: 'var(--text-tertiary)', marginTop: '4px', marginBottom: '16px' }}>
+                Select one submission to test live. All others will become runners-up.
+              </p>
+              <div style={styles.list}>
+                {submittedSubs.map((sub) => (
+                  <div key={sub.id} style={styles.appCard}>
+                    <div style={styles.appHeader}>
+                      <div style={styles.appInfo}>
+                        <span style={styles.appName}>{sub.profiles?.display_name || 'Unknown'}</span>
+                        <StatusBadge status={sub.status} variant="submission" />
+                      </div>
+                      <button
+                        onClick={() => selectForTesting(sub.id)}
+                        disabled={updating === sub.id}
+                        style={styles.selectButton}
+                      >
+                        {updating === sub.id ? '...' : 'Select for Testing'}
+                      </button>
+                    </div>
+                    <div style={styles.appBody}>
+                      <p style={styles.appFieldValue}>{sub.description}</p>
+                      {sub.evidence_url && (
+                        <a href={sub.evidence_url} target="_blank" rel="noopener noreferrer" style={styles.evidenceLink}>
+                          View Evidence
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Status: testing — One submission selected for live testing */}
+      {challenge.status === 'testing' && (
+        <div style={{ marginTop: '24px' }}>
+          <div style={styles.statusCard}>
+            <p style={styles.statusMessage}>One submission selected for live testing. Admin will verify results.</p>
+          </div>
+
+          {selectedSub && (
+            <div style={{ marginTop: '24px' }}>
+              <h2 style={styles.sectionTitle}>Selected for Testing</h2>
+              <div style={{ ...styles.appCard, marginTop: '16px', border: '2px solid var(--accent)' }}>
                 <div style={styles.appHeader}>
                   <div style={styles.appInfo}>
-                    <span style={styles.appName}>{sub.profiles?.display_name || 'Unknown'}</span>
-                    <StatusBadge status={sub.status} variant="submission" />
+                    <span style={styles.appName}>{selectedSub.profiles?.display_name || 'Unknown'}</span>
+                    <StatusBadge status={selectedSub.status} variant="submission" />
                   </div>
-                  {sub.claimed_value !== null && (
-                    <span style={styles.claimedValue}>
-                      Claimed: {sub.claimed_value}
-                    </span>
-                  )}
                 </div>
                 <div style={styles.appBody}>
-                  <p style={styles.appFieldValue}>{sub.description}</p>
-                  {sub.evidence_url && (
-                    <a
-                      href={sub.evidence_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={styles.evidenceLink}
-                    >
+                  <p style={styles.appFieldValue}>{selectedSub.description}</p>
+                  {selectedSub.evidence_url && (
+                    <a href={selectedSub.evidence_url} target="_blank" rel="noopener noreferrer" style={styles.evidenceLink}>
                       View Evidence
                     </a>
                   )}
                 </div>
               </div>
-            ))}
+            </div>
+          )}
+
+          {/* All submissions with feedback */}
+          <div style={{ marginTop: '32px' }}>
+            <h2 style={styles.sectionTitle}>All Finalist Submissions</h2>
+            <div style={{ ...styles.list, marginTop: '16px' }}>
+              {submissions.map((sub) => (
+                <div key={sub.id} style={styles.appCard}>
+                  <div style={styles.appHeader}>
+                    <div style={styles.appInfo}>
+                      <span style={styles.appName}>{sub.profiles?.display_name || 'Unknown'}</span>
+                      <StatusBadge status={sub.status} variant="submission" />
+                    </div>
+                  </div>
+                  <div style={styles.appBody}>
+                    <p style={styles.appFieldValue}>{sub.description}</p>
+                    {sub.evidence_url && (
+                      <a href={sub.evidence_url} target="_blank" rel="noopener noreferrer" style={styles.evidenceLink}>
+                        View Evidence
+                      </a>
+                    )}
+                    <div style={styles.feedbackSection}>
+                      <label style={styles.appFieldLabel}>Brand Feedback</label>
+                      <textarea
+                        value={feedbackText[sub.id] || ''}
+                        onChange={(e) => setFeedbackText((prev) => ({ ...prev, [sub.id]: e.target.value }))}
+                        placeholder="Leave feedback for this finalist..."
+                        rows={3}
+                        style={styles.feedbackTextarea}
+                      />
+                      <button
+                        onClick={() => saveFeedback(sub.id)}
+                        disabled={savingFeedback === sub.id}
+                        style={styles.feedbackButton}
+                      >
+                        {savingFeedback === sub.id ? 'Saving...' : 'Save Feedback'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Status: verifying / completed / refunded — Show results */}
+      {(challenge.status === 'verifying' || challenge.status === 'completed' || challenge.status === 'refunded') && (
+        <div style={{ marginTop: '24px' }}>
+          <div style={styles.statusCard}>
+            <p style={styles.statusMessage}>
+              {challenge.status === 'verifying' && 'Admin is verifying the test results.'}
+              {challenge.status === 'completed' && 'Challenge completed! A winner has been selected.'}
+              {challenge.status === 'refunded' && 'Challenge refunded. Nobody beat the baseline.'}
+            </p>
+          </div>
+
+          {/* Results summary */}
+          {(challenge.status === 'completed' || challenge.status === 'refunded') && (
+            <div style={{ ...styles.card, marginTop: '24px' }}>
+              <h2 style={styles.sectionTitle}>Results</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
+                <div style={styles.appField}>
+                  <span style={styles.appFieldLabel}>Baseline</span>
+                  <span style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {challenge.baseline_value}{challenge.metric_unit}
+                  </span>
+                </div>
+                <div style={styles.appField}>
+                  <span style={styles.appFieldLabel}>Verified Result</span>
+                  <span style={{ fontSize: '20px', fontWeight: 600, color: challenge.verified_result && challenge.verified_result > challenge.baseline_value ? '#2ed573' : '#eb5757' }}>
+                    {challenge.verified_result !== null ? `${challenge.verified_result}${challenge.metric_unit}` : 'Pending'}
+                  </span>
+                </div>
+              </div>
+              {challenge.admin_verification_notes && (
+                <div style={{ marginTop: '16px' }}>
+                  <span style={styles.appFieldLabel}>Admin Notes</span>
+                  <p style={styles.appFieldValue}>{challenge.admin_verification_notes}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* All submissions with feedback */}
+          <div style={{ marginTop: '32px' }}>
+            <h2 style={styles.sectionTitle}>All Finalist Submissions</h2>
+            <div style={{ ...styles.list, marginTop: '16px' }}>
+              {submissions.map((sub) => (
+                <div key={sub.id} style={{
+                  ...styles.appCard,
+                  ...(sub.status === 'winner' ? { border: '2px solid #2ed573' } : {}),
+                }}>
+                  <div style={styles.appHeader}>
+                    <div style={styles.appInfo}>
+                      <span style={styles.appName}>{sub.profiles?.display_name || 'Unknown'}</span>
+                      <StatusBadge status={sub.status} variant="submission" />
+                    </div>
+                  </div>
+                  <div style={styles.appBody}>
+                    <p style={styles.appFieldValue}>{sub.description}</p>
+                    {sub.evidence_url && (
+                      <a href={sub.evidence_url} target="_blank" rel="noopener noreferrer" style={styles.evidenceLink}>
+                        View Evidence
+                      </a>
+                    )}
+                    {sub.brand_feedback && (
+                      <div style={styles.appField}>
+                        <span style={styles.appFieldLabel}>Your Feedback</span>
+                        <p style={styles.appFieldValue}>{sub.brand_feedback}</p>
+                      </div>
+                    )}
+                    <div style={styles.feedbackSection}>
+                      <label style={styles.appFieldLabel}>Brand Feedback</label>
+                      <textarea
+                        value={feedbackText[sub.id] || ''}
+                        onChange={(e) => setFeedbackText((prev) => ({ ...prev, [sub.id]: e.target.value }))}
+                        placeholder="Leave feedback for this finalist..."
+                        rows={3}
+                        style={styles.feedbackTextarea}
+                      />
+                      <button
+                        onClick={() => saveFeedback(sub.id)}
+                        disabled={savingFeedback === sub.id}
+                        style={styles.feedbackButton}
+                      >
+                        {savingFeedback === sub.id ? 'Saving...' : 'Save Feedback'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -282,6 +642,61 @@ const styles: Record<string, React.CSSProperties> = {
   metaText: {
     fontSize: '13px',
     color: 'var(--text-tertiary)',
+  },
+  progressBar: {
+    display: 'flex',
+    gap: '4px',
+    marginTop: '24px',
+    paddingTop: '20px',
+    borderTop: '1px solid var(--border-primary)',
+  },
+  progressStep: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '6px',
+  },
+  progressStepActive: {},
+  progressStepComplete: {},
+  progressStepFuture: {},
+  progressDot: {
+    width: '10px',
+    height: '10px',
+    borderRadius: '50%',
+  },
+  statusSection: {},
+  statusCard: {
+    padding: '20px 24px',
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-primary)',
+    borderRadius: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '16px',
+    flexWrap: 'wrap',
+  },
+  statusMessage: {
+    fontSize: '14px',
+    color: 'var(--text-secondary)',
+    fontWeight: 500,
+  },
+  primaryButton: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '40px',
+    padding: '0 20px',
+    fontSize: '14px',
+    fontWeight: 500,
+    color: 'var(--bg-primary)',
+    background: 'var(--text-primary)',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    textDecoration: 'none',
   },
   sectionHeader: {
     display: 'flex',
@@ -397,15 +812,42 @@ const styles: Record<string, React.CSSProperties> = {
     lineHeight: 1.6,
     whiteSpace: 'pre-wrap' as const,
   },
-  claimedValue: {
-    fontSize: '14px',
-    color: 'var(--accent)',
-    fontWeight: 500,
-  },
   evidenceLink: {
     fontSize: '14px',
     color: 'var(--accent)',
     textDecoration: 'none',
     fontWeight: 500,
+  },
+  feedbackSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    marginTop: '8px',
+    paddingTop: '12px',
+    borderTop: '1px solid var(--border-primary)',
+  },
+  feedbackTextarea: {
+    padding: '10px 14px',
+    fontSize: '14px',
+    color: 'var(--text-primary)',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-secondary)',
+    borderRadius: '8px',
+    outline: 'none',
+    fontFamily: 'inherit',
+    resize: 'vertical' as const,
+    lineHeight: 1.5,
+  },
+  feedbackButton: {
+    alignSelf: 'flex-start',
+    fontSize: '13px',
+    fontWeight: 500,
+    color: 'var(--text-secondary)',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-primary)',
+    borderRadius: '6px',
+    padding: '6px 14px',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
   },
 }
