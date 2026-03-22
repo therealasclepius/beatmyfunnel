@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ChallengeCard from '@/components/challenge-card'
 import type { Challenge } from '@/types/database'
@@ -44,10 +45,29 @@ export default async function BrowseChallengesPage() {
   return (
     <div>
       <div style={styles.pageHeader}>
-        <h1 style={styles.pageTitle}>Challenges</h1>
-        <p style={styles.pageDesc}>
-          Browse open challenges and apply to compete.
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h1 style={styles.pageTitle}>Challenges</h1>
+            <p style={styles.pageDesc}>
+              Browse open challenges and apply to compete.
+            </p>
+          </div>
+          <Link href="/challenges/new" style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            height: '40px',
+            padding: '0 20px',
+            background: 'var(--text-primary)',
+            color: 'var(--bg-primary)',
+            fontSize: '14px',
+            fontWeight: 500,
+            borderRadius: '8px',
+            textDecoration: 'none',
+            whiteSpace: 'nowrap' as const,
+          }}>
+            + Post a Challenge
+          </Link>
+        </div>
       </div>
 
       {typedChallenges.length === 0 ? (
