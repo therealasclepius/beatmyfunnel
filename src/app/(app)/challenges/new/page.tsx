@@ -44,7 +44,8 @@ export default function NewChallengePage() {
         .eq('id', user.id)
         .single()
 
-      if (!profile || (profile as Pick<Profile, 'role'>).role !== 'brand') {
+      const userRole = (profile as Pick<Profile, 'role'>)?.role
+      if (!profile || (userRole !== 'brand' && userRole !== 'admin')) {
         router.push('/dashboard')
         return
       }
