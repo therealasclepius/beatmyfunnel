@@ -27,8 +27,10 @@ export default function NewChallengePage() {
   const [metricUnit, setMetricUnit] = useState('%')
   const [baselineValue, setBaselineValue] = useState('')
   const [prizeAmount, setPrizeAmount] = useState('')
-  const [maxFinalists, setMaxFinalists] = useState('5')
+  const [maxFinalists, setMaxFinalists] = useState('3')
   const [deadline, setDeadline] = useState('')
+  const [trafficSessions, setTrafficSessions] = useState('5000')
+  const [trafficDays, setTrafficDays] = useState('14')
 
   useEffect(() => {
     const checkRole = async () => {
@@ -73,6 +75,11 @@ export default function NewChallengePage() {
       return
     }
 
+    if (prizeInCents < 500000) {
+      setError('Minimum prize amount is $5,000.')
+      return
+    }
+
     const deadlineDate = new Date(deadline)
     if (deadlineDate <= new Date()) {
       setError('Deadline must be in the future.')
@@ -109,6 +116,9 @@ export default function NewChallengePage() {
         deadline: deadline,
         metric_unit: metricUnit,
         challenge_type: challengeType,
+        traffic_commitment_sessions: parseInt(trafficSessions, 10) || 5000,
+        traffic_commitment_days: parseInt(trafficDays, 10) || 14,
+        finalist_floor_payout: 500,
       })
       .select('id')
       .single()
@@ -181,6 +191,14 @@ export default function NewChallengePage() {
             <div style={styles.summaryRow}>
               <span style={styles.summaryLabel}>Type</span>
               <span style={styles.summaryValue}>{challengeType.replace(/_/g, ' ')}</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span style={styles.summaryLabel}>Traffic Commitment</span>
+              <span style={styles.summaryValue}>{trafficSessions} sessions in {trafficDays} days</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span style={styles.summaryLabel}>Finalist Pool</span>
+              <span style={styles.summaryValue}>${(parseInt(maxFinalists, 10) || 0) * 500}</span>
             </div>
           </div>
 
@@ -305,7 +323,7 @@ export default function NewChallengePage() {
                 id="prize"
                 type="number"
                 step="0.01"
-                min="1"
+                min="5000"
                 value={prizeAmount}
                 onChange={(e) => setPrizeAmount(e.target.value)}
                 placeholder="e.g. 5000"
@@ -320,13 +338,55 @@ export default function NewChallengePage() {
                 id="maxFinalists"
                 type="number"
                 min="1"
-                max="20"
+                max="3"
                 value={maxFinalists}
                 onChange={(e) => setMaxFinalists(e.target.value)}
                 required
                 style={styles.input}
               />
             </div>
+          </div>
+
+          <div style={styles.row}>
+            <div style={styles.field}>
+              <label style={styles.label} htmlFor="trafficSessions">Traffic Commitment (sessions)</label>
+              <input
+                id="trafficSessions"
+                type="number"
+                min="1000"
+                value={trafficSessions}
+                onChange={(e) => setTrafficSessions(e.target.value)}
+                required
+                style={styles.input}
+              />
+            </div>
+
+            <div style={styles.field}>
+              <label style={styles.label} htmlFor="trafficDays">Commitment Period (days)</label>
+              <input
+                id="trafficDays"
+                type="number"
+                min="1"
+                value={trafficDays}
+                onChange={(e) => setTrafficDays(e.target.value)}
+                required
+                style={styles.input}
+              />
+            </div>
+          </div>
+
+          {/* Finalist Pool (read-only calculated field) */}
+          <div style={styles.field}>
+            <label style={styles.label}>Finalist Pool</label>
+            <input
+              type="text"
+              value={`$${(parseInt(maxFinalists, 10) || 0) * 500}`}
+              readOnly
+              style={{ ...styles.input, color: 'var(--text-tertiary)', cursor: 'default' }}
+            />
+            <span style={{ fontSize: '12px', color: 'var(--text-quaternary)', marginTop: '4px' }}>
+              Each finalist receives $500 upon submission. This is paid on top of the prize.
+            </span>
           </div>
 
           <div style={styles.field}>

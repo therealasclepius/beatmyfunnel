@@ -14,6 +14,7 @@ export interface Profile {
   bio: string | null
   avatar_url: string | null
   website_url: string | null
+  badges: Record<string, unknown>[] | null
   created_at: string
   updated_at: string
 }
@@ -31,6 +32,10 @@ export interface Challenge {
   status: ChallengeStatus
   metric_unit: string
   challenge_type: ChallengeType
+  traffic_commitment_sessions: number
+  traffic_commitment_days: number
+  finalist_floor_payout: number
+  current_sessions_delivered: number
   escrow_transaction_id: string | null
   payment_status: string
   winner_id: string | null
@@ -74,7 +79,7 @@ export interface Submission {
 
 // Insert types (omit auto-generated fields)
 export type ProfileInsert = Omit<Profile, 'created_at' | 'updated_at'>
-export type ChallengeInsert = Omit<Challenge, 'id' | 'status' | 'escrow_transaction_id' | 'payment_status' | 'winner_id' | 'verified_result' | 'admin_verification_notes' | 'created_at' | 'updated_at'>
+export type ChallengeInsert = Omit<Challenge, 'id' | 'status' | 'current_sessions_delivered' | 'escrow_transaction_id' | 'payment_status' | 'winner_id' | 'verified_result' | 'admin_verification_notes' | 'created_at' | 'updated_at'>
 export type ApplicationInsert = Omit<Application, 'id' | 'status' | 'shortlisted_badge' | 'created_at' | 'updated_at'>
 export type SubmissionInsert = Omit<Submission, 'id' | 'status' | 'claimed_value' | 'verified_value' | 'brand_feedback' | 'admin_notes' | 'is_portfolio_visible' | 'tested_at' | 'test_result' | 'created_at' | 'updated_at'>
 

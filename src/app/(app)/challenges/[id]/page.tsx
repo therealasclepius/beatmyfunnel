@@ -190,6 +190,16 @@ export default async function ChallengeDetailPage({
             <span style={styles.detailLabel}>Applicants</span>
             <span style={styles.detailValue}>{applicationCount || 0} operators have applied</span>
           </div>
+          <div style={styles.detailItem}>
+            <span style={styles.detailLabel}>Traffic Commitment</span>
+            <span style={styles.detailValue}>
+              {typedChallenge.traffic_commitment_sessions?.toLocaleString() ?? '5,000'} sessions in {typedChallenge.traffic_commitment_days ?? 14} days
+            </span>
+          </div>
+          <div style={styles.detailItem}>
+            <span style={styles.detailLabel}>Finalist Floor</span>
+            <span style={styles.detailValue}>Each finalist receives ${typedChallenge.finalist_floor_payout ?? 500} upon submission</span>
+          </div>
         </div>
 
         {/* Winner Display */}

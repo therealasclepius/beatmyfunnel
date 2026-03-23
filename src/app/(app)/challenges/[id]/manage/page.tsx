@@ -208,6 +208,12 @@ export default function ManageChallengePage() {
   const selectedSub = submissions.find((s) => s.status === 'selected_for_testing' || s.status === 'winner')
   const currentStepIndex = FLOW_STEPS.findIndex((s) => s.status === challenge.status)
 
+  const effectiveMaxFinalists = Math.min(challenge.max_finalists, 3)
+  const finalistFloorPayout = challenge.finalist_floor_payout ?? 500
+  const finalistPool = effectiveMaxFinalists * finalistFloorPayout * 100 // in cents
+  const platformFee = Math.round(challenge.prize_amount * 0.15) // 15% platform fee in cents
+  const totalBrandCost = challenge.prize_amount + finalistPool + platformFee
+
   return (
     <div style={styles.wrapper}>
       <Link href="/dashboard" style={styles.backLink}>
@@ -223,6 +229,7 @@ export default function ManageChallengePage() {
               <StatusBadge status={challenge.status} variant="challenge" />
               <span style={styles.metaText}>{formatCurrency(challenge.prize_amount)} prize</span>
               <span style={styles.metaText}>Deadline: {formatDate(challenge.deadline)}</span>
+              <span style={styles.metaText}>Max {effectiveMaxFinalists} finalists</span>
             </div>
           </div>
         </div>
@@ -262,6 +269,29 @@ export default function ManageChallengePage() {
         </div>
       </div>
 
+      {/* Total Brand Cost Summary */}
+      <div style={{ ...styles.card, marginTop: '16px' }}>
+        <h2 style={{ ...styles.sectionTitle, fontSize: '15px', marginBottom: '12px' }}>Total Brand Cost</h2>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={styles.metaText}>Prize</span>
+            <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: 500 }}>{formatCurrency(challenge.prize_amount)}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={styles.metaText}>Finalist pool ({effectiveMaxFinalists} x ${finalistFloorPayout})</span>
+            <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: 500 }}>{formatCurrency(finalistPool)}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={styles.metaText}>Platform fee (15%)</span>
+            <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: 500 }}>{formatCurrency(platformFee)}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-primary)', paddingTop: '8px', marginTop: '4px' }}>
+            <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: 600 }}>Total</span>
+            <span style={{ fontSize: '14px', color: 'var(--accent)', fontWeight: 600 }}>{formatCurrency(totalBrandCost)}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Status: draft — Prompt to publish */}
       {challenge.status === 'draft' && (
         <div style={{ ...styles.statusSection, marginTop: '24px' }}>
@@ -295,7 +325,7 @@ export default function ManageChallengePage() {
             <div style={styles.sectionHeader}>
               <h2 style={styles.sectionTitle}>Applications</h2>
               <span style={styles.finalistCount}>
-                {finalistCount}/{challenge.max_finalists} finalists selected
+                {finalistCount}/{effectiveMaxFinalists} finalists selected
               </span>
             </div>
 
@@ -323,7 +353,7 @@ export default function ManageChallengePage() {
                                 e.stopPropagation()
                                 updateApplicationStatus(app.id, 'finalist')
                               }}
-                              disabled={updating === app.id || finalistCount >= challenge.max_finalists}
+                              disabled={updating === app.id || finalistCount >= effectiveMaxFinalists}
                               style={styles.selectButton}
                             >
                               {updating === app.id ? '...' : 'Select as Finalist'}
