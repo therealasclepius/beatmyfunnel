@@ -114,6 +114,14 @@
           "@type": "Answer",
           "text": "Every finalist submission becomes a verified public entry on their operator profile. Non-winning finalists earn a Shortlisted badge and receive written feedback from the brand. Brands can also reach out to hire any finalist directly through the platform."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Who owns the submissions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Brands only acquire the rights to the winning submission. Non-winning submissions remain the intellectual property of the operator. Brands may not use elements of non-winning submissions without purchasing them directly from the operator."
+        }
       }
     ]
   }
@@ -1665,6 +1673,10 @@
         --section-padding: 80px;
       }
 
+      .use-cases [style*="grid-template-columns: repeat(3"] {
+        grid-template-columns: 1fr !important;
+      }
+
       .logo {
         white-space: nowrap;
       }
@@ -1816,7 +1828,7 @@
       <h1 class="hero-anim hero-anim-2">Don't pitch for the work.<br>Win it.</h1>
 
       <p class="hero-sub hero-anim hero-anim-3">
-        Beat My Funnel is a performance marketplace where brands post challenges and operators compete to prove they're better. Winners get paid — and often get the client.
+        Stop paying agencies on faith. Pay on proof.
       </p>
 
       <!-- CTA -->
@@ -1831,6 +1843,7 @@
             <span class="cta-micro">For operators &amp; builders</span>
           </div>
         </div>
+        <p class="hero-micro" style="margin-top: 16px; font-size: 13px; color: var(--text-quaternary);">47 operators on the waitlist · 3 challenges launching in April</p>
       </div>
 
       <!-- Pill slider -->
@@ -1971,7 +1984,8 @@
         <div class="letter-right letter-body">
           <p><strong>Beat My Funnel is the fix.</strong> A brand posts their metric and locks prize money in escrow. Operators apply. The brand picks a few finalists. One submission gets tested live. If it wins, the money moves. If not, full refund.</p>
           <p><strong>No retainers. No pitch decks. No handshake deals.</strong> Just: can you beat this number? Prove it.</p>
-          <p>The best operators shouldn't have to sell themselves. They should show their work and let the results talk. I'm glad you're here, and I'd love to have you <a href="#get-started" class="letter-link">join the beta</a>.</p>
+          <p>The best operators shouldn't have to sell themselves. They should show their work and let the results talk.</p>
+          <p class="letter-highlight"><a href="#get-started" class="letter-link">That's what this is. Prove it or get paid.</a></p>
           <div class="letter-sig">
             <div class="letter-sig-avatar">K</div>
             <div class="letter-sig-info">
@@ -2035,26 +2049,23 @@
         <p class="responses-label">The operators responded</p>
         <div class="marquee-container">
           <div class="marquee-row marquee-row--left">
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'm ready Jacob!"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">J</div><div><span class="marquee-name">Jason Applebaum</span><span class="marquee-handle">@Jason______A</span></div><span class="marquee-text">"I love this!"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">D</div><div><span class="marquee-name">Dave</span><span class="marquee-handle">@DaveDiederen</span></div><span class="marquee-text">"Let's freaking get it! Just messaged 🙏🏽"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">S</div><div><span class="marquee-name">Stefan Georgi</span><span class="marquee-handle">@StefanGeorgi</span></div><span class="marquee-text">"I'll take a crack"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">S</div><div><span class="marquee-name">Stefan Georgi</span><span class="marquee-handle">@StefanGeorgi</span></div><span class="marquee-text">"I'll take a crack"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'm ready Jacob!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Dave</span><span class="marquee-handle">@DaveDiederen</span></div><span class="marquee-text">"Let's freaking get it! Just messaged 🙏🏽"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">J</div><div><span class="marquee-name">Jason Applebaum</span><span class="marquee-handle">@Jason______A</span></div><span class="marquee-text">"I love this!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">P</div><div><span class="marquee-name">Paddy</span><span class="marquee-handle">@paddymedia</span></div><span class="marquee-text">"Messaged"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Daniel</span><span class="marquee-handle">@DanielDoor8</span></div><span class="marquee-text">"Interested"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">T</div><div><span class="marquee-name">The Funnel Professor</span><span class="marquee-handle">@DTC_Quizbuilder</span></div><span class="marquee-text">"🧡"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'd love to try"</span></div>
             <!-- duplicate for seamless loop -->
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'm ready Jacob!"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">J</div><div><span class="marquee-name">Jason Applebaum</span><span class="marquee-handle">@Jason______A</span></div><span class="marquee-text">"I love this!"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">D</div><div><span class="marquee-name">Dave</span><span class="marquee-handle">@DaveDiederen</span></div><span class="marquee-text">"Let's freaking get it! Just messaged 🙏🏽"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--accent">S</div><div><span class="marquee-name">Stefan Georgi</span><span class="marquee-handle">@StefanGeorgi</span></div><span class="marquee-text">"I'll take a crack"</span></div>
-          </div>
-          <div class="marquee-row marquee-row--right">
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'd love to try"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">D</div><div><span class="marquee-name">Daniel</span><span class="marquee-handle">@DanielDoor8</span></div><span class="marquee-text">"Interested"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">P</div><div><span class="marquee-name">Paddy</span><span class="marquee-handle">@paddymedia</span></div><span class="marquee-text">"Messaged"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">T</div><div><span class="marquee-name">The Funnel Professor</span><span class="marquee-handle">@DTC_Quizbuilder</span></div><span class="marquee-text">"🧡"</span></div>
-            <!-- duplicate for seamless loop -->
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'd love to try"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">D</div><div><span class="marquee-name">Daniel</span><span class="marquee-handle">@DanielDoor8</span></div><span class="marquee-text">"Interested"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">P</div><div><span class="marquee-name">Paddy</span><span class="marquee-handle">@paddymedia</span></div><span class="marquee-text">"Messaged"</span></div>
-            <div class="marquee-card"><div class="marquee-avatar marquee-avatar--green">T</div><div><span class="marquee-name">The Funnel Professor</span><span class="marquee-handle">@DTC_Quizbuilder</span></div><span class="marquee-text">"🧡"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">S</div><div><span class="marquee-name">Stefan Georgi</span><span class="marquee-handle">@StefanGeorgi</span></div><span class="marquee-text">"I'll take a crack"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'm ready Jacob!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Dave</span><span class="marquee-handle">@DaveDiederen</span></div><span class="marquee-text">"Let's freaking get it! Just messaged 🙏🏽"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">J</div><div><span class="marquee-name">Jason Applebaum</span><span class="marquee-handle">@Jason______A</span></div><span class="marquee-text">"I love this!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">P</div><div><span class="marquee-name">Paddy</span><span class="marquee-handle">@paddymedia</span></div><span class="marquee-text">"Messaged"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Daniel</span><span class="marquee-handle">@DanielDoor8</span></div><span class="marquee-text">"Interested"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">T</div><div><span class="marquee-name">The Funnel Professor</span><span class="marquee-handle">@DTC_Quizbuilder</span></div><span class="marquee-text">"🧡"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'd love to try"</span></div>
           </div>
         </div>
       </div>
@@ -2172,6 +2183,33 @@
   <hr class="divider">
 
   <!-- TWO-SIDED VALUE -->
+  <!-- THREE USE CASES -->
+  <section class="use-cases reveal">
+    <div class="container" style="text-align: center;">
+      <p class="section-label">Three ways brands use Beat My Funnel</p>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-primary); border: 1px solid var(--border-primary); border-radius: 12px; overflow: hidden; margin-top: 48px;">
+        <div style="background: var(--bg-card); padding: 32px 28px; text-align: left;">
+          <p style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-quaternary); margin-bottom: 16px;">Agency Validation</p>
+          <h3 style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 12px;">Test your agency.<br>For real.</h3>
+          <p style="font-size: 14px; line-height: 1.6; color: var(--text-tertiary);">Your agency says they're the best. Make them prove it. If they win the challenge, you keep them with confidence. If they lose, you have your answer — and a better operator ready to go.</p>
+        </div>
+        <div style="background: var(--bg-card); padding: 32px 28px; text-align: left;">
+          <p style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-quaternary); margin-bottom: 16px;">Hiring Test</p>
+          <h3 style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 12px;">The world's best<br>job interview.</h3>
+          <p style="font-size: 14px; line-height: 1.6; color: var(--text-tertiary);">The operator who beats your funnel is the one you want running it full-time. $10K to find a world-class hire is the best recruiting spend you'll make.</p>
+        </div>
+        <div style="background: var(--bg-card); padding: 32px 28px; text-align: left;">
+          <p style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-quaternary); margin-bottom: 16px;">CRO Budget Alternative</p>
+          <h3 style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 12px;">One challenge beats<br>two retainers.</h3>
+          <p style="font-size: 14px; line-height: 1.6; color: var(--text-tertiary);">Your CRO budget is $30K. Instead of splitting it between two agencies with conflicting opinions — post one challenge. Only pay if someone's actually better.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
   <section id="get-started" class="two-sided reveal">
     <div class="container">
       <p class="section-label">Get started</p>
@@ -2217,7 +2255,7 @@
     <div class="container">
       <p class="section-label">FAQ</p>
       <h2>Everything you need to know</h2>
-      <p class="faq-sub">How challenges work, how you get paid, and why this isn't spec work.</p>
+      <p class="faq-sub">How challenges work, how you get paid, and what happens to your submissions.</p>
 
       <div class="faq-list">
         <details class="faq-item" open>
@@ -2251,8 +2289,8 @@
         </details>
 
         <details class="faq-item">
-          <summary>How do submissions work? Isn't this spec work? <span class="icon">+</span></summary>
-          <div class="answer">No. This isn't open entry where 20 people build blindly. Operators apply with a quick pitch — who they are, relevant wins, why they'd beat it. The brand selects 3–5 finalists. Only finalists build and submit. That's a real competition with real odds, not a lottery.</div>
+          <summary>How do finalists get compensated? <span class="icon">+</span></summary>
+          <div class="answer">Operators apply for free with a quick pitch. The brand selects 3–5 finalists. Only finalists build and submit — real competition with real odds, not a lottery. Winners receive the full prize. Every finalist gets a verified portfolio entry and written feedback from the brand. You don't build blind and you don't walk away empty-handed.</div>
         </details>
 
         <details class="faq-item">
@@ -2263,6 +2301,11 @@
         <details class="faq-item">
           <summary>How does the application process work? <span class="icon">+</span></summary>
           <div class="answer">Brand posts a challenge. Operators apply for free — a quick pitch covering their background, relevant wins, and why they'd beat the current metrics. The brand reviews applications and selects 3–5 finalists. Only those finalists build and submit their version. Results are verified automatically.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Who owns the submissions? <span class="icon">+</span></summary>
+          <div class="answer">Brands only acquire the rights to the winning submission. Non-winning submissions remain the intellectual property of the operator. Brands may not use elements of non-winning submissions without purchasing them directly from the operator.</div>
         </details>
       </div>
     </div>
