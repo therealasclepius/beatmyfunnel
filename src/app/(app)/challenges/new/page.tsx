@@ -530,8 +530,9 @@ export default function NewChallengePage() {
           id="deadline"
           type="date"
           value={deadline}
+          min={new Date().toISOString().split('T')[0]}
           onChange={(e) => setDeadline(e.target.value)}
-          style={styles.input}
+          style={{ ...styles.input, colorScheme: 'dark' }}
         />
       </div>
     </div>
@@ -617,10 +618,10 @@ export default function NewChallengePage() {
 
   const renderStep = () => {
     switch (step) {
-      case 1: return <Step1 />
-      case 2: return <Step2 />
-      case 3: return <Step3 />
-      case 4: return <Step4 />
+      case 1: return Step1()
+      case 2: return Step2()
+      case 3: return Step3()
+      case 4: return Step4()
       default: return null
     }
   }
