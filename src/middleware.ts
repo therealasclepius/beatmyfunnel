@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // Protect app routes
-  const protectedPaths = ['/dashboard', '/challenges/new', '/admin', '/profile']
+  const protectedPaths = ['/dashboard', '/challenges/new', '/admin', '/profile', '/onboarding']
   const isProtected = protectedPaths.some(path => request.nextUrl.pathname.startsWith(path))
 
   if (isProtected && !user) {
@@ -46,9 +46,27 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // Redirect to onboarding if not completed (skip if already on onboarding or admin)
+  const isOnboardingPage = request.nextUrl.pathname === '/onboarding'
+  const isAdminPage = request.nextUrl.pathname.startsWith('/admin')
+
+  if (user && isProtected && !isOnboardingPage && !isAdminPage) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('onboarding_completed')
+      .eq('id', user.id)
+      .single()
+
+    if (profile && profile.onboarding_completed === false) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/onboarding'
+      return NextResponse.redirect(url)
+    }
+  }
+
   return supabaseResponse
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/challenges/new', '/admin/:path*', '/profile/:path*', '/login', '/signup'],
+  matcher: ['/dashboard/:path*', '/challenges/new', '/admin/:path*', '/profile/:path*', '/login', '/signup', '/onboarding'],
 }

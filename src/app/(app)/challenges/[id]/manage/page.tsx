@@ -59,6 +59,7 @@ export default function ManageChallengePage() {
   const [updating, setUpdating] = useState<string | null>(null)
   const [feedbackText, setFeedbackText] = useState<Record<string, string>>({})
   const [savingFeedback, setSavingFeedback] = useState<string | null>(null)
+  const [linkCopied, setLinkCopied] = useState(false)
 
   const loadData = useCallback(async () => {
     const supabase = createClient()
@@ -232,6 +233,18 @@ export default function ManageChallengePage() {
               <span style={styles.metaText}>Max {effectiveMaxFinalists} finalists</span>
             </div>
           </div>
+          <button
+            onClick={() => {
+              const url = `${window.location.origin}/c/${id}`
+              navigator.clipboard.writeText(url).then(() => {
+                setLinkCopied(true)
+                setTimeout(() => setLinkCopied(false), 2500)
+              })
+            }}
+            style={styles.shareLinkButton}
+          >
+            {linkCopied ? 'Copied!' : 'Copy Share Link'}
+          </button>
         </div>
 
         {/* Progress Steps */}
@@ -889,6 +902,20 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'inherit',
     resize: 'vertical' as const,
     lineHeight: 1.5,
+  },
+  shareLinkButton: {
+    height: '36px',
+    padding: '0 16px',
+    fontSize: '13px',
+    fontWeight: 500,
+    color: 'var(--text-secondary)',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-secondary)',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    whiteSpace: 'nowrap' as const,
+    flexShrink: 0,
   },
   feedbackButton: {
     alignSelf: 'flex-start',

@@ -15,8 +15,22 @@ export interface Profile {
   avatar_url: string | null
   website_url: string | null
   badges: Record<string, unknown>[] | null
+  onboarding_completed: boolean
   created_at: string
   updated_at: string
+}
+
+export type NotificationType = 'challenge_update' | 'application_update' | 'submission_update' | 'system' | string
+
+export interface Notification {
+  id: string
+  user_id: string
+  type: NotificationType
+  title: string
+  message: string
+  link: string | null
+  read: boolean
+  created_at: string
 }
 
 export interface Challenge {
@@ -88,3 +102,7 @@ export type ProfileUpdate = Partial<Omit<Profile, 'id' | 'created_at' | 'updated
 export type ChallengeUpdate = Partial<Omit<Challenge, 'id' | 'brand_id' | 'created_at' | 'updated_at'>>
 export type ApplicationUpdate = Partial<Pick<Application, 'status' | 'shortlisted_badge'>>
 export type SubmissionUpdate = Partial<Omit<Submission, 'id' | 'challenge_id' | 'operator_id' | 'application_id' | 'created_at' | 'updated_at'>>
+
+// Notification types
+export type NotificationInsert = Omit<Notification, 'id' | 'read' | 'created_at'>
+export type NotificationUpdate = Partial<Pick<Notification, 'read'>>

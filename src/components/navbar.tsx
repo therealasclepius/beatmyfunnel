@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { Profile } from '@/types/database'
+import NotificationDropdown from '@/components/NotificationDropdown'
 
 interface NavbarProps {
   profile: Profile
@@ -52,6 +53,7 @@ export default function Navbar({ profile }: NavbarProps) {
           </div>
         </div>
         <div style={styles.right}>
+          <NotificationDropdown />
           <Link href="/profile" style={{ ...styles.userName, textDecoration: 'none', cursor: 'pointer' }}>
             {profile.display_name}
           </Link>
