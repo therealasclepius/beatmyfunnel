@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Beat My Funnel x Intelligems — Partnership Preview</title>
+  <meta name="description" content="Beat My Funnel is a performance marketplace powered by Intelligems' testing engine. Brands post challenges. Operators compete. Results are verified through concurrent A/B tests.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2694;&#xFE0F;</text></svg>">
+
+  <!-- Fonts: Inter Variable -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #08090a;
+      --bg-secondary: #111113;
+      --bg-tertiary: #191a1c;
+      --bg-card: #141416;
+      --border-primary: #23252a;
+      --border-secondary: #2e3035;
+      --border-subtle: rgba(255,255,255,0.06);
+      --text-primary: #f7f8f8;
+      --text-secondary: #b4b8c0;
+      --text-tertiary: #6e7279;
+      --text-quaternary: #484b52;
+      --accent: #8a8fff;
+      --accent-muted: rgba(138, 143, 255, 0.10);
+      --accent-subtle: rgba(138, 143, 255, 0.05);
+      --max-width: 1080px;
+      --section-padding: 128px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      letter-spacing: -0.011em;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ================================ */
+    /* ANIMATION SYSTEM                 */
+    /* ================================ */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(30px); filter: blur(6px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    .hero-anim {
+      opacity: 0;
+      animation: heroIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-anim-1 { animation-delay: 0.05s; }
+    .hero-anim-2 { animation-delay: 0.15s; }
+    .hero-anim-3 { animation-delay: 0.3s; }
+    .hero-anim-4 { animation-delay: 0.45s; }
+    .hero-anim-5 { animation-delay: 0.6s; }
+    .hero-anim-6 { animation-delay: 0.8s; }
+
+    @keyframes prizeGlow {
+      0% { text-shadow: none; }
+      50% { text-shadow: 0 0 40px rgba(255, 255, 255, 0.15), 0 0 80px rgba(255, 255, 255, 0.05); }
+      100% { text-shadow: none; }
+    }
+
+    .prize-counted {
+      animation: prizeGlow 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+    }
+
+    .step {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .step.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes metricPop {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .metric-value { opacity: 0; }
+    .metric-value.counted {
+      animation: metricPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .type-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .type-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .side {
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .brand-side { opacity: 0; transform: translateX(-20px); }
+    .operator-side { opacity: 0; transform: translateX(20px); }
+    .brand-side.in-view,
+    .operator-side.in-view {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .faq-item {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .faq-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .faq-item .answer {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+
+    .grid-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .grid-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ================================ */
+    /* NAV                              */
+    /* ================================ */
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(8, 9, 10, 0.8);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .logo .collab { color: var(--text-tertiary); font-weight: 400; }
+
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .nav-cta:hover {
+      color: var(--text-primary);
+      border-color: var(--border-secondary);
+    }
+    .nav-cta-primary {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.06);
+      border-color: var(--border-secondary);
+    }
+    .nav-cta-primary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--text-quaternary);
+    }
+
+    /* ================================ */
+    /* HERO                             */
+    /* ================================ */
+
+    .hero {
+      padding: 60px 0 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -40%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      padding: 6px 16px;
+      border: 1px solid rgba(138, 143, 255, 0.2);
+      border-radius: 99px;
+      background: rgba(138, 143, 255, 0.06);
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 500;
+      line-height: 1.0;
+      letter-spacing: -0.022em;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      text-wrap: balance;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-tertiary);
+      max-width: 600px;
+      margin: 0 auto 36px;
+      text-wrap: balance;
+    }
+
+    /* ================================ */
+    /* CHALLENGE CARD                   */
+    /* ================================ */
+
+    .challenge-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card-fan {
+      position: relative;
+      max-width: 660px;
+      height: 420px;
+      margin: 0 auto 48px;
+      z-index: 1;
+    }
+
+    .fan-card {
+      position: absolute;
+      width: 480px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default;
+    }
+
+    .fan-card-back-left {
+      left: 0; top: 20px;
+      transform: rotate(-4deg);
+      opacity: 0.5; z-index: 1;
+    }
+
+    .fan-card-back-right {
+      right: 0; top: 20px;
+      transform: rotate(4deg);
+      opacity: 0.5; z-index: 1;
+    }
+
+    .fan-card-front {
+      left: 50%; top: 0;
+      transform: translateX(-50%) rotate(0deg);
+      z-index: 3;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .card-fan:hover .fan-card-back-left {
+      transform: rotate(-6deg) translateX(-20px);
+      opacity: 0.7;
+    }
+    .card-fan:hover .fan-card-back-right {
+      transform: rotate(6deg) translateX(20px);
+      opacity: 0.7;
+    }
+    .card-fan:hover .fan-card-front {
+      transform: translateX(-50%) translateY(-4px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+
+    .fan-card-mini .challenge-header { padding: 14px 20px; }
+    .fan-card-mini .challenge-prize { font-size: 40px; margin-bottom: 4px; }
+    .fan-card-mini .challenge-body { padding: 20px 20px; }
+    .fan-card-mini .challenge-label { margin-bottom: 16px; font-size: 12px; }
+    .fan-card-mini .challenge-metrics { display: none; }
+    .fan-card-mini .challenge-footer { padding: 12px 20px; }
+
+    .applicant-avatars { display: flex; align-items: center; gap: 0; }
+
+    .applicant-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; color: white;
+      margin-left: -6px; border: 2px solid var(--bg-card);
+    }
+    .applicant-avatar:first-child { margin-left: 0; }
+
+    .challenge-header {
+      padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .challenge-status {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(138, 143, 255, 0.4);
+    }
+
+    .challenge-type { font-size: 12px; color: var(--text-quaternary); }
+
+    .challenge-body { padding: 32px 24px; }
+
+    .challenge-prize {
+      font-size: clamp(56px, 10vw, 80px);
+      font-weight: 600; line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .challenge-label {
+      font-size: 13px; color: var(--text-quaternary);
+      letter-spacing: -0.01em; margin-bottom: 28px;
+    }
+
+    .challenge-metrics {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px; background: var(--border-primary);
+      border-radius: 8px; overflow: hidden;
+    }
+
+    .metric {
+      background: var(--bg-secondary);
+      padding: 16px; text-align: center;
+    }
+
+    .metric-value {
+      font-size: 20px; font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary); margin-bottom: 2px;
+    }
+
+    .metric-label {
+      font-size: 11px; color: var(--text-quaternary);
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+
+    .challenge-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-primary);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .escrow-status {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-quaternary);
+    }
+    .escrow-icon { width: 14px; height: 14px; opacity: 0.5; }
+    .entries-count { font-size: 12px; color: var(--text-quaternary); margin-left: 8px; }
+
+    /* ================================ */
+    /* BUTTONS                          */
+    /* ================================ */
+
+    .btn-primary {
+      display: inline-flex; align-items: center;
+      height: 44px; padding: 0 24px;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      font-size: 14px; font-weight: 500;
+      letter-spacing: -0.01em;
+      border-radius: 8px; border: none;
+      cursor: pointer; text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center;
+      height: 44px; padding: 0 24px;
+      background: transparent;
+      color: var(--text-tertiary);
+      font-size: 14px; font-weight: 500;
+      letter-spacing: -0.01em;
+      border-radius: 8px;
+      border: 1px solid var(--border-secondary);
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .btn-secondary:hover {
+      border-color: var(--text-quaternary);
+      color: var(--text-secondary);
+    }
+
+    .hero-cta-group {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .hero-micro {
+      font-size: 12px;
+      color: var(--text-quaternary);
+      margin-top: 4px;
+    }
+
+    /* ================================ */
+    /* DIVIDER                          */
+    /* ================================ */
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border-primary);
+    }
+
+    /* ================================ */
+    /* SECTION STYLES                   */
+    /* ================================ */
+
+    .section-label {
+      font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-quaternary);
+      margin-bottom: 16px; text-align: center;
+    }
+
+    /* ================================ */
+    /* POWERED BY INTELLIGEMS           */
+    /* ================================ */
+
+    .powered-section {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .powered-section h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 12px;
+    }
+
+    .powered-section .section-sub {
+      font-size: 15px; color: var(--text-tertiary);
+      margin-bottom: 56px;
+      max-width: 600px;
+      margin-left: auto; margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .powered-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .powered-item {
+      background: var(--bg-card);
+      padding: 32px 28px;
+      text-align: left;
+    }
+
+    .powered-item h3 {
+      font-size: 15px; font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .powered-item p {
+      font-size: 14px; line-height: 1.6;
+      color: var(--text-tertiary);
+    }
+
+    /* ================================ */
+    /* CHALLENGE TYPES                  */
+    /* ================================ */
+
+    .challenge-types {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .challenge-types h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 12px;
+    }
+
+    .challenge-types .section-sub {
+      font-size: 15px; color: var(--text-tertiary);
+      margin-bottom: 48px;
+      max-width: 520px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .type-item {
+      background: var(--bg-card);
+      padding: 24px; text-align: left;
+    }
+
+    .type-name {
+      font-size: 14px; font-weight: 600;
+      letter-spacing: -0.01em; margin-bottom: 4px;
+    }
+
+    .type-metric {
+      font-size: 13px; color: var(--text-quaternary);
+    }
+
+    .type-powered {
+      font-size: 11px;
+      color: var(--accent);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* ================================ */
+    /* HOW IT WORKS                     */
+    /* ================================ */
+
+    .how-it-works {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .how-it-works h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 64px;
+    }
+
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px; overflow: hidden;
+    }
+
+    .step {
+      background: var(--bg-card);
+      padding: 32px 28px; text-align: left;
+    }
+
+    .step-number {
+      font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-quaternary); margin-bottom: 16px;
+    }
+
+    .step h3 {
+      font-size: 16px; font-weight: 600;
+      letter-spacing: -0.015em; margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: 14px; line-height: 1.6;
+      color: var(--text-tertiary);
+    }
+
+    /* ================================ */
+    /* COMPETITION FLOW                 */
+    /* ================================ */
+
+    .competition-flow {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .competition-flow h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.022em; margin-bottom: 16px;
+    }
+
+    .competition-intro {
+      font-size: 16px; color: var(--text-tertiary);
+      max-width: 540px; margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .flow-steps {
+      max-width: 600px; margin: 0 auto;
+      position: relative; text-align: left;
+    }
+
+    .flow-steps::before {
+      content: ''; position: absolute;
+      left: 15px; top: 16px; bottom: 16px; width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--border-primary) 30%, var(--border-primary) 70%, var(--accent));
+    }
+
+    .flow-step {
+      display: flex; align-items: flex-start;
+      gap: 20px; padding: 14px 0; position: relative;
+    }
+
+    .flow-number {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg-primary);
+      border: 2px solid var(--border-secondary);
+      color: var(--text-secondary);
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; position: relative; z-index: 1;
+      transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .flow-step:hover .flow-number {
+      border-color: var(--accent); color: var(--accent);
+      box-shadow: 0 0 12px rgba(138, 143, 255, 0.2);
+    }
+
+    .flow-step p {
+      font-size: 15px; line-height: 1.5;
+      color: var(--text-secondary); padding-top: 5px;
+    }
+
+    .flow-step:hover p { color: var(--text-primary); }
+
+    .competition-kicker {
+      font-size: 15px; font-weight: 500;
+      color: var(--text-primary);
+      margin: 32px auto 0; max-width: 540px;
+    }
+
+    /* ================================ */
+    /* WHY PARTNER                      */
+    /* ================================ */
+
+    .why-partner {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .why-partner h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.022em;
+      margin-bottom: 48px;
+    }
+
+    .partner-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+
+    .partner-col {
+      background: var(--bg-card);
+      padding: 40px 36px;
+      text-align: left;
+    }
+
+    .partner-col-label {
+      font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .partner-col h3 {
+      font-size: 20px; font-weight: 500;
+      letter-spacing: -0.02em; line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .partner-col ul {
+      list-style: none; padding: 0; margin: 0;
+    }
+
+    .partner-col li {
+      display: flex; gap: 10px;
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.5; padding: 6px 0;
+    }
+
+    .partner-col li .check {
+      flex-shrink: 0; margin-top: 2px;
+      font-size: 13px; color: var(--text-primary);
+    }
+
+    .partner-kicker {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-primary);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ================================ */
+    /* SOCIAL PROOF                     */
+    /* ================================ */
+
+    .social-proof {
+      padding: var(--section-padding) 0;
+    }
+
+    .social-proof-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .social-proof-header h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.022em; margin-bottom: 12px;
+      text-wrap: balance;
+    }
+
+    .social-proof-header p {
+      font-size: 15px; color: var(--text-tertiary);
+      max-width: 560px; margin: 0 auto;
+    }
+
+    .featured-tweets {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border-primary);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px; overflow: hidden;
+      max-width: 760px; margin: 0 auto 16px;
+    }
+
+    .featured-tweet {
+      background: var(--bg-card); padding: 28px 24px;
+    }
+
+    .featured-tweet-header {
+      display: flex; align-items: center;
+      gap: 12px; margin-bottom: 16px;
+    }
+
+    .featured-tweet-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--bg-tertiary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 600;
+      color: var(--text-secondary); flex-shrink: 0;
+    }
+
+    .featured-tweet-author { flex: 1; min-width: 0; }
+
+    .featured-tweet-name {
+      font-size: 14px; font-weight: 600; color: var(--text-primary);
+    }
+
+    .featured-tweet-handle {
+      font-size: 12px; color: var(--text-quaternary);
+    }
+
+    .featured-tweet-badge {
+      font-size: 11px; font-weight: 600;
+      padding: 4px 10px; border-radius: 99px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      white-space: nowrap;
+      border: 1px solid var(--border-primary);
+    }
+
+    .featured-tweet-body {
+      font-size: 15px; line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .featured-tweet-body strong {
+      color: var(--text-primary); font-weight: 600;
+    }
+
+    .featured-tweet-date {
+      font-size: 12px; color: var(--text-quaternary); margin-top: 16px;
+    }
+
+    .featured-tweet-stats {
+      display: flex; gap: 16px; margin-top: 12px;
+      font-size: 12px; color: var(--text-quaternary);
+    }
+
+    .social-proof-kicker {
+      font-size: 15px; color: var(--text-tertiary);
+      text-align: center; margin-top: 48px;
+      max-width: 560px; margin-left: auto; margin-right: auto;
+    }
+
+    /* Marquee */
+    .responses-section { margin-top: 48px; }
+
+    .responses-label {
+      font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-quaternary);
+      text-align: center; margin-bottom: 20px;
+    }
+
+    .marquee-container {
+      overflow: hidden; position: relative;
+    }
+
+    .marquee-container::before,
+    .marquee-container::after {
+      content: ''; position: absolute;
+      top: 0; bottom: 0; width: 80px;
+      z-index: 2; pointer-events: none;
+    }
+    .marquee-container::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg-primary), transparent);
+    }
+    .marquee-container::after {
+      right: 0;
+      background: linear-gradient(270deg, var(--bg-primary), transparent);
+    }
+    .marquee-container:hover .marquee-row { animation-play-state: paused; }
+
+    .marquee-row {
+      display: flex; gap: 12px;
+      width: max-content; padding: 6px 0;
+    }
+    .marquee-row--left { animation: marqueeLeft 30s linear infinite; }
+
+    @keyframes marqueeLeft {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .marquee-card {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 8px; padding: 12px 16px;
+      white-space: nowrap; opacity: 0.6;
+      transition: opacity 0.2s ease; flex-shrink: 0;
+    }
+    .marquee-card:hover { opacity: 1; }
+
+    .marquee-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; color: white; flex-shrink: 0;
+      background: var(--border-secondary);
+    }
+
+    .marquee-name {
+      font-size: 13px; font-weight: 600; color: var(--text-primary);
+    }
+
+    .marquee-handle {
+      font-size: 12px; color: var(--text-quaternary); margin-left: 4px;
+    }
+
+    .marquee-text {
+      font-size: 13px; color: var(--text-secondary);
+    }
+
+    /* ================================ */
+    /* PILL SLIDER                      */
+    /* ================================ */
+
+    .pill-slider {
+      position: relative; overflow: hidden;
+      pointer-events: none;
+      margin: 0 auto 32px; max-width: 100%;
+    }
+
+    .pill-slider::before,
+    .pill-slider::after {
+      content: ''; position: absolute;
+      top: 0; bottom: 0; width: 100px;
+      z-index: 2; pointer-events: none;
+    }
+    .pill-slider::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg-primary), transparent);
+    }
+    .pill-slider::after {
+      right: 0;
+      background: linear-gradient(270deg, var(--bg-primary), transparent);
+    }
+
+    .pill-track {
+      display: flex; gap: 10px;
+      width: max-content;
+      animation: pillScroll 20s linear infinite;
+    }
+
+    @keyframes pillScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .pill {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid var(--pill-clr, rgba(255,255,255,0.1));
+      border-radius: 99px;
+      font-size: 12px; font-weight: 500;
+      color: var(--pill-clr, rgba(255,255,255,0.35));
+      background: var(--pill-bg, rgba(255,255,255,0.03));
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    .pill-icon { font-size: 12px; line-height: 1; }
+
+    /* ================================ */
+    /* FAQ                              */
+    /* ================================ */
+
+    .faq {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .faq h2 {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.022em; margin-bottom: 16px;
+    }
+
+    .faq-sub {
+      font-size: 15px; color: var(--text-tertiary);
+      margin-bottom: 48px;
+    }
+
+    .faq-list {
+      max-width: 640px; margin: 0 auto; text-align: left;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .faq-item summary {
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; padding: 20px 0;
+      font-size: 15px; font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--text-primary); list-style: none;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary .icon {
+      color: var(--text-quaternary);
+      font-size: 18px; transition: transform 0.2s ease;
+    }
+    .faq-item[open] summary .icon { transform: rotate(45deg); }
+
+    .faq-item .answer {
+      font-size: 14px; line-height: 1.7;
+      color: var(--text-tertiary);
+      padding-bottom: 20px; max-width: 540px;
+    }
+
+    /* ================================ */
+    /* FINAL CTA                        */
+    /* ================================ */
+
+    .final-cta {
+      padding: var(--section-padding) 0;
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 500; line-height: 1.1;
+      letter-spacing: -0.022em; margin-bottom: 16px;
+    }
+
+    .final-cta p {
+      font-size: 15px; color: var(--text-tertiary);
+      margin-bottom: 32px; max-width: 540px;
+      margin-left: auto; margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .final-cta .btn-group {
+      display: flex; justify-content: center; gap: 12px;
+    }
+
+    /* ================================ */
+    /* FOOTER                           */
+    /* ================================ */
+
+    footer {
+      border-top: 1px solid var(--border-primary);
+      padding: 24px 0;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-quaternary);
+    }
+
+    .footer-right {
+      font-size: 12px; color: var(--text-quaternary);
+    }
+
+    /* ================================ */
+    /* RESPONSIVE                       */
+    /* ================================ */
+
+    @media (max-width: 768px) {
+      :root { --section-padding: 80px; }
+
+      .logo { font-size: 14px; }
+
+      .nav-cta {
+        font-size: 11px; padding: 5px 10px; white-space: nowrap;
+      }
+
+      .steps { grid-template-columns: 1fr; }
+      .featured-tweets { grid-template-columns: 1fr; }
+      .partner-grid { grid-template-columns: 1fr; }
+      .types-grid { grid-template-columns: 1fr 1fr; }
+      .powered-grid { grid-template-columns: 1fr; }
+
+      .card-fan { height: auto; max-width: 100%; }
+      .fan-card { position: relative; width: 100%; }
+      .fan-card-back-left, .fan-card-back-right { display: none; }
+      .fan-card-front { position: relative; left: auto; transform: none; }
+      .card-fan:hover .fan-card-front { transform: none; }
+      .challenge-metrics { grid-template-columns: 1fr 1fr 1fr; }
+      .hero h1 { font-size: 36px; }
+      .challenge-prize { font-size: 56px; }
+
+      .partner-col { padding: 28px 24px; }
+
+      .final-cta .btn-group {
+        flex-direction: column; align-items: center;
+      }
+
+      .footer-inner {
+        flex-direction: column; gap: 8px; text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .types-grid { grid-template-columns: 1fr; }
+      .powered-grid { grid-template-columns: 1fr; }
+      .challenge-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <span class="logo">Beat My Funnel <span class="collab">&times; Intelligems</span></span>
+      <a href="mailto:kosta@kleosmedia.io" class="nav-cta nav-cta-primary">Let's Talk</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <p class="hero-eyebrow hero-anim hero-anim-1">Partnership Preview</p>
+
+      <h1 class="hero-anim hero-anim-2">Don't pitch for the work.<br>Win it.</h1>
+
+      <p class="hero-sub hero-anim hero-anim-3">
+        Beat My Funnel is a performance marketplace powered by Intelligems' testing engine. Brands post challenges. Operators compete. Results are verified through concurrent A/B tests &mdash; no screenshots, no self-reporting.
+      </p>
+
+      <!-- CTA -->
+      <div class="hero-cta-group hero-anim hero-anim-4">
+        <a href="mailto:kosta@kleosmedia.io" class="btn-primary">Let's Talk</a>
+        <p class="hero-micro" style="margin-top: 8px; font-size: 13px; color: var(--text-quaternary);">Partnership inquiry &mdash; kosta@kleosmedia.io</p>
+      </div>
+
+      <!-- Pill slider -->
+      <div class="pill-slider hero-anim hero-anim-5">
+        <div class="pill-track">
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">&#x1F4B0;</span> Price Testing</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">&#x1F3AF;</span> CVR</span>
+          <span class="pill" style="--pill-clr: #f0bf00; --pill-bg: rgba(240,191,0,0.06);"><span class="pill-icon">&#x1F6D2;</span> Checkout Flow</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">&#x1F4CA;</span> Revenue Per Visitor</span>
+          <span class="pill" style="--pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">&#x1F4B5;</span> Offer Strategy</span>
+          <span class="pill" style="--pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">&#x1F6EB;</span> Shipping</span>
+          <span class="pill" style="--pill-clr: #eb5757; --pill-bg: rgba(235,87,87,0.06);"><span class="pill-icon">&#x26A1;</span> A/B Test</span>
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">&#x1F4C4;</span> Landing Pages</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">&#x1F6CD;&#xFE0F;</span> Product Page</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">&#x1F4C8;</span> Statistical Significance</span>
+          <!-- duplicate for seamless loop -->
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">&#x1F4B0;</span> Price Testing</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">&#x1F3AF;</span> CVR</span>
+          <span class="pill" style="--pill-clr: #f0bf00; --pill-bg: rgba(240,191,0,0.06);"><span class="pill-icon">&#x1F6D2;</span> Checkout Flow</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">&#x1F4CA;</span> Revenue Per Visitor</span>
+          <span class="pill" style="--pill-clr: #00b8cc; --pill-bg: rgba(0,184,204,0.06);"><span class="pill-icon">&#x1F4B5;</span> Offer Strategy</span>
+          <span class="pill" style="--pill-clr: #5e6ad2; --pill-bg: rgba(94,106,210,0.06);"><span class="pill-icon">&#x1F6EB;</span> Shipping</span>
+          <span class="pill" style="--pill-clr: #eb5757; --pill-bg: rgba(235,87,87,0.06);"><span class="pill-icon">&#x26A1;</span> A/B Test</span>
+          <span class="pill" style="--pill-clr: #4ea7fc; --pill-bg: rgba(78,167,252,0.06);"><span class="pill-icon">&#x1F4C4;</span> Landing Pages</span>
+          <span class="pill" style="--pill-clr: #fc7840; --pill-bg: rgba(252,120,64,0.06);"><span class="pill-icon">&#x1F6CD;&#xFE0F;</span> Product Page</span>
+          <span class="pill" style="--pill-clr: #27a644; --pill-bg: rgba(39,166,68,0.06);"><span class="pill-icon">&#x1F4C8;</span> Statistical Significance</span>
+        </div>
+      </div>
+
+      <!-- FANNED CHALLENGE CARDS -->
+      <div class="card-fan hero-anim hero-anim-6">
+        <!-- Back left -->
+        <div class="fan-card fan-card-back-left fan-card-mini">
+          <div class="challenge-header">
+            <div class="challenge-status">
+              <div class="status-dot"></div>
+              <span style="color: var(--accent);">Live</span>
+            </div>
+            <span class="challenge-type">Price Test &middot; Intelligems</span>
+          </div>
+          <div class="challenge-body">
+            <div style="font-size: 11px; color: var(--text-quaternary); margin-bottom: 6px; letter-spacing: 0.02em;">Shopify Fashion Brand &middot; 7-Figure</div>
+            <div class="challenge-prize">$5,000</div>
+            <div class="challenge-label">Prize in escrow</div>
+            <div class="challenge-metrics"></div>
+          </div>
+          <div class="challenge-footer">
+            <div class="escrow-status">
+              <svg class="escrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              Escrow locked
+            </div>
+            <span class="entries-count">7 entries</span>
+          </div>
+        </div>
+
+        <!-- Back right -->
+        <div class="fan-card fan-card-back-right fan-card-mini">
+          <div class="challenge-header">
+            <div class="challenge-status">
+              <div class="status-dot"></div>
+              <span style="color: var(--accent);">Live</span>
+            </div>
+            <span class="challenge-type">Shipping Strategy &middot; Intelligems</span>
+          </div>
+          <div class="challenge-body">
+            <div style="font-size: 11px; color: var(--text-quaternary); margin-bottom: 6px; letter-spacing: 0.02em;">DTC Supplements &middot; 8-Figure</div>
+            <div class="challenge-prize">$15,000</div>
+            <div class="challenge-label">Prize in escrow</div>
+            <div class="challenge-metrics"></div>
+          </div>
+          <div class="challenge-footer">
+            <div class="escrow-status">
+              <svg class="escrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              Escrow locked
+            </div>
+            <span class="entries-count">5 entries</span>
+          </div>
+        </div>
+
+        <!-- Front center -->
+        <div class="fan-card fan-card-front challenge-card">
+          <div class="challenge-header">
+            <div class="challenge-status">
+              <div class="status-dot"></div>
+              <span style="color: var(--accent);">Live</span>
+            </div>
+            <span class="challenge-type">Landing Page CVR &middot; Intelligems A/B Test</span>
+          </div>
+          <div class="challenge-body">
+            <div style="font-size: 11px; color: var(--text-quaternary); margin-bottom: 6px; letter-spacing: 0.02em;">DTC Supplement Brand &middot; 8-Figure</div>
+            <div class="challenge-prize">$10,000</div>
+            <div class="challenge-label">Prize in escrow &mdash; verified via Intelligems</div>
+            <div class="challenge-metrics">
+              <div class="metric">
+                <div class="metric-value">3.2%</div>
+                <div class="metric-label">Current CVR</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">5,000</div>
+                <div class="metric-label">Sessions</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">14d</div>
+                <div class="metric-label">Time Left</div>
+              </div>
+            </div>
+          </div>
+          <div class="challenge-footer">
+            <div class="escrow-status">
+              <svg class="escrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              Funds locked in escrow
+            </div>
+            <div class="applicant-avatars">
+              <div class="applicant-avatar" style="background: #5e6ad2;">S</div>
+              <div class="applicant-avatar" style="background: #4ea7fc;">B</div>
+              <div class="applicant-avatar" style="background: #fc7840;">D</div>
+              <span class="entries-count">3 entries</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="text-align: center; font-size: 13px; color: var(--text-quaternary); margin-top: 24px; letter-spacing: -0.01em;">
+        <svg style="width: 12px; height: 12px; vertical-align: -1px; margin-right: 4px; opacity: 0.5;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        Every challenge is fully funded before operators can apply. Results verified through Intelligems A/B testing.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- POWERED BY INTELLIGEMS -->
+  <section class="powered-section reveal">
+    <div class="container">
+      <p class="section-label">Powered by Intelligems</p>
+      <h2>Real A/B testing. Real results.</h2>
+      <p class="section-sub">Every challenge runs as a concurrent split test through Intelligems &mdash; the same platform trusted by thousands of Shopify brands.</p>
+
+      <div class="powered-grid">
+        <div class="powered-item grid-item">
+          <h3>Concurrent A/B Testing</h3>
+          <p>Split traffic in real time. No sequential testing bias.</p>
+        </div>
+        <div class="powered-item grid-item">
+          <h3>Revenue Per Visitor</h3>
+          <p>Track the metric that actually matters, not just CVR.</p>
+        </div>
+        <div class="powered-item grid-item">
+          <h3>Price &amp; Offer Testing</h3>
+          <p>Go beyond landing pages. Test pricing, shipping, discounts.</p>
+        </div>
+        <div class="powered-item grid-item">
+          <h3>Statistical Significance</h3>
+          <p>Results verified automatically. No guesswork.</p>
+        </div>
+        <div class="powered-item grid-item">
+          <h3>Shopify Native</h3>
+          <p>One-click integration with any Shopify store.</p>
+        </div>
+        <div class="powered-item grid-item">
+          <h3>Real-Time Analytics</h3>
+          <p>Both parties see live results as they happen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SOCIAL PROOF -->
+  <section class="social-proof reveal">
+    <div class="container">
+      <div class="social-proof-header">
+        <p class="section-label">This is already happening</p>
+        <h2>Founders are already doing this.<br>We're building the home for it.</h2>
+      </div>
+
+      <div class="featured-tweets">
+        <div class="featured-tweet">
+          <div class="featured-tweet-header">
+            <div class="featured-tweet-avatar">J</div>
+            <div class="featured-tweet-author">
+              <div class="featured-tweet-name">Jacob</div>
+              <div class="featured-tweet-handle">@jforjacob</div>
+            </div>
+            <span class="featured-tweet-badge">$15k Challenge</span>
+          </div>
+          <p class="featured-tweet-body">Will pay any landing page builder <strong>$15k</strong> if they can beat the performance of our current main landing page (which is a pdp)<br><br>Can be any style you wish (listicle, advertorial, sales page, pdp)<br><br>If it doesn't beat our current page I will pay <strong>$0</strong><br><br>If your up for it, dm me</p>
+          <div class="featured-tweet-stats">
+            <span>233 likes</span>
+            <span>73 replies</span>
+          </div>
+          <p class="featured-tweet-date">Feb 27, 2026</p>
+        </div>
+
+        <div class="featured-tweet">
+          <div class="featured-tweet-header">
+            <div class="featured-tweet-avatar">Z</div>
+            <div class="featured-tweet-author">
+              <div class="featured-tweet-name">Zach Stuck</div>
+              <div class="featured-tweet-handle">@zachmstuck</div>
+            </div>
+            <span class="featured-tweet-badge">$30k Challenge</span>
+          </div>
+          <p class="featured-tweet-body">Well @jforjacob offered $15k, so I'll offer double.<br><br><strong>$30k</strong> to whoever can beat our top compression sock funnel for HollowSocks.com<br><br>If your page can hit 100k sessions at a higher Northbeam 1DCROAS, the money is yours.<br><br>Could be as simple as a lander or pdp update.</p>
+          <div class="featured-tweet-stats">
+            <span>152 likes</span>
+            <span>34 replies</span>
+          </div>
+          <p class="featured-tweet-date">Mar 21, 2026</p>
+        </div>
+      </div>
+
+      <!-- Operator responses -->
+      <div class="responses-section">
+        <p class="responses-label">The operators responded</p>
+        <div class="marquee-container">
+          <div class="marquee-row marquee-row--left">
+            <div class="marquee-card"><div class="marquee-avatar">S</div><div><span class="marquee-name">Stefan Georgi</span><span class="marquee-handle">@StefanGeorgi</span></div><span class="marquee-text">"I'll take a crack"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'm ready Jacob!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Dave</span><span class="marquee-handle">@DaveDiederen</span></div><span class="marquee-text">"Let's freaking get it!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">J</div><div><span class="marquee-name">Jason Applebaum</span><span class="marquee-handle">@Jason______A</span></div><span class="marquee-text">"I love this!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">P</div><div><span class="marquee-name">Paddy</span><span class="marquee-handle">@paddymedia</span></div><span class="marquee-text">"Messaged"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Daniel</span><span class="marquee-handle">@DanielDoor8</span></div><span class="marquee-text">"Interested"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">T</div><div><span class="marquee-name">The Funnel Professor</span><span class="marquee-handle">@DTC_Quizbuilder</span></div><span class="marquee-text">"Count me in"</span></div>
+            <!-- duplicate for seamless loop -->
+            <div class="marquee-card"><div class="marquee-avatar">S</div><div><span class="marquee-name">Stefan Georgi</span><span class="marquee-handle">@StefanGeorgi</span></div><span class="marquee-text">"I'll take a crack"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">B</div><div><span class="marquee-name">Brandon Doyle</span><span class="marquee-handle">@Brandondoyle</span></div><span class="marquee-text">"I'm ready Jacob!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Dave</span><span class="marquee-handle">@DaveDiederen</span></div><span class="marquee-text">"Let's freaking get it!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">J</div><div><span class="marquee-name">Jason Applebaum</span><span class="marquee-handle">@Jason______A</span></div><span class="marquee-text">"I love this!"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">P</div><div><span class="marquee-name">Paddy</span><span class="marquee-handle">@paddymedia</span></div><span class="marquee-text">"Messaged"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">D</div><div><span class="marquee-name">Daniel</span><span class="marquee-handle">@DanielDoor8</span></div><span class="marquee-text">"Interested"</span></div>
+            <div class="marquee-card"><div class="marquee-avatar">T</div><div><span class="marquee-name">The Funnel Professor</span><span class="marquee-handle">@DTC_Quizbuilder</span></div><span class="marquee-text">"Count me in"</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="social-proof-kicker">$45,000 in public challenges posted this week &mdash; with no platform, no escrow, and no verification. Until now.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works reveal">
+    <div class="container">
+      <p class="section-label">How it works</p>
+      <h2>Three steps. You only pay if you lose.</h2>
+
+      <div class="steps">
+        <div class="step">
+          <p class="step-number">Step 01</p>
+          <h3>Post your challenge</h3>
+          <p>Define your metric, set your prize, and deposit funds into escrow. The challenge doesn't go live until the money is verified and locked.</p>
+        </div>
+        <div class="step">
+          <p class="step-number">Step 02</p>
+          <h3>The best operators compete</h3>
+          <p>CRO experts, copywriters, and funnel builders submit their version. You review entries before anything goes live.</p>
+        </div>
+        <div class="step">
+          <p class="step-number">Step 03</p>
+          <h3>Intelligems verifies the result</h3>
+          <p>The winning submission runs as a concurrent A/B test through Intelligems. Real traffic, real revenue, real statistical significance. If they beat you, the prize transfers automatically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- HOW THE COMPETITION WORKS -->
+  <section class="competition-flow reveal">
+    <div class="container">
+      <p class="section-label">The full process</p>
+      <h2>How the competition actually works</h2>
+      <p class="competition-intro">Posting a challenge doesn't mean 10 strangers get access to your store. Here's the exact sequence:</p>
+
+      <div class="flow-steps">
+        <div class="flow-step">
+          <span class="flow-number">1</span>
+          <p>You post your metric and lock your prize in escrow</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">2</span>
+          <p>Operators apply in 2 minutes &mdash; no work done yet</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">3</span>
+          <p>You review applicants and pick 3 finalists</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">4</span>
+          <p>Finalists submit their version &mdash; you review everything before it touches your site</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">5</span>
+          <p>Your chosen submission runs as a concurrent A/B test through Intelligems &mdash; same traffic, split in real time</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">6</span>
+          <p>Intelligems verifies statistical significance automatically</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">7</span>
+          <p>They beat your number &rarr; prize releases automatically. Nobody beats it &rarr; full refund.</p>
+        </div>
+      </div>
+
+      <p class="competition-kicker">Traffic is split in real time through Intelligems &mdash; no sequential testing, no timing bias. You stay in control at every step.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CHALLENGE TYPES -->
+  <section class="challenge-types reveal">
+    <div class="container">
+      <p class="section-label">Challenge types</p>
+      <h2>What can you put up for a challenge?</h2>
+      <p class="section-sub">Every challenge has a preset win condition. Intelligems handles the verification layer.</p>
+
+      <div class="types-grid">
+        <div class="type-item">
+          <p class="type-name">Price Testing</p>
+          <p class="type-metric">Optimize price points for maximum revenue per visitor</p>
+          <p class="type-powered">Powered by Intelligems</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Offer / Discount Strategy</p>
+          <p class="type-metric">Test discount structures, bundles, and promotions</p>
+          <p class="type-powered">Powered by Intelligems</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Landing Page CVR</p>
+          <p class="type-metric">Beat my conversion rate at X sessions</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Checkout Flow</p>
+          <p class="type-metric">Reduce abandonment and increase checkout completion</p>
+          <p class="type-powered">Powered by Intelligems</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Shipping Strategy</p>
+          <p class="type-metric">Test thresholds, pricing, and delivery messaging</p>
+          <p class="type-powered">Powered by Intelligems</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Product Page Optimization</p>
+          <p class="type-metric">Beat my add-to-cart and revenue per visitor</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- WHY PARTNER -->
+  <section class="why-partner reveal">
+    <div class="container">
+      <p class="section-label">The partnership</p>
+      <h2>Why this partnership works.</h2>
+
+      <div class="partner-grid">
+        <div class="partner-col brand-side">
+          <p class="partner-col-label">What Beat My Funnel brings</p>
+          <h3>The marketplace and the demand.</h3>
+          <ul>
+            <li><span class="check">&#10003;</span> Brands posting live challenges with real money in escrow</li>
+            <li><span class="check">&#10003;</span> A growing pool of vetted CRO operators competing for work</li>
+            <li><span class="check">&#10003;</span> The escrow model &mdash; funds locked before anyone applies</li>
+            <li><span class="check">&#10003;</span> The demand side: brands who need proof, not pitches</li>
+            <li><span class="check">&#10003;</span> A verified operator portfolio built on real results</li>
+          </ul>
+        </div>
+
+        <div class="partner-col operator-side">
+          <p class="partner-col-label">What Intelligems brings</p>
+          <h3>The testing engine and the trust.</h3>
+          <ul>
+            <li><span class="check">&#10003;</span> Concurrent A/B testing with real-time traffic splitting</li>
+            <li><span class="check">&#10003;</span> Statistical rigor &mdash; automated significance calculations</li>
+            <li><span class="check">&#10003;</span> Native Shopify integration trusted by thousands of brands</li>
+            <li><span class="check">&#10003;</span> Price, offer, and shipping testing capabilities</li>
+            <li><span class="check">&#10003;</span> The verification layer that makes results undeniable</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="partner-kicker">Together: the first performance marketplace with built-in, verified A/B testing. No other platform can offer this.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FAQ -->
+  <section class="faq reveal">
+    <div class="container">
+      <p class="section-label">FAQ</p>
+      <h2>Everything you need to know</h2>
+      <p class="faq-sub">How challenges work, how verification works, and what makes this different.</p>
+
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary>What is Beat My Funnel? <span class="icon">+</span></summary>
+          <div class="answer">A performance marketplace where brands post challenges with real money in escrow. Operators compete to beat the brand's current metrics. Results are verified through concurrent A/B tests powered by Intelligems. Winners get paid automatically.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How does Intelligems fit in? <span class="icon">+</span></summary>
+          <div class="answer">Intelligems is the testing and verification layer. Every challenge runs as a concurrent split test through Intelligems &mdash; real-time traffic splitting, revenue per visitor tracking, and automated statistical significance. Both the brand and the operator see the same live dashboard. No screenshots, no self-reporting.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do challenges work? <span class="icon">+</span></summary>
+          <div class="answer">Brand defines a metric and current baseline (e.g. 3.2% CVR). Sets a prize and deposits it into escrow. Operators apply and submit their version. The winning submission runs as a concurrent A/B test through Intelligems. If someone beats the baseline with statistical significance, the prize releases automatically.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How does escrow work? <span class="icon">+</span></summary>
+          <div class="answer">Funds are held by the platform from the moment a challenge goes live. The brand cannot withdraw them during the challenge window. If nobody beats the baseline, the full prize is refunded. If someone wins, the prize transfers automatically upon verification.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Why concurrent A/B testing? <span class="icon">+</span></summary>
+          <div class="answer">Sequential testing introduces timing bias &mdash; traffic quality changes by day, by season, by campaign. Concurrent testing through Intelligems splits the same traffic pool in real time, ensuring a fair comparison. It's the only way to get a trustworthy result.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What types of challenges can be tested? <span class="icon">+</span></summary>
+          <div class="answer">Landing pages, product pages, pricing strategies, offer and discount structures, checkout flows, shipping thresholds &mdash; anything Intelligems can split test on Shopify. The Intelligems integration dramatically expands what's possible beyond just page-level CVR.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How are results verified? <span class="icon">+</span></summary>
+          <div class="answer">Through Intelligems directly. The platform tracks revenue per visitor, conversion rate, and other metrics in real time. Statistical significance is calculated automatically. Both parties see the same live dashboard &mdash; there's nothing to dispute.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Who owns the submissions? <span class="icon">+</span></summary>
+          <div class="answer">Brands only acquire the rights to the winning submission. Non-winning submissions remain the intellectual property of the operator. Brands may not use elements of non-winning submissions without purchasing them directly from the operator.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FINAL CTA -->
+  <section class="final-cta reveal">
+    <div class="container">
+      <h2>The first performance marketplace<br>with built-in A/B testing.</h2>
+      <p>We'd love to explore what a Beat My Funnel &times; Intelligems partnership looks like. Let's find 30 minutes to talk through it.</p>
+      <div class="btn-group">
+        <a href="mailto:kosta@kleosmedia.io" class="btn-primary">Let's Talk</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">Beat My Funnel &times; Intelligems</div>
+      <div class="footer-right">Partnership Preview. Not public.</div>
+    </div>
+  </footer>
+
+  <!-- JS: Animation Engine -->
+  <script>
+    // Count-up with easing
+    function countUp(el, target, prefix, suffix, duration, from) {
+      const start = performance.now();
+      const startVal = from || 0;
+      const isFloat = String(target).includes('.');
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const current = isFloat
+          ? (startVal + (target - startVal) * eased).toFixed(1)
+          : Math.floor(startVal + (target - startVal) * eased).toLocaleString();
+        el.textContent = prefix + current + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // Scroll observer: sections
+    const sectionObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('in-view');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => sectionObs.observe(el));
+
+    // Scroll observer: staggered children
+    const childObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const children = e.target.querySelectorAll('.type-item, .step, .faq-item, .grid-item');
+        children.forEach((child, i) => {
+          child.style.transitionDelay = (i * 0.07) + 's';
+          child.classList.add('in-view');
+        });
+        childObs.unobserve(e.target);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.types-grid, .steps, .faq-list, .powered-grid').forEach(el => childObs.observe(el));
+
+    // Two-sided / partner cards slide in
+    const sideObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.querySelectorAll('.brand-side, .operator-side').forEach((side, i) => {
+          side.style.transitionDelay = (i * 0.15) + 's';
+          side.classList.add('in-view');
+        });
+        sideObs.unobserve(e.target);
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.partner-grid').forEach(el => sideObs.observe(el));
+
+    // Prize count-up + metric pop
+    const prizeEl = document.querySelector('.fan-card-front .challenge-prize');
+    if (prizeEl) {
+      prizeEl.textContent = '$100';
+      setTimeout(() => {
+        countUp(prizeEl, 10000, '$', '', 2000, 100);
+        const metrics = document.querySelectorAll('.metric-value');
+        metrics.forEach((m, i) => {
+          setTimeout(() => {
+            m.classList.add('counted');
+            if (i === 0) countUp(m, 3.2, '', '%', 1200);
+            if (i === 1) countUp(m, 5000, '', '', 1400);
+            if (i === 2) m.textContent = '14d';
+          }, 600 + i * 300);
+        });
+        setTimeout(() => prizeEl.classList.add('prize-counted'), 2100);
+      }, 300);
+    }
+
+    // Smooth scroll for anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+  </script>
+
+</body>
+</html>
