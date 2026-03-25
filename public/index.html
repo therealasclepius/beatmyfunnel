@@ -1137,8 +1137,8 @@
     /* USE CASES                        */
     /* ================================ */
 
-    .use-cases-cards {
-      /* Styles handled inline */
+    .use-cases {
+      padding: var(--section-padding) 0;
     }
 
     /* ================================ */
@@ -1708,9 +1708,8 @@
         --section-padding: 80px;
       }
 
-      .use-cases-cards > div {
-        flex-direction: column;
-        gap: 16px;
+      .use-cases [style*="grid-template-columns: repeat(3"] {
+        grid-template-columns: 1fr !important;
       }
 
       .logo {
@@ -2015,6 +2014,35 @@
     </div>
   </section>
 
+  <!-- FOUNDER LETTER -->
+  <section class="founder-letter reveal">
+    <div class="container">
+      <p class="section-label">Why we're building this</p>
+      <div class="letter-card">
+        <div class="letter-left letter-body">
+          <p>A brand pays <strong>$8k/month</strong> to an agency. The agency sends a report. The numbers don't move. The brand pays again next month. <strong>Nobody's accountable.</strong></p>
+          <p>Meanwhile, there's an operator who could genuinely beat that funnel. But they <strong>can't get a meeting.</strong> They don't have the connections or a pitch deck polished enough to get past the gatekeeper.</p>
+          <p>So the brand keeps paying for mediocre. And the operator keeps being invisible.</p>
+          <p class="letter-highlight">It's time to flip the model.</p>
+        </div>
+        <div class="letter-right letter-body">
+          <p><strong>Beat My Funnel is the fix.</strong> A brand posts their metric and locks prize money in escrow. Operators apply. The brand picks a few finalists. One submission gets tested live. If it wins, the money moves. If not, full refund.</p>
+          <p><strong>No retainers. No pitch decks. No handshake deals.</strong> Just: can you beat this number? Prove it.</p>
+          <p>The best operators shouldn't have to sell themselves. They should show their work and let the results talk.</p>
+          <p class="letter-highlight"><a href="#get-started" class="letter-link">That's what this is. Prove it or get paid.</a></p>
+          <div class="letter-sig">
+            <div class="letter-sig-avatar">K</div>
+            <div class="letter-sig-info">
+              <div class="letter-sig-name">Kosta Hantzis</div>
+              <div class="letter-sig-title">Founder, Beat My Funnel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
   <!-- SOCIAL PROOF -->
   <section class="social-proof reveal">
     <div class="container">
@@ -2090,34 +2118,6 @@
     </div>
   </section>
 
-  <!-- FOUNDER LETTER -->
-  <section class="founder-letter reveal">
-    <div class="container">
-      <p class="section-label">Why we're building this</p>
-      <div class="letter-card">
-        <div class="letter-left letter-body">
-          <p>A brand pays <strong>$8k/month</strong> to an agency. The agency sends a report. The numbers don't move. The brand pays again next month. <strong>Nobody's accountable.</strong></p>
-          <p>Meanwhile, there's an operator who could genuinely beat that funnel. But they <strong>can't get a meeting.</strong> They don't have the connections or a pitch deck polished enough to get past the gatekeeper.</p>
-          <p>So the brand keeps paying for mediocre. And the operator keeps being invisible.</p>
-          <p class="letter-highlight">It's time to flip the model.</p>
-        </div>
-        <div class="letter-right letter-body">
-          <p><strong>Beat My Funnel is the fix.</strong> A brand posts their metric and locks prize money in escrow. Operators apply. The brand picks a few finalists. One submission gets tested live. If it wins, the money moves. If not, full refund.</p>
-          <p><strong>No retainers. No pitch decks. No handshake deals.</strong> Just: can you beat this number? Prove it.</p>
-          <p>The best operators shouldn't have to sell themselves. They should show their work and let the results talk.</p>
-          <p class="letter-highlight"><a href="#get-started" class="letter-link">That's what this is. Prove it or get paid.</a></p>
-          <div class="letter-sig">
-            <div class="letter-sig-avatar">K</div>
-            <div class="letter-sig-info">
-              <div class="letter-sig-name">Kosta Hantzis</div>
-              <div class="letter-sig-title">Founder, Beat My Funnel</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <hr class="divider">
 
   <!-- HOW IT WORKS -->
@@ -2148,14 +2148,92 @@
 
   <hr class="divider">
 
-  <!-- GET STARTED: Use Cases + Two-Sided CTA -->
-  <section id="get-started" class="two-sided reveal">
+  <!-- HOW THE COMPETITION WORKS -->
+  <section class="competition-flow reveal">
     <div class="container">
-      <p class="section-label">Get started</p>
-      <h2 class="two-sided-headline">Post a challenge. Get your answer.</h2>
+      <p class="section-label">The full process</p>
+      <h2>How the competition actually works</h2>
+      <p class="competition-intro">Posting a challenge doesn't mean 10 strangers get access to your store. Here's the exact sequence:</p>
 
-      <!-- Use case cards -->
-      <div class="use-cases-cards" style="display: flex; flex-direction: column; gap: 1px; max-width: 860px; margin: 0 auto 64px; background: var(--border-primary); border: 1px solid var(--border-primary); border-radius: 12px; overflow: hidden;">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <span class="flow-number">1</span>
+          <p>You post your metric and lock your prize in escrow</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">2</span>
+          <p>Operators apply in 2 minutes — no work done yet</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">3</span>
+          <p>You review applicants and pick 3 finalists</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">4</span>
+          <p>Finalists submit their version — you review everything before it touches your site</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">5</span>
+          <p>Your chosen submission runs as a concurrent A/B test against your current page — same traffic, split in real time</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">6</span>
+          <p>We verify the result directly via Shopify or GA4</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-number">7</span>
+          <p>They beat your number → prize releases automatically. Nobody beats it → full refund.</p>
+        </div>
+      </div>
+
+      <p class="competition-kicker">Traffic is split in real time — no sequential testing, no timing bias. You stay in control at every step. You only pay if someone is actually better.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CHALLENGE TYPES -->
+  <section class="challenge-types reveal">
+    <div class="container">
+      <p class="section-label">Challenge types</p>
+      <h2>What can you put up for a challenge?</h2>
+      <p class="section-sub">Every challenge has a preset win condition defined before anyone starts. No ambiguity. No disputes.</p>
+
+      <div class="types-grid">
+        <div class="type-item">
+          <p class="type-name">Landing Page / Funnel</p>
+          <p class="type-metric">Beat my CVR at X sessions</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Ad Creative</p>
+          <p class="type-metric">Beat my CPA or ROAS at $X spend</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Email</p>
+          <p class="type-metric">Beat my open + click rate on the same segment</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Homepage</p>
+          <p class="type-metric">Beat my add-to-cart rate at X sessions</p>
+        </div>
+        <div class="type-item">
+          <p class="type-name">Pricing Page</p>
+          <p class="type-metric">Beat my checkout conversion at X sessions</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- TWO-SIDED VALUE -->
+  <!-- THREE USE CASES -->
+  <section class="use-cases reveal">
+    <div class="container">
+      <p class="section-label" style="text-align: center;">Three ways to use it</p>
+      <h2 style="font-size: clamp(28px, 4vw, 36px); font-weight: 500; line-height: 1.2; letter-spacing: -0.022em; margin-bottom: 40px; text-align: center; text-wrap: balance;">Post a challenge. Get your answer.</h2>
+
+      <div style="display: flex; flex-direction: column; gap: 1px; max-width: 860px; margin: 0 auto; background: var(--border-primary); border: 1px solid var(--border-primary); border-radius: 12px; overflow: hidden;">
         <!-- Use case 1 -->
         <div style="display: flex; gap: 32px; align-items: flex-start; background: var(--bg-card); padding: 32px 28px;">
           <div style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-primary); display: flex; align-items: center; justify-content: center; font-size: 22px;">🔍</div>
@@ -2186,8 +2264,15 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <h3 class="two-sided-headline" style="font-size: clamp(24px, 3vw, 30px);">Which side are you on?</h3>
+  <hr class="divider">
+
+  <section id="get-started" class="two-sided reveal">
+    <div class="container">
+      <p class="section-label">Get started</p>
+      <h2 class="two-sided-headline">Which side are you on?</h2>
       <div class="two-sided-grid">
         <div class="side brand-side">
           <p class="side-label brand">For Brands & Founders</p>
