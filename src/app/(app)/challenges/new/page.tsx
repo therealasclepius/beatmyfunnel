@@ -16,6 +16,25 @@ const STEP_LABELS = [
 const METRIC_DEFAULTS: Record<ChallengeType, { metric: string; unit: string }> = {
   landing_page: { metric: 'Landing Page CVR', unit: '%' },
   email_flow: { metric: 'Email Open Rate', unit: '%' },
+  price_testing: { metric: 'Revenue Per Visitor', unit: '$' },
+  offer_strategy: { metric: 'Revenue Per Visitor', unit: '$' },
+  checkout_flow: { metric: 'Checkout Conversion Rate', unit: '%' },
+  product_page: { metric: 'Add to Cart Rate', unit: '%' },
+  shipping_strategy: { metric: 'Conversion Rate', unit: '%' },
+  homepage: { metric: 'Add to Cart Rate', unit: '%' },
+  ad_creative: { metric: 'ROAS', unit: 'x' },
+}
+
+const CHALLENGE_TYPE_INFO: Record<ChallengeType, { label: string; icon: string; description: string }> = {
+  landing_page: { label: 'Landing Page / Funnel', icon: '📄', description: 'Beat my conversion rate' },
+  email_flow: { label: 'Email Flow', icon: '📧', description: 'Beat my open or click rate' },
+  price_testing: { label: 'Price Testing', icon: '💲', description: 'Beat my revenue per visitor' },
+  offer_strategy: { label: 'Offer / Discount', icon: '🏷️', description: 'Beat my promo conversion' },
+  checkout_flow: { label: 'Checkout Flow', icon: '🛒', description: 'Beat my checkout conversion' },
+  product_page: { label: 'Product Page', icon: '📦', description: 'Beat my add-to-cart rate' },
+  shipping_strategy: { label: 'Shipping Strategy', icon: '🚚', description: 'Beat my shipping conversion' },
+  homepage: { label: 'Homepage', icon: '🏠', description: 'Beat my homepage engagement' },
+  ad_creative: { label: 'Ad Creative', icon: '📣', description: 'Beat my CPA or ROAS' },
 }
 
 export default function NewChallengePage() {
@@ -305,56 +324,30 @@ export default function NewChallengePage() {
       <h2 style={styles.stepTitle}>What are you challenging?</h2>
       <p style={styles.stepSubtitle}>Pick the funnel element you want optimized.</p>
 
-      <div style={styles.cardGrid}>
-        <button
-          type="button"
-          onClick={() => handleChallengeTypeSelect('landing_page')}
-          style={{
-            ...styles.typeCard,
-            borderColor: challengeType === 'landing_page' ? '#f7f8f8' : '#23252a',
-            background: challengeType === 'landing_page' ? '#1a1a1f' : '#141416',
-          }}
-        >
-          <div style={styles.typeIcon}>
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <rect x="4" y="4" width="24" height="24" rx="4" stroke={challengeType === 'landing_page' ? '#f7f8f8' : '#8a8f98'} strokeWidth="2"/>
-              <rect x="8" y="8" width="16" height="4" rx="1" fill={challengeType === 'landing_page' ? '#f7f8f8' : '#8a8f98'} opacity="0.5"/>
-              <rect x="8" y="16" width="10" height="2" rx="1" fill={challengeType === 'landing_page' ? '#f7f8f8' : '#8a8f98'} opacity="0.3"/>
-              <rect x="8" y="20" width="8" height="4" rx="2" fill={challengeType === 'landing_page' ? '#f7f8f8' : '#8a8f98'}/>
-            </svg>
-          </div>
-          <span style={{
-            ...styles.typeLabel,
-            color: challengeType === 'landing_page' ? '#f7f8f8' : '#8a8f98',
-          }}>
-            Landing Page
-          </span>
-          <span style={styles.typeDesc}>Conversion rate optimization</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => handleChallengeTypeSelect('email_flow')}
-          style={{
-            ...styles.typeCard,
-            borderColor: challengeType === 'email_flow' ? '#f7f8f8' : '#23252a',
-            background: challengeType === 'email_flow' ? '#1a1a1f' : '#141416',
-          }}
-        >
-          <div style={styles.typeIcon}>
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <rect x="4" y="7" width="24" height="18" rx="3" stroke={challengeType === 'email_flow' ? '#f7f8f8' : '#8a8f98'} strokeWidth="2"/>
-              <path d="M4 10L16 18L28 10" stroke={challengeType === 'email_flow' ? '#f7f8f8' : '#8a8f98'} strokeWidth="2"/>
-            </svg>
-          </div>
-          <span style={{
-            ...styles.typeLabel,
-            color: challengeType === 'email_flow' ? '#f7f8f8' : '#8a8f98',
-          }}>
-            Email Flow
-          </span>
-          <span style={styles.typeDesc}>Open rate & click rate</span>
-        </button>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+        {(Object.entries(CHALLENGE_TYPE_INFO) as [ChallengeType, { label: string; icon: string; description: string }][]).map(([type, info]) => (
+          <button
+            key={type}
+            type="button"
+            onClick={() => handleChallengeTypeSelect(type)}
+            style={{
+              ...styles.typeCard,
+              padding: '16px 14px',
+              borderColor: challengeType === type ? '#f7f8f8' : '#23252a',
+              background: challengeType === type ? '#1a1a1f' : '#141416',
+            }}
+          >
+            <div style={{ fontSize: '24px', marginBottom: '8px' }}>{info.icon}</div>
+            <span style={{
+              ...styles.typeLabel,
+              fontSize: '13px',
+              color: challengeType === type ? '#f7f8f8' : '#8a8f98',
+            }}>
+              {info.label}
+            </span>
+            <span style={{ ...styles.typeDesc, fontSize: '11px' }}>{info.description}</span>
+          </button>
+        ))}
       </div>
 
       <div style={{ ...styles.field, marginTop: '24px' }}>
@@ -364,11 +357,7 @@ export default function NewChallengePage() {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder={
-            challengeType === 'landing_page'
-              ? 'e.g. Beat our checkout conversion rate'
-              : 'e.g. Beat our welcome flow open rate'
-          }
+          placeholder={`e.g. ${CHALLENGE_TYPE_INFO[challengeType]?.description || 'Beat our metric'}`}
           style={styles.input}
         />
       </div>

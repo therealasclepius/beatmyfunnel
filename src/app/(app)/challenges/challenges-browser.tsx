@@ -131,7 +131,7 @@ export default function ChallengesBrowser({ challenges, brandMap, countMap }: Ch
         <div style={styles.filterGroup}>
           <span style={styles.filterLabel}>Type</span>
           <div style={styles.pillGroup}>
-            {([['all', 'All'], ['landing_page', 'Landing Page'], ['email_flow', 'Email Flow']] as const).map(([value, label]) => (
+            {([['all', 'All'], ['landing_page', 'Landing Page'], ['email_flow', 'Email'], ['price_testing', 'Pricing'], ['offer_strategy', 'Offers'], ['checkout_flow', 'Checkout'], ['product_page', 'Product Page'], ['shipping_strategy', 'Shipping'], ['homepage', 'Homepage'], ['ad_creative', 'Ads']] as const).map(([value, label]) => (
               <button
                 key={value}
                 className="filter-pill"

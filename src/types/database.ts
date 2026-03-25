@@ -3,7 +3,7 @@ export type UserRole = 'brand' | 'operator' | 'admin'
 export type ChallengeStatus = 'draft' | 'open' | 'accepting_submissions' | 'testing' | 'verifying' | 'completed' | 'refunded' | 'cancelled'
 export type ApplicationStatus = 'pending' | 'shortlisted' | 'finalist' | 'rejected'
 export type SubmissionStatus = 'pending' | 'submitted' | 'selected_for_testing' | 'tested' | 'winner' | 'runner_up'
-export type ChallengeType = 'landing_page' | 'email_flow'
+export type ChallengeType = 'landing_page' | 'email_flow' | 'price_testing' | 'offer_strategy' | 'checkout_flow' | 'product_page' | 'shipping_strategy' | 'homepage' | 'ad_creative'
 
 // Tables
 export interface Profile {
