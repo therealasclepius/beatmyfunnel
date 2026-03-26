@@ -69,7 +69,7 @@ export default function AdminUsersPage() {
       <h1 style={styles.pageTitle}>Users</h1>
 
       {/* Summary */}
-      <div style={styles.statsRow}>
+      <div className="admin-stats-row" style={styles.statsRow}>
         <div style={styles.statChip}>
           <span style={styles.statChipValue}>{users.length}</span>
           <span style={styles.statChipLabel}>Total</span>
@@ -89,7 +89,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Users Table */}
-      <div style={styles.tableWrapper}>
+      <div className="admin-table-wrapper" style={styles.tableWrapper}>
         <table style={styles.table}>
           <thead>
             <tr>

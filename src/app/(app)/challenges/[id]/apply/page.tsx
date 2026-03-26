@@ -130,7 +130,7 @@ export default function ApplyToChallengePage() {
         <Link href={`/challenges/${id}`} style={styles.backLink}>
           &larr; Back to Challenge
         </Link>
-        <div style={styles.card}>
+        <div className="detail-card" style={styles.card}>
           <h1 style={styles.title}>You&apos;ve already applied</h1>
           <p style={styles.subtitle}>Your application is currently:</p>
           <div style={{ marginTop: '12px' }}>

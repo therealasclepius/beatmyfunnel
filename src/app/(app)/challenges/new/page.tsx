@@ -288,6 +288,7 @@ export default function NewChallengePage() {
                 )}
               </div>
               <span
+                className="progress-step-label"
                 style={{
                   fontSize: '12px',
                   fontWeight: isActive ? 600 : 400,
@@ -324,7 +325,7 @@ export default function NewChallengePage() {
       <h2 style={styles.stepTitle}>What are you challenging?</h2>
       <p style={styles.stepSubtitle}>Pick the funnel element you want optimized.</p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+      <div className="wizard-type-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
         {(Object.entries(CHALLENGE_TYPE_INFO) as [ChallengeType, { label: string; icon: string; description: string }][]).map(([type, info]) => (
           <button
             key={type}
@@ -558,7 +559,7 @@ export default function NewChallengePage() {
           {description && (
             <div style={styles.reviewRow}>
               <span style={styles.reviewLabel}>Description</span>
-              <span style={{ ...styles.reviewValue, maxWidth: '300px', textAlign: 'right' }}>{description}</span>
+              <span style={{ ...styles.reviewValue, maxWidth: '60%', textAlign: 'right', wordBreak: 'break-word' as const }}>{description}</span>
             </div>
           )}
         </div>
@@ -632,7 +633,7 @@ export default function NewChallengePage() {
         &larr; Back to Dashboard
       </Link>
 
-      <div style={styles.card}>
+      <div className="wizard-card" style={styles.card}>
         <ProgressBar />
 
         <div
@@ -647,7 +648,7 @@ export default function NewChallengePage() {
         {error && <p style={styles.error}>{error}</p>}
 
         {/* Navigation */}
-        <div style={styles.navRow}>
+        <div className="wizard-nav-row" style={styles.navRow}>
           {step > 1 ? (
             <button type="button" onClick={goBack} style={styles.ghostButton}>
               Back
@@ -807,6 +808,8 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: '8px',
     outline: 'none',
     fontFamily: 'inherit',
+    width: '100%',
+    boxSizing: 'border-box' as const,
   },
   textarea: {
     padding: '12px 16px',
@@ -819,6 +822,8 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'inherit',
     resize: 'vertical' as const,
     lineHeight: 1.5,
+    width: '100%',
+    boxSizing: 'border-box' as const,
   },
   select: {
     height: '44px',
@@ -831,6 +836,8 @@ const styles: Record<string, React.CSSProperties> = {
     outline: 'none',
     fontFamily: 'inherit',
     appearance: 'none' as const,
+    width: '100%',
+    boxSizing: 'border-box' as const,
   },
   hint: {
     fontSize: '12px',

@@ -126,11 +126,11 @@ export default function ChallengesBrowser({ challenges, brandMap, countMap }: Ch
       </div>
 
       {/* Filter bar */}
-      <div style={styles.filterBar} className="filter-bar-inner">
+      <div style={styles.filterBar} className="filter-bar-inner filter-bar-mobile">
         {/* Type filter */}
         <div style={styles.filterGroup}>
           <span style={styles.filterLabel}>Type</span>
-          <div style={styles.pillGroup}>
+          <div className="filter-pill-group" style={styles.pillGroup}>
             {([['all', 'All'], ['landing_page', 'Landing Page'], ['email_flow', 'Email'], ['price_testing', 'Pricing'], ['offer_strategy', 'Offers'], ['checkout_flow', 'Checkout'], ['product_page', 'Product Page'], ['shipping_strategy', 'Shipping'], ['homepage', 'Homepage'], ['ad_creative', 'Ads']] as const).map(([value, label]) => (
               <button
                 key={value}
@@ -150,7 +150,7 @@ export default function ChallengesBrowser({ challenges, brandMap, countMap }: Ch
         {/* Prize filter */}
         <div style={styles.filterGroup}>
           <span style={styles.filterLabel}>Prize</span>
-          <div style={styles.pillGroup}>
+          <div className="filter-pill-group" style={styles.pillGroup}>
             {([['all', 'All'], ['5k-10k', '$5K\u2013$10K'], ['10k-25k', '$10K\u2013$25K'], ['25k+', '$25K+']] as const).map(([value, label]) => (
               <button
                 key={value}
@@ -419,6 +419,8 @@ const styles: Record<string, React.CSSProperties> = {
     textDecoration: 'none',
     transition: 'border-color 0.15s, box-shadow 0.15s',
     cursor: 'pointer',
+    minWidth: 0,
+    overflow: 'hidden',
   },
   cardTop: {
     display: 'flex',

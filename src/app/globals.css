@@ -1343,3 +1343,248 @@ footer {
     gap: 16px;
   }
 }
+
+/* ================================ */
+/* DASHBOARD MOBILE RESPONSIVE      */
+/* ================================ */
+
+/* App layout main padding */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 20px 16px !important;
+  }
+}
+
+/* Navbar mobile */
+@media (max-width: 640px) {
+  .navbar-inner {
+    padding: 0 12px !important;
+    gap: 6px;
+  }
+  .navbar-left {
+    gap: 8px !important;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .navbar-links {
+    gap: 0 !important;
+  }
+  .navbar-links a {
+    padding: 6px 6px !important;
+    font-size: 12px !important;
+  }
+  .navbar-logo {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+  .navbar-right {
+    gap: 6px !important;
+    flex-shrink: 0;
+  }
+  .navbar-username {
+    display: none !important;
+  }
+  .navbar-signout {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+    white-space: nowrap;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 400px) {
+  .navbar-inner {
+    padding: 0 8px !important;
+  }
+  .navbar-logo {
+    font-size: 12px !important;
+  }
+  .navbar-links a {
+    padding: 4px 5px !important;
+    font-size: 11px !important;
+  }
+  .navbar-signout {
+    font-size: 10px !important;
+    padding: 3px 6px !important;
+  }
+}
+
+/* Dashboard grids — 2col to 1col */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Dashboard page header stack on mobile */
+@media (max-width: 480px) {
+  .dashboard-page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+}
+
+/* App rows stack on mobile */
+@media (max-width: 640px) {
+  .app-row-link {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding: 14px 16px !important;
+  }
+}
+
+/* Challenge detail grid — 3/4col to 2col to 1col */
+@media (max-width: 768px) {
+  .detail-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  .detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Challenge detail card padding */
+@media (max-width: 640px) {
+  .detail-card {
+    padding: 20px 16px !important;
+  }
+}
+
+/* Progress bar text hide on mobile */
+@media (max-width: 480px) {
+  .progress-step-label {
+    font-size: 9px !important;
+  }
+}
+
+/* Wizard card padding */
+@media (max-width: 640px) {
+  .wizard-card {
+    padding: 20px 16px !important;
+  }
+}
+
+/* Wizard type grid */
+@media (max-width: 640px) {
+  .wizard-type-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 400px) {
+  .wizard-type-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Wizard nav row */
+@media (max-width: 480px) {
+  .wizard-nav-row {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+  .wizard-nav-row > div {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+}
+
+/* Profile stats row */
+@media (max-width: 640px) {
+  .profile-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Profile form card */
+@media (max-width: 640px) {
+  .profile-form-card {
+    padding: 20px 16px !important;
+  }
+  .profile-section-card {
+    padding: 20px 16px !important;
+  }
+}
+
+/* Onboarding card */
+@media (max-width: 480px) {
+  .onboarding-content {
+    padding: 32px 20px 24px !important;
+  }
+  .onboarding-footer {
+    padding: 20px 20px 24px !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+}
+
+/* Admin tables — horizontal scroll wrapper */
+.admin-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .admin-table-wrapper table {
+    min-width: 600px;
+  }
+  .admin-stats-row {
+    flex-wrap: wrap !important;
+  }
+  .admin-tabs {
+    overflow-x: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Manage page header */
+@media (max-width: 640px) {
+  .manage-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .manage-meta-row {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .manage-app-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+  .manage-app-actions {
+    flex-wrap: wrap !important;
+  }
+  .manage-results-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Filter bar mobile */
+@media (max-width: 768px) {
+  .filter-bar-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .filter-pill-group {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* Status box / actions mobile */
+@media (max-width: 640px) {
+  .challenge-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .challenge-status-box {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+}

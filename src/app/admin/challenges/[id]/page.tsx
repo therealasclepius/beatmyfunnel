@@ -397,8 +397,8 @@ export default function AdminChallengeDetailPage() {
       </Link>
 
       {/* Challenge Header */}
-      <div style={styles.card}>
-        <div style={styles.headerRow}>
+      <div className="detail-card" style={styles.card}>
+        <div className="manage-header" style={styles.headerRow}>
           <div>
             <h1 style={styles.title}>{challenge.title}</h1>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px', flexWrap: 'wrap' }}>
@@ -424,7 +424,7 @@ export default function AdminChallengeDetailPage() {
                     background: isComplete ? '#2ed573' : isActive ? 'var(--accent)' : 'var(--border-secondary)',
                   }}
                 />
-                <span style={{
+                <span className="progress-step-label" style={{
                   fontSize: '11px',
                   fontWeight: isActive ? 600 : 400,
                   color: isFuture ? 'var(--text-quaternary)' : 'var(--text-secondary)',
@@ -437,7 +437,7 @@ export default function AdminChallengeDetailPage() {
         </div>
 
         {/* Challenge Details */}
-        <div style={styles.detailsGrid}>
+        <div className="detail-grid" style={styles.detailsGrid}>
           <div style={styles.detailItem}>
             <span style={styles.detailLabel}>Brand</span>
             <span style={styles.detailValue}>
@@ -612,7 +612,7 @@ export default function AdminChallengeDetailPage() {
 
         {challenge.escrow_transaction_id ? (
           <div style={{ marginTop: '16px' }}>
-            <div style={styles.detailsGrid}>
+            <div className="detail-grid" style={styles.detailsGrid}>
               <div style={styles.detailItem}>
                 <span style={styles.detailLabel}>Transaction ID</span>
                 <span style={styles.detailValue}>{challenge.escrow_transaction_id}</span>

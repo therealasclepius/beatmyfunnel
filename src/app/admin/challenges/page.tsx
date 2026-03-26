@@ -100,7 +100,7 @@ export default function AdminChallengesPage() {
       <h1 style={styles.pageTitle}>All Challenges</h1>
 
       {/* Filter Tabs */}
-      <div style={styles.tabs}>
+      <div className="admin-tabs" style={styles.tabs}>
         {FILTER_TABS.map((tab) => (
           <button
             key={tab.value}
@@ -121,7 +121,7 @@ export default function AdminChallengesPage() {
       </div>
 
       {/* Table */}
-      <div style={styles.tableWrapper}>
+      <div className="admin-table-wrapper" style={styles.tableWrapper}>
         <table style={styles.table}>
           <thead>
             <tr>

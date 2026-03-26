@@ -117,7 +117,7 @@ export default async function ChallengeDetailPage({
         &larr; Back to Challenges
       </Link>
 
-      <div style={styles.card}>
+      <div className="detail-card" style={styles.card}>
         <div style={styles.header}>
           <StatusBadge status={typedChallenge.status} variant="challenge" />
           <span style={styles.prize}>{formatCurrency(typedChallenge.prize_amount)}</span>
@@ -151,7 +151,7 @@ export default async function ChallengeDetailPage({
                     background: isComplete ? '#2ed573' : isActive ? 'var(--accent, #8a8fff)' : 'var(--border-secondary, #333)',
                   }}
                 />
-                <span style={{
+                <span className="progress-step-label" style={{
                   fontSize: '11px',
                   fontWeight: isActive ? 600 : 400,
                   color: isFuture ? 'var(--text-quaternary)' : 'var(--text-secondary)',
@@ -165,7 +165,7 @@ export default async function ChallengeDetailPage({
 
         <p style={styles.description}>{typedChallenge.description}</p>
 
-        <div style={styles.details}>
+        <div className="detail-grid" style={styles.details}>
           <div style={styles.detailItem}>
             <span style={styles.detailLabel}>Metric Type</span>
             <span style={styles.detailValue}>{typedChallenge.metric_type}</span>
@@ -225,7 +225,7 @@ export default async function ChallengeDetailPage({
           </div>
         )}
 
-        <div style={styles.actions}>
+        <div className="challenge-actions" style={styles.actions}>
           {isOwner && (
             <Link href={`/challenges/${id}/manage`} style={styles.primaryButton}>
               Manage Challenge
@@ -240,7 +240,7 @@ export default async function ChallengeDetailPage({
           )}
 
           {isOperator && typedChallenge.status === 'open' && hasApplied && !isFinalist && (
-            <div style={styles.statusBox}>
+            <div className="challenge-status-box" style={styles.statusBox}>
               <p style={styles.statusText}>
                 You applied to this challenge.
               </p>
@@ -249,7 +249,7 @@ export default async function ChallengeDetailPage({
           )}
 
           {isOperator && typedChallenge.status === 'accepting_submissions' && isFinalist && (
-            <div style={styles.statusBox}>
+            <div className="challenge-status-box" style={styles.statusBox}>
               <p style={styles.statusText}>
                 You are a finalist!
               </p>
@@ -260,7 +260,7 @@ export default async function ChallengeDetailPage({
           )}
 
           {isOperator && typedChallenge.status === 'accepting_submissions' && !isFinalist && (
-            <div style={styles.statusBox}>
+            <div className="challenge-status-box" style={styles.statusBox}>
               <p style={styles.statusText}>
                 Applications closed. {hasApplied ? 'You were not selected as a finalist.' : 'This challenge is no longer accepting applications.'}
               </p>
@@ -268,7 +268,7 @@ export default async function ChallengeDetailPage({
           )}
 
           {isOperator && (typedChallenge.status === 'testing' || typedChallenge.status === 'verifying') && (
-            <div style={styles.statusBox}>
+            <div className="challenge-status-box" style={styles.statusBox}>
               <p style={styles.statusText}>
                 Challenge in progress — {typedChallenge.status === 'testing' ? 'live testing underway' : 'results being verified'}.
               </p>
@@ -276,7 +276,7 @@ export default async function ChallengeDetailPage({
           )}
 
           {isOperator && hasApplied && isFinalist && typedChallenge.status === 'open' && (
-            <div style={styles.statusBox}>
+            <div className="challenge-status-box" style={styles.statusBox}>
               <p style={styles.statusText}>
                 You are a finalist! Waiting for the brand to close applications.
               </p>

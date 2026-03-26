@@ -26,12 +26,12 @@ export default function Navbar({ profile }: NavbarProps) {
 
   return (
     <nav style={styles.nav}>
-      <div style={styles.inner}>
-        <div style={styles.left}>
-          <Link href="/" style={styles.logo}>
+      <div className="navbar-inner" style={styles.inner}>
+        <div className="navbar-left" style={styles.left}>
+          <Link href="/" className="navbar-logo" style={styles.logo}>
             Beat My Funnel
           </Link>
-          <div style={styles.links}>
+          <div className="navbar-links" style={styles.links}>
             <Link
               href="/dashboard"
               style={{
@@ -52,12 +52,12 @@ export default function Navbar({ profile }: NavbarProps) {
             </Link>
           </div>
         </div>
-        <div style={styles.right}>
+        <div className="navbar-right" style={styles.right}>
           <NotificationDropdown />
-          <Link href="/profile" style={{ ...styles.userName, textDecoration: 'none', cursor: 'pointer' }}>
+          <Link href="/profile" className="navbar-username" style={{ ...styles.userName, textDecoration: 'none', cursor: 'pointer' }}>
             {profile.display_name}
           </Link>
-          <button onClick={handleSignOut} style={styles.signOut}>
+          <button onClick={handleSignOut} className="navbar-signout" style={styles.signOut}>
             Sign out
           </button>
         </div>
@@ -96,6 +96,8 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-primary)',
     textDecoration: 'none',
     letterSpacing: '-0.02em',
+    whiteSpace: 'nowrap',
+    flexShrink: 0,
   },
   links: {
     display: 'flex',

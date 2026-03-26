@@ -89,7 +89,7 @@ export default async function AdminOverviewPage() {
           <Link href="/admin/challenges" style={styles.viewAllLink}>View all &rarr;</Link>
         </div>
 
-        <div style={styles.tableWrapper}>
+        <div className="admin-table-wrapper" style={styles.tableWrapper}>
           <table style={styles.table}>
             <thead>
               <tr>

@@ -149,7 +149,7 @@ export default function SubmitWorkPage() {
         <Link href={`/challenges/${id}`} style={styles.backLink}>
           &larr; Back to Challenge
         </Link>
-        <div style={styles.card}>
+        <div className="detail-card" style={styles.card}>
           <h1 style={styles.title}>Submission Received</h1>
           <p style={styles.subtitle}>Your work has been submitted. The brand will review it.</p>
 

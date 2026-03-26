@@ -256,6 +256,7 @@ const styles: Record<string, React.CSSProperties> = {
     top: 'calc(100% + 8px)',
     right: 0,
     width: '380px',
+    maxWidth: 'calc(100vw - 24px)',
     maxHeight: '480px',
     background: 'var(--bg-card)',
     border: '1px solid var(--border-primary)',

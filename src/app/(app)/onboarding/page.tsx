@@ -223,13 +223,13 @@ export default function OnboardingPage() {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <div style={styles.content}>
+        <div className="onboarding-content" style={styles.content}>
           <h1 style={styles.title}>{screen.title}</h1>
           <p style={styles.subtitle}>{screen.subtitle}</p>
           <div style={styles.body}>{screen.content}</div>
         </div>
 
-        <div style={styles.footer}>
+        <div className="onboarding-footer" style={styles.footer}>
           {/* Progress dots */}
           <div style={styles.dots}>
             {screens.map((_, i) => (

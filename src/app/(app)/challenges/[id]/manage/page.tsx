@@ -222,11 +222,11 @@ export default function ManageChallengePage() {
       </Link>
 
       {/* Challenge Overview */}
-      <div style={styles.card}>
-        <div style={styles.header}>
+      <div className="detail-card" style={styles.card}>
+        <div className="manage-header" style={styles.header}>
           <div>
             <h1 style={styles.title}>{challenge.title}</h1>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+            <div className="manage-meta-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
               <StatusBadge status={challenge.status} variant="challenge" />
               <span style={styles.metaText}>{formatCurrency(challenge.prize_amount)} prize</span>
               <span style={styles.metaText}>Deadline: {formatDate(challenge.deadline)}</span>
@@ -269,7 +269,7 @@ export default function ManageChallengePage() {
                     background: isComplete ? '#2ed573' : isActive ? 'var(--accent)' : 'var(--border-secondary)',
                   }}
                 />
-                <span style={{
+                <span className="progress-step-label" style={{
                   fontSize: '11px',
                   fontWeight: isActive ? 600 : 400,
                   color: isFuture ? 'var(--text-quaternary)' : 'var(--text-secondary)',
@@ -351,6 +351,7 @@ export default function ManageChallengePage() {
                 {applications.map((app) => (
                   <div key={app.id} style={styles.appCard}>
                     <div
+                      className="manage-app-header"
                       style={styles.appHeader}
                       onClick={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
                     >
@@ -358,7 +359,7 @@ export default function ManageChallengePage() {
                         <span style={styles.appName}>{app.profiles?.display_name || 'Unknown'}</span>
                         <StatusBadge status={app.status} variant="application" />
                       </div>
-                      <div style={styles.appActions}>
+                      <div className="manage-app-actions" style={styles.appActions}>
                         {app.status === 'pending' && (
                           <>
                             <button
@@ -596,7 +597,7 @@ export default function ManageChallengePage() {
           {(challenge.status === 'completed' || challenge.status === 'refunded') && (
             <div style={{ ...styles.card, marginTop: '24px' }}>
               <h2 style={styles.sectionTitle}>Results</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
+              <div className="manage-results-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
                 <div style={styles.appField}>
                   <span style={styles.appFieldLabel}>Baseline</span>
                   <span style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-primary)' }}>
@@ -808,6 +809,8 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: 'space-between',
     padding: '16px 20px',
     cursor: 'pointer',
+    gap: '8px',
+    flexWrap: 'wrap' as const,
   },
   appInfo: {
     display: 'flex',

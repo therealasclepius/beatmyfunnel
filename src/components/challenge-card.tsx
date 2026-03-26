@@ -65,9 +65,13 @@ const styles: Record<string, React.CSSProperties> = {
     background: 'var(--bg-card)',
     border: '1px solid var(--border-primary)',
     borderRadius: '12px',
-    padding: '24px',
+    padding: '20px',
     textDecoration: 'none',
     transition: 'border-color 0.15s',
+    minWidth: 0,
+    overflow: 'hidden',
+    width: '100%',
+    boxSizing: 'border-box' as const,
   },
   header: {
     display: 'flex',
@@ -95,8 +99,9 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '16px',
   },
   meta: {
-    display: 'flex',
-    gap: '20px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '12px',
     marginTop: '16px',
   },
   metaItem: {

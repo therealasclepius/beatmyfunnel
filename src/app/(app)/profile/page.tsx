@@ -253,7 +253,7 @@ export default function ProfilePage() {
         </p>
       </div>
 
-      <form onSubmit={handleSave} style={styles.form}>
+      <form onSubmit={handleSave} className="profile-form-card" style={styles.form}>
         {/* Avatar + Role */}
         <div style={styles.avatarSection}>
           <div style={styles.avatar}>
@@ -366,7 +366,7 @@ export default function ProfilePage() {
       {isOperator && (
         <>
           {/* Stats Row */}
-          <div style={styles.statsRow}>
+          <div className="profile-stats-row" style={styles.statsRow}>
             <div style={styles.statCard}>
               <span style={styles.statValue}>{challengeHistory.length}</span>
               <span style={styles.statLabel}>Applied</span>
@@ -388,7 +388,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Challenge History List */}
-          <div style={styles.section}>
+          <div className="profile-section-card" style={styles.section}>
             <h2 style={styles.sectionTitle}>Challenge History</h2>
             {challengeHistory.length === 0 ? (
               <p style={styles.emptyText}>No challenges yet. Browse open challenges to get started.</p>
@@ -413,7 +413,7 @@ export default function ProfilePage() {
 
           {/* Badges */}
           {beatBadges.length > 0 && (
-            <div style={styles.section}>
+            <div className="profile-section-card" style={styles.section}>
               <h2 style={styles.sectionTitle}>Badges</h2>
               <div style={styles.badgeGrid}>
                 {beatBadges.map((badge, i) => (
@@ -432,7 +432,7 @@ export default function ProfilePage() {
 
       {/* Brand: Challenges Posted */}
       {isBrand && (
-        <div style={styles.section}>
+        <div className="profile-section-card" style={styles.section}>
           <h2 style={styles.sectionTitle}>Challenges Posted</h2>
           {brandChallenges.length === 0 ? (
             <p style={styles.emptyText}>No challenges posted yet.</p>
@@ -563,6 +563,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '15px',
     fontFamily: 'inherit',
     outline: 'none',
+    boxSizing: 'border-box' as const,
   },
   pillContainer: {
     display: 'flex',

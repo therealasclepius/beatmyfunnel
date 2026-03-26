@@ -40,15 +40,17 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     <span
       style={{
         display: 'inline-block',
-        padding: '2px 10px',
-        fontSize: '12px',
+        padding: '2px 8px',
+        fontSize: '11px',
         fontWeight: 500,
         borderRadius: '9999px',
         background: colors.bg,
         color: colors.text,
         textTransform: 'capitalize',
         letterSpacing: '0.01em',
-        lineHeight: '20px',
+        lineHeight: '18px',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
       }}
     >
       {label}

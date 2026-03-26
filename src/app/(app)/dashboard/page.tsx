@@ -75,7 +75,7 @@ async function BrandDashboard({ userId }: { userId: string }) {
 
   return (
     <div>
-      <div style={styles.pageHeader}>
+      <div className="dashboard-page-header" style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>Your Challenges</h1>
         <Link href="/challenges/new" style={styles.primaryButton}>
           Post a Challenge
@@ -98,7 +98,7 @@ async function BrandDashboard({ userId }: { userId: string }) {
           {activeChallenges.length > 0 && (
             <div style={{ marginBottom: '40px' }}>
               <h2 style={styles.sectionTitle}>Active Challenges</h2>
-              <div style={styles.grid}>
+              <div className="dashboard-grid" style={styles.grid}>
                 {activeChallenges.map((challenge) => (
                   <div key={challenge.id} style={{ position: 'relative' }}>
                     <ChallengeCard
@@ -119,7 +119,7 @@ async function BrandDashboard({ userId }: { userId: string }) {
           {completedChallenges.length > 0 && (
             <div>
               <h2 style={styles.sectionTitle}>Completed</h2>
-              <div style={styles.grid}>
+              <div className="dashboard-grid" style={styles.grid}>
                 {completedChallenges.map((challenge) => (
                   <ChallengeCard
                     key={challenge.id}
@@ -190,7 +190,7 @@ async function OperatorDashboard({ userId }: { userId: string }) {
       {/* Your Applications Section */}
       {typedUserApps.length > 0 && (
         <div style={{ marginBottom: '48px' }}>
-          <div style={styles.pageHeader}>
+          <div className="dashboard-page-header" style={styles.pageHeader}>
             <h1 style={styles.pageTitle}>Your Applications</h1>
           </div>
           <div style={styles.appList}>
@@ -198,20 +198,21 @@ async function OperatorDashboard({ userId }: { userId: string }) {
               <Link
                 key={app.id}
                 href={`/challenges/${app.challenge_id}`}
+                className="app-row-link"
                 style={styles.appRow}
               >
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <span style={styles.appChallengeTitle}>{app.challenges?.title || 'Unknown Challenge'}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px', flexWrap: 'wrap' as const }}>
                     <StatusBadge status={app.status} variant="application" />
                     {app.challenges && (
                       <StatusBadge status={app.challenges.status} variant="challenge" />
                     )}
+                    <span style={styles.appDateInline}>
+                      Applied {new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </span>
                   </div>
                 </div>
-                <span style={styles.appDate}>
-                  Applied {new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                </span>
               </Link>
             ))}
           </div>
@@ -220,7 +221,7 @@ async function OperatorDashboard({ userId }: { userId: string }) {
 
       {/* Open Challenges Section */}
       <div>
-        <div style={styles.pageHeader}>
+        <div className="dashboard-page-header" style={styles.pageHeader}>
           <h1 style={styles.pageTitle}>Open Challenges</h1>
           <Link href="/challenges" style={styles.ghostButton}>
             Browse All
@@ -235,7 +236,7 @@ async function OperatorDashboard({ userId }: { userId: string }) {
             </p>
           </div>
         ) : (
-          <div style={styles.grid}>
+          <div className="dashboard-grid" style={styles.grid}>
             {typedChallenges.map((challenge) => (
               <ChallengeCard
                 key={challenge.id}
@@ -349,21 +350,22 @@ const styles: Record<string, React.CSSProperties> = {
   },
   appRow: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '16px 20px',
+    alignItems: 'flex-start',
+    padding: '14px 16px',
     background: 'var(--bg-card)',
     border: '1px solid var(--border-primary)',
     borderRadius: '10px',
     textDecoration: 'none',
   },
   appChallengeTitle: {
-    fontSize: '15px',
+    fontSize: '14px',
     fontWeight: 500,
     color: 'var(--text-primary)',
+    lineHeight: 1.3,
   },
-  appDate: {
-    fontSize: '13px',
+  appDateInline: {
+    fontSize: '12px',
     color: 'var(--text-quaternary)',
+    whiteSpace: 'nowrap',
   },
 }

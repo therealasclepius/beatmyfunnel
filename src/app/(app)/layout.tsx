@@ -25,9 +25,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', overflowX: 'hidden', maxWidth: '100vw' }}>
       <Navbar profile={profile as Profile} />
-      <main style={styles.main}>{children}</main>
+      <main className="app-main" style={styles.main}>{children}</main>
     </div>
   )
 }
@@ -37,5 +37,7 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '1080px',
     margin: '0 auto',
     padding: '32px 24px',
+    width: '100%',
+    boxSizing: 'border-box' as const,
   },
 }
