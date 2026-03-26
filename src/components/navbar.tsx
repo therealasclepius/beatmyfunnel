@@ -28,7 +28,7 @@ export default function Navbar({ profile }: NavbarProps) {
     <nav style={styles.nav}>
       <div className="navbar-inner" style={styles.inner}>
         <div className="navbar-left" style={styles.left}>
-          <Link href="/" className="navbar-logo" style={styles.logo}>
+          <Link href="/dashboard" className="navbar-logo" style={styles.logo}>
             Beat My Funnel
           </Link>
           <div className="navbar-links" style={styles.links}>
