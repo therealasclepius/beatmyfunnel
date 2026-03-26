@@ -61,7 +61,8 @@ export default function ChallengeCard({ challenge, applicationCount, brandName }
 
 const styles: Record<string, React.CSSProperties> = {
   card: {
-    display: 'block',
+    display: 'flex',
+    flexDirection: 'column' as const,
     background: 'var(--bg-card)',
     border: '1px solid var(--border-primary)',
     borderRadius: '12px',
@@ -71,6 +72,7 @@ const styles: Record<string, React.CSSProperties> = {
     minWidth: 0,
     overflow: 'hidden',
     width: '100%',
+    height: '100%',
     boxSizing: 'border-box' as const,
   },
   header: {

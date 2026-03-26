@@ -91,10 +91,15 @@ export default function ChallengesBrowser({ challenges, brandMap, countMap }: Ch
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 16px;
+          align-items: stretch;
+        }
+        .challenges-grid > a {
+          height: 100%;
         }
         @media (max-width: 768px) {
           .challenges-grid {
             grid-template-columns: 1fr;
+            gap: 12px;
           }
           .filter-bar-inner {
             flex-direction: column;
@@ -421,6 +426,8 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     minWidth: 0,
     overflow: 'hidden',
+    height: '100%',
+    boxSizing: 'border-box' as const,
   },
   cardTop: {
     display: 'flex',

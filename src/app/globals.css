@@ -1409,10 +1409,20 @@ footer {
   }
 }
 
-/* Dashboard grids — 2col to 1col */
+/* Dashboard grids */
+.dashboard-grid {
+  align-items: stretch;
+}
+.dashboard-grid > * {
+  height: 100%;
+}
+.dashboard-grid > * > a {
+  height: 100%;
+}
 @media (max-width: 768px) {
   .dashboard-grid {
     grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
 }
 
