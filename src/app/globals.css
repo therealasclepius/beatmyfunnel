@@ -1384,6 +1384,9 @@ footer {
   .navbar-username {
     display: none !important;
   }
+  .navbar-profile-icon {
+    display: flex !important;
+  }
   .navbar-signout {
     font-size: 11px !important;
     padding: 4px 8px !important;
