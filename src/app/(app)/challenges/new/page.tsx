@@ -88,6 +88,7 @@ export default function NewChallengePage() {
       setCheckingRole(false)
     }
     checkRole()
+    window.scrollTo(0, 0)
   }, [router])
 
   const handleChallengeTypeSelect = (type: ChallengeType) => {
@@ -130,12 +131,14 @@ export default function NewChallengePage() {
     setError('')
     setDirection('forward')
     setStep((s) => Math.min(s + 1, 4))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const goBack = () => {
     setError('')
     setDirection('back')
     setStep((s) => Math.max(s - 1, 1))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleSaveDraft = async () => {
@@ -533,7 +536,7 @@ export default function NewChallengePage() {
           value={deadline}
           min={new Date().toISOString().split('T')[0]}
           onChange={(e) => setDeadline(e.target.value)}
-          style={{ ...styles.input, colorScheme: 'dark' }}
+          style={{ ...styles.input, colorScheme: 'dark', width: '100%', boxSizing: 'border-box' as const }}
         />
       </div>
     </div>
@@ -687,12 +690,12 @@ export default function NewChallengePage() {
       {/* Inline keyframes for animations */}
       <style>{`
         @keyframes wizardSlideIn {
-          from { opacity: 0; transform: translateX(24px); }
-          to { opacity: 1; transform: translateX(0); }
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @keyframes wizardSlideBack {
-          from { opacity: 0; transform: translateX(-24px); }
-          to { opacity: 1; transform: translateX(0); }
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>
@@ -703,6 +706,8 @@ const styles: Record<string, React.CSSProperties> = {
   wrapper: {
     maxWidth: '640px',
     margin: '0 auto',
+    overflowX: 'hidden' as const,
+    width: '100%',
   },
   backLink: {
     display: 'inline-block',
@@ -716,6 +721,9 @@ const styles: Record<string, React.CSSProperties> = {
     border: '1px solid #23252a',
     borderRadius: '12px',
     padding: '32px',
+    overflowX: 'hidden' as const,
+    boxSizing: 'border-box' as const,
+    width: '100%',
   },
 
   // ── Progress ──
