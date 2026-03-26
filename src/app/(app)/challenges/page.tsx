@@ -1,9 +1,18 @@
 import { createClient } from '@/lib/supabase/server'
-import type { Challenge } from '@/types/database'
+import type { Challenge, Profile } from '@/types/database'
 import ChallengesBrowser from './challenges-browser'
 
 export default async function BrowseChallengesPage() {
   const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: profile } = user ? await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single() : { data: null }
+
+  const userRole = (profile as Profile | null)?.role || 'operator'
 
   const { data: challenges } = await supabase
     .from('challenges')
@@ -46,6 +55,7 @@ export default async function BrowseChallengesPage() {
       challenges={typedChallenges}
       brandMap={brandMap}
       countMap={countMap}
+      userRole={userRole}
     />
   )
 }

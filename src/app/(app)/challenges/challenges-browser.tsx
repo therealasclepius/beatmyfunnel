@@ -9,6 +9,7 @@ interface ChallengesBrowserProps {
   challenges: Challenge[]
   brandMap: Record<string, string>
   countMap: Record<string, number>
+  userRole?: string
 }
 
 type TypeFilter = 'all' | ChallengeType
@@ -50,7 +51,7 @@ const formatChallengeType = (type: ChallengeType) => {
   }
 }
 
-export default function ChallengesBrowser({ challenges, brandMap, countMap }: ChallengesBrowserProps) {
+export default function ChallengesBrowser({ challenges, brandMap, countMap, userRole }: ChallengesBrowserProps) {
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all')
   const [prizeFilter, setPrizeFilter] = useState<PrizeFilter>('all')
   const [sortBy, setSortBy] = useState<SortOption>('newest')
@@ -124,9 +125,11 @@ export default function ChallengesBrowser({ challenges, brandMap, countMap }: Ch
               Browse open challenges and apply to compete.
             </p>
           </div>
-          <Link href="/challenges/new" style={styles.postButton}>
-            + Post a Challenge
-          </Link>
+          {(userRole === 'brand' || userRole === 'admin') && (
+            <Link href="/challenges/new" style={styles.postButton}>
+              + Post a Challenge
+            </Link>
+          )}
         </div>
       </div>
 
