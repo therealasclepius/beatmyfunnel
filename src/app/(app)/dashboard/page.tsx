@@ -116,6 +116,7 @@ async function BrandDashboard({ userId }: { userId: string }) {
                     <ChallengeCard
                       challenge={challenge}
                       applicationCount={countMap[challenge.id] || 0}
+                      isOwner={true}
                     />
                     <div style={styles.progressIndicator}>
                       <StatusBadge status={challenge.status} variant="challenge" />
@@ -137,6 +138,7 @@ async function BrandDashboard({ userId }: { userId: string }) {
                     key={challenge.id}
                     challenge={challenge}
                     applicationCount={countMap[challenge.id] || 0}
+                    isOwner={true}
                   />
                 ))}
               </div>

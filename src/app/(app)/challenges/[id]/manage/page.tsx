@@ -672,6 +672,51 @@ export default function ManageChallengePage() {
           </div>
         </div>
       )}
+
+      {/* Danger zone — Close / Delete */}
+      <div style={{ marginTop: '48px', padding: '24px', border: '1px solid #3a2020', borderRadius: '12px', background: 'rgba(235, 87, 87, 0.04)' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#eb5757', marginBottom: '8px' }}>Danger Zone</h3>
+        <p style={{ fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '16px' }}>
+          {challenge.status === 'draft'
+            ? 'Delete this draft permanently.'
+            : challenge.status === 'completed' || challenge.status === 'refunded'
+            ? 'This challenge has been resolved.'
+            : 'Close this challenge and refund all funds. This cannot be undone.'}
+        </p>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' as const }}>
+          {challenge.status === 'draft' && (
+            <button
+              onClick={async () => {
+                if (!confirm('Are you sure you want to delete this draft? This cannot be undone.')) return
+                setUpdating('delete')
+                const supabase = createClient()
+                await supabase.from('challenges').delete().eq('id', id)
+                router.push('/dashboard')
+              }}
+              disabled={updating === 'delete'}
+              style={{ height: '36px', padding: '0 16px', fontSize: '13px', fontWeight: 500, background: '#eb5757', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontFamily: 'inherit' }}
+            >
+              {updating === 'delete' ? 'Deleting...' : 'Delete Draft'}
+            </button>
+          )}
+          {(challenge.status === 'open' || challenge.status === 'accepting_submissions') && (
+            <button
+              onClick={async () => {
+                if (!confirm('Are you sure you want to close this challenge and refund? This cannot be undone.')) return
+                setUpdating('close')
+                const supabase = createClient()
+                await supabase.from('challenges').update({ status: 'refunded' }).eq('id', id)
+                await loadData()
+                setUpdating(null)
+              }}
+              disabled={updating === 'close'}
+              style={{ height: '36px', padding: '0 16px', fontSize: '13px', fontWeight: 500, background: 'transparent', color: '#eb5757', border: '1px solid #eb5757', borderRadius: '6px', cursor: 'pointer', fontFamily: 'inherit' }}
+            >
+              {updating === 'close' ? 'Closing...' : 'Close & Refund Challenge'}
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

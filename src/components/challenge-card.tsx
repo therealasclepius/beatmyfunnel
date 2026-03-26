@@ -7,6 +7,7 @@ interface ChallengeCardProps {
   challenge: Challenge
   applicationCount?: number
   brandName?: string
+  isOwner?: boolean
 }
 
 const formatCurrency = (cents: number) =>
@@ -23,9 +24,10 @@ const formatDate = (dateStr: string) =>
     year: 'numeric',
   })
 
-export default function ChallengeCard({ challenge, applicationCount, brandName }: ChallengeCardProps) {
+export default function ChallengeCard({ challenge, applicationCount, brandName, isOwner }: ChallengeCardProps) {
+  const href = isOwner ? `/challenges/${challenge.id}/manage` : `/challenges/${challenge.id}`
   return (
-    <Link href={`/challenges/${challenge.id}`} style={styles.card}>
+    <Link href={href} style={styles.card}>
       <div style={styles.header}>
         <StatusBadge status={challenge.status} variant="challenge" />
         <span style={styles.prize}>{formatCurrency(challenge.prize_amount)}</span>
