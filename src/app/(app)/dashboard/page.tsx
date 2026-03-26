@@ -75,6 +75,18 @@ async function BrandDashboard({ userId }: { userId: string }) {
 
   return (
     <div>
+      <style>{`
+        @media (max-width: 768px) {
+          .dashboard-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .dashboard-grid > * {
+            width: 100% !important;
+            min-width: 0 !important;
+          }
+        }
+      `}</style>
       <div className="dashboard-page-header" style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>Your Challenges</h1>
         <Link href="/challenges/new" style={styles.primaryButton}>
@@ -186,7 +198,19 @@ async function OperatorDashboard({ userId }: { userId: string }) {
   const typedUserApps = (userApps || []) as (Application & { challenges: Challenge })[]
 
   return (
-    <div>
+    <div style={{ width: '100%', minWidth: 0 }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .dashboard-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .dashboard-grid > * {
+            width: 100% !important;
+            min-width: 0 !important;
+          }
+        }
+      `}</style>
       {/* Your Applications Section */}
       {typedUserApps.length > 0 && (
         <div style={{ marginBottom: '48px' }}>
@@ -306,6 +330,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '16px',
+    width: '100%',
   },
   emptyState: {
     display: 'flex',
