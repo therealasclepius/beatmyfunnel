@@ -426,8 +426,8 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     minWidth: 0,
     overflow: 'hidden',
-    height: '100%',
     boxSizing: 'border-box' as const,
+    width: '100%',
   },
   cardTop: {
     display: 'flex',
