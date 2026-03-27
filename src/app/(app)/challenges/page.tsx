@@ -14,7 +14,6 @@ export default async function BrowseChallengesPage() {
 
   const userRole = (profile as Profile | null)?.role || 'operator'
 
-  // Fetch challenges data directly (no cache - auth context needed)
   const { data: challenges } = await supabase
     .from('challenges')
     .select('*')
@@ -23,19 +22,27 @@ export default async function BrowseChallengesPage() {
 
   const typedChallenges = (challenges || []) as Challenge[]
 
+  // Fetch brand names
   const brandIds = [...new Set(typedChallenges.map((c) => c.brand_id))]
-  const { data: profiles2 } = brandIds.length > 0
-    ? await supabase.from('profiles').select('id, display_name').in('id', brandIds)
+  const { data: profiles } = brandIds.length > 0
+    ? await supabase
+        .from('profiles')
+        .select('id, display_name')
+        .in('id', brandIds)
     : { data: [] }
 
   const brandMap: Record<string, string> = {}
-  ;(profiles2 || []).forEach((p: { id: string; display_name: string }) => {
+  ;(profiles || []).forEach((p: { id: string; display_name: string }) => {
     brandMap[p.id] = p.display_name
   })
 
+  // Fetch application counts
   const challengeIds = typedChallenges.map((c) => c.id)
   const { data: appCounts } = challengeIds.length > 0
-    ? await supabase.from('applications').select('challenge_id').in('challenge_id', challengeIds)
+    ? await supabase
+        .from('applications')
+        .select('challenge_id')
+        .in('challenge_id', challengeIds)
     : { data: [] }
 
   const countMap: Record<string, number> = {}

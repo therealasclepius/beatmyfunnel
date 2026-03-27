@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Navbar from '@/components/navbar'
-import { AuthProvider } from '@/components/auth-provider'
 import type { Profile } from '@/types/database'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -26,12 +25,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <AuthProvider initialProfile={profile as Profile}>
-      <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', overflowX: 'hidden', maxWidth: '100vw' }}>
-        <Navbar />
-        <main className="app-main" style={styles.main}>{children}</main>
-      </div>
-    </AuthProvider>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', overflowX: 'hidden', maxWidth: '100vw' }}>
+      <Navbar profile={profile as Profile} />
+      <main className="app-main" style={styles.main}>{children}</main>
+    </div>
   )
 }
 

@@ -3,12 +3,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { useAuth } from '@/components/auth-provider'
 import type { Notification } from '@/types/database'
+
+const POLL_INTERVAL = 30000 // 30 seconds
 
 export default function NotificationDropdown() {
   const router = useRouter()
-  const { user } = useAuth()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -17,48 +17,24 @@ export default function NotificationDropdown() {
   const unreadCount = notifications.filter((n) => !n.read).length
 
   const fetchNotifications = useCallback(async () => {
-    if (!user) return
     const supabase = createClient()
     const { data } = await supabase
       .from('notifications')
       .select('*')
-      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(20)
 
     if (data) {
       setNotifications(data as Notification[])
     }
-  }, [user])
+  }, [])
 
-  // Initial fetch + Realtime subscription
+  // Initial fetch + polling
   useEffect(() => {
-    if (!user) return
-
     fetchNotifications()
-
-    const supabase = createClient()
-    const channel = supabase
-      .channel('notifications-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          const newNotification = payload.new as Notification
-          setNotifications((prev) => [newNotification, ...prev].slice(0, 20))
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [user, fetchNotifications])
+    const interval = setInterval(fetchNotifications, POLL_INTERVAL)
+    return () => clearInterval(interval)
+  }, [fetchNotifications])
 
   // Close dropdown on outside click
   useEffect(() => {

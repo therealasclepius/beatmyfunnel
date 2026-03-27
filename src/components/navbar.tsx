@@ -4,11 +4,14 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { useAuth } from '@/components/auth-provider'
+import type { Profile } from '@/types/database'
 import NotificationDropdown from '@/components/NotificationDropdown'
 
-export default function Navbar() {
-  const { profile } = useAuth()
+interface NavbarProps {
+  profile: Profile
+}
+
+export default function Navbar({ profile }: NavbarProps) {
   const router = useRouter()
   const pathname = usePathname()
 
@@ -58,7 +61,7 @@ export default function Navbar() {
             </svg>
           </Link>
           <Link href="/profile" className="navbar-username" style={{ ...styles.userName, textDecoration: 'none', cursor: 'pointer' }}>
-            {profile?.display_name}
+            {profile.display_name}
           </Link>
           <button onClick={handleSignOut} className="navbar-signout" style={styles.signOut}>
             Sign out
