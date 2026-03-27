@@ -133,6 +133,27 @@ export default function ChallengesBrowser({ challenges, brandMap, countMap, user
         </div>
       </div>
 
+      {/* Brand context banner */}
+      {(userRole === 'brand' || userRole === 'admin') && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '12px 16px',
+          background: 'rgba(94, 106, 210, 0.08)',
+          border: '1px solid rgba(94, 106, 210, 0.15)',
+          borderRadius: '8px',
+          marginBottom: '24px',
+          flexWrap: 'wrap' as const,
+        }}>
+          <span style={{ fontSize: '14px' }}>ℹ️</span>
+          <span style={{ fontSize: '13px', color: '#b4b8c0', lineHeight: 1.5 }}>
+            You&apos;re browsing the marketplace — these are all open challenges, not just yours.{' '}
+            <Link href="/dashboard" style={{ color: '#8a8fff', textDecoration: 'underline' }}>Go to your dashboard</Link> to manage your challenges.
+          </span>
+        </div>
+      )}
+
       {/* Filter bar */}
       <div style={styles.filterBar} className="filter-bar-inner filter-bar-mobile">
         {/* Type filter */}
