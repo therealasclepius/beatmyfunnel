@@ -21,9 +21,14 @@
   <link rel="canonical" href="https://beatmyfunnel.com/">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
 
+  <!-- Performance: DNS prefetch -->
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="dns-prefetch" href="//embed.typeform.com">
+
   <!-- Fonts: Inter Variable -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- AI SEO: Schema Markup -->
@@ -2736,8 +2741,21 @@
     </div>
   </footer>
 
-  <!-- Typeform Embed SDK -->
-  <script src="//embed.typeform.com/next/embed.js"></script>
+  <!-- Typeform Embed SDK (lazy-loaded when CTA section is near viewport) -->
+  <script>
+    const tfObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const script = document.createElement('script');
+          script.src = '//embed.typeform.com/next/embed.js';
+          document.body.appendChild(script);
+          tfObserver.disconnect();
+        }
+      });
+    }, { rootMargin: '200px' });
+    const ctaSection = document.getElementById('get-started');
+    if (ctaSection) tfObserver.observe(ctaSection);
+  </script>
 
   <!-- JS: Animation Engine -->
   <script>

@@ -4,6 +4,8 @@ import type { Metadata } from 'next'
 import { createServiceClient } from '@/lib/supabase-server'
 import type { Challenge, Profile } from '@/types/database'
 
+export const revalidate = 60
+
 const formatCurrency = (cents: number) =>
   new Intl.NumberFormat('en-US', {
     style: 'currency',
