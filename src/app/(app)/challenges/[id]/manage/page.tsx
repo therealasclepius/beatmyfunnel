@@ -61,6 +61,25 @@ export default function ManageChallengePage() {
   const [savingFeedback, setSavingFeedback] = useState<string | null>(null)
   const [linkCopied, setLinkCopied] = useState(false)
 
+  // Edit challenge state
+  const [isEditing, setIsEditing] = useState(false)
+  const [editForm, setEditForm] = useState({
+    title: '',
+    description: '',
+    baseline_value: 0,
+    deadline: '',
+    prize_amount_dollars: 0,
+    traffic_commitment_sessions: 0,
+    traffic_commitment_days: 0,
+  })
+  const [savingEdit, setSavingEdit] = useState(false)
+
+  // Pause/resume state
+  const [wasPreviouslyOpen, setWasPreviouslyOpen] = useState(false)
+
+  // Duplicate state
+  const [duplicating, setDuplicating] = useState(false)
+
   const loadData = useCallback(async () => {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -81,7 +100,27 @@ export default function ManageChallengePage() {
       return
     }
 
-    setChallenge(challengeData as Challenge)
+    const ch = challengeData as Challenge
+    setChallenge(ch)
+
+    // Detect if this draft was previously open (has applications = was published before)
+    const { count: appCount } = await supabase
+      .from('applications')
+      .select('*', { count: 'exact', head: true })
+      .eq('challenge_id', id)
+
+    setWasPreviouslyOpen(ch.status === 'draft' && (appCount ?? 0) > 0)
+
+    // Populate edit form
+    setEditForm({
+      title: ch.title,
+      description: ch.description,
+      baseline_value: ch.baseline_value,
+      deadline: ch.deadline,
+      prize_amount_dollars: ch.prize_amount / 100,
+      traffic_commitment_sessions: ch.traffic_commitment_sessions,
+      traffic_commitment_days: ch.traffic_commitment_days,
+    })
 
     const { data: appsData } = await supabase
       .from('applications')
@@ -195,6 +234,92 @@ export default function ManageChallengePage() {
     setSavingFeedback(null)
   }
 
+  const saveEdit = async () => {
+    setSavingEdit(true)
+    const supabase = createClient()
+    await supabase
+      .from('challenges')
+      .update({
+        title: editForm.title,
+        description: editForm.description,
+        baseline_value: editForm.baseline_value,
+        deadline: editForm.deadline,
+        prize_amount: Math.round(editForm.prize_amount_dollars * 100),
+        traffic_commitment_sessions: editForm.traffic_commitment_sessions,
+        traffic_commitment_days: editForm.traffic_commitment_days,
+      })
+      .eq('id', id)
+    setIsEditing(false)
+    await loadData()
+    setSavingEdit(false)
+  }
+
+  const cancelEdit = () => {
+    if (challenge) {
+      setEditForm({
+        title: challenge.title,
+        description: challenge.description,
+        baseline_value: challenge.baseline_value,
+        deadline: challenge.deadline,
+        prize_amount_dollars: challenge.prize_amount / 100,
+        traffic_commitment_sessions: challenge.traffic_commitment_sessions,
+        traffic_commitment_days: challenge.traffic_commitment_days,
+      })
+    }
+    setIsEditing(false)
+  }
+
+  const pauseChallenge = async () => {
+    if (!confirm('Pausing will hide this challenge from operators. You can resume at any time. Continue?')) return
+    setUpdating('pause')
+    const supabase = createClient()
+    await supabase.from('challenges').update({ status: 'draft' }).eq('id', id)
+    await loadData()
+    setUpdating(null)
+  }
+
+  const resumeChallenge = async () => {
+    setUpdating('resume')
+    const supabase = createClient()
+    await supabase.from('challenges').update({ status: 'open' }).eq('id', id)
+    await loadData()
+    setUpdating(null)
+  }
+
+  const duplicateChallenge = async () => {
+    if (!challenge) return
+    setDuplicating(true)
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+
+    const { data: newChallenge } = await supabase
+      .from('challenges')
+      .insert({
+        title: `Copy of ${challenge.title}`,
+        description: challenge.description,
+        metric_type: challenge.metric_type,
+        baseline_value: challenge.baseline_value,
+        prize_amount: challenge.prize_amount,
+        max_finalists: challenge.max_finalists,
+        challenge_type: challenge.challenge_type,
+        metric_unit: challenge.metric_unit,
+        traffic_commitment_sessions: challenge.traffic_commitment_sessions,
+        traffic_commitment_days: challenge.traffic_commitment_days,
+        finalist_floor_payout: challenge.finalist_floor_payout,
+        deadline: challenge.deadline,
+        status: 'draft',
+        brand_id: user.id,
+      })
+      .select('id')
+      .single()
+
+    if (newChallenge) {
+      router.push(`/challenges/${newChallenge.id}/manage`)
+    }
+    setDuplicating(false)
+  }
+
   if (loading || !challenge) {
     return (
       <div style={{ padding: '80px 24px', textAlign: 'center' }}>
@@ -224,27 +349,118 @@ export default function ManageChallengePage() {
       {/* Challenge Overview */}
       <div className="detail-card" style={styles.card}>
         <div className="manage-header" style={styles.header}>
-          <div>
-            <h1 style={styles.title}>{challenge.title}</h1>
-            <div className="manage-meta-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
-              <StatusBadge status={challenge.status} variant="challenge" />
-              <span style={styles.metaText}>{formatCurrency(challenge.prize_amount)} prize</span>
-              <span style={styles.metaText}>Deadline: {formatDate(challenge.deadline)}</span>
-              <span style={styles.metaText}>Max {effectiveMaxFinalists} finalists</span>
-            </div>
+          <div style={{ flex: 1 }}>
+            {isEditing ? (
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '12px' }}>
+                <div style={styles.editFieldGroup}>
+                  <label style={styles.editLabel}>Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title}
+                    onChange={(e) => setEditForm((f) => ({ ...f, title: e.target.value }))}
+                    style={styles.editInput}
+                  />
+                </div>
+                <div style={styles.editFieldGroup}>
+                  <label style={styles.editLabel}>Description</label>
+                  <textarea
+                    value={editForm.description}
+                    onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
+                    rows={4}
+                    style={{ ...styles.editInput, resize: 'vertical' as const }}
+                  />
+                </div>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' as const }}>
+                  <div style={{ ...styles.editFieldGroup, flex: 1, minWidth: '140px' }}>
+                    <label style={styles.editLabel}>Baseline Value</label>
+                    <input
+                      type="number"
+                      value={editForm.baseline_value}
+                      onChange={(e) => setEditForm((f) => ({ ...f, baseline_value: parseFloat(e.target.value) || 0 }))}
+                      style={styles.editInput}
+                    />
+                  </div>
+                  <div style={{ ...styles.editFieldGroup, flex: 1, minWidth: '140px' }}>
+                    <label style={styles.editLabel}>Prize Amount ($)</label>
+                    <input
+                      type="number"
+                      value={editForm.prize_amount_dollars}
+                      onChange={(e) => setEditForm((f) => ({ ...f, prize_amount_dollars: parseFloat(e.target.value) || 0 }))}
+                      style={styles.editInput}
+                    />
+                  </div>
+                  <div style={{ ...styles.editFieldGroup, flex: 1, minWidth: '140px' }}>
+                    <label style={styles.editLabel}>Deadline</label>
+                    <input
+                      type="date"
+                      value={editForm.deadline?.split('T')[0] || ''}
+                      onChange={(e) => setEditForm((f) => ({ ...f, deadline: e.target.value }))}
+                      style={styles.editInput}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' as const }}>
+                  <div style={{ ...styles.editFieldGroup, flex: 1, minWidth: '140px' }}>
+                    <label style={styles.editLabel}>Traffic Sessions</label>
+                    <input
+                      type="number"
+                      value={editForm.traffic_commitment_sessions}
+                      onChange={(e) => setEditForm((f) => ({ ...f, traffic_commitment_sessions: parseInt(e.target.value) || 0 }))}
+                      style={styles.editInput}
+                    />
+                  </div>
+                  <div style={{ ...styles.editFieldGroup, flex: 1, minWidth: '140px' }}>
+                    <label style={styles.editLabel}>Traffic Days</label>
+                    <input
+                      type="number"
+                      value={editForm.traffic_commitment_days}
+                      onChange={(e) => setEditForm((f) => ({ ...f, traffic_commitment_days: parseInt(e.target.value) || 0 }))}
+                      style={styles.editInput}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                  <button onClick={saveEdit} disabled={savingEdit} style={styles.primaryButton}>
+                    {savingEdit ? 'Saving...' : 'Save Changes'}
+                  </button>
+                  <button onClick={cancelEdit} style={styles.shareLinkButton}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <h1 style={styles.title}>{challenge.title}</h1>
+                  {(challenge.status === 'draft' || challenge.status === 'open') && (
+                    <button onClick={() => setIsEditing(true)} style={styles.editButton}>
+                      Edit
+                    </button>
+                  )}
+                </div>
+                <div className="manage-meta-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+                  <StatusBadge status={challenge.status} variant="challenge" />
+                  <span style={styles.metaText}>{formatCurrency(challenge.prize_amount)} prize</span>
+                  <span style={styles.metaText}>Deadline: {formatDate(challenge.deadline)}</span>
+                  <span style={styles.metaText}>Max {effectiveMaxFinalists} finalists</span>
+                </div>
+              </>
+            )}
           </div>
-          <button
-            onClick={() => {
-              const url = `${window.location.origin}/c/${id}`
-              navigator.clipboard.writeText(url).then(() => {
-                setLinkCopied(true)
-                setTimeout(() => setLinkCopied(false), 2500)
-              })
-            }}
-            style={styles.shareLinkButton}
-          >
-            {linkCopied ? 'Copied!' : 'Copy Share Link'}
-          </button>
+          {!isEditing && (
+            <button
+              onClick={() => {
+                const url = `${window.location.origin}/c/${id}`
+                navigator.clipboard.writeText(url).then(() => {
+                  setLinkCopied(true)
+                  setTimeout(() => setLinkCopied(false), 2500)
+                })
+              }}
+              style={styles.shareLinkButton}
+            >
+              {linkCopied ? 'Copied!' : 'Copy Share Link'}
+            </button>
+          )}
         </div>
 
         {/* Progress Steps */}
@@ -305,24 +521,39 @@ export default function ManageChallengePage() {
         </div>
       </div>
 
-      {/* Status: draft — Prompt to publish */}
+      {/* Status: draft — Prompt to publish or resume */}
       {challenge.status === 'draft' && (
         <div style={{ ...styles.statusSection, marginTop: '24px' }}>
           <div style={styles.statusCard}>
-            <p style={styles.statusMessage}>This challenge is still a draft. Publish it to start accepting applications.</p>
-            <button
-              onClick={async () => {
-                setUpdating('publish')
-                const supabase = createClient()
-                await supabase.from('challenges').update({ status: 'open' }).eq('id', id)
-                await loadData()
-                setUpdating(null)
-              }}
-              disabled={updating === 'publish'}
-              style={styles.primaryButton}
-            >
-              {updating === 'publish' ? 'Publishing...' : 'Publish Challenge'}
-            </button>
+            {wasPreviouslyOpen ? (
+              <>
+                <p style={styles.statusMessage}>This challenge is paused. It is hidden from operators. You can resume at any time.</p>
+                <button
+                  onClick={resumeChallenge}
+                  disabled={updating === 'resume'}
+                  style={styles.primaryButton}
+                >
+                  {updating === 'resume' ? 'Resuming...' : 'Resume Challenge'}
+                </button>
+              </>
+            ) : (
+              <>
+                <p style={styles.statusMessage}>This challenge is still a draft. Publish it to start accepting applications.</p>
+                <button
+                  onClick={async () => {
+                    setUpdating('publish')
+                    const supabase = createClient()
+                    await supabase.from('challenges').update({ status: 'open' }).eq('id', id)
+                    await loadData()
+                    setUpdating(null)
+                  }}
+                  disabled={updating === 'publish'}
+                  style={styles.primaryButton}
+                >
+                  {updating === 'publish' ? 'Publishing...' : 'Publish Challenge'}
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -332,6 +563,13 @@ export default function ManageChallengePage() {
         <div style={{ marginTop: '24px' }}>
           <div style={styles.statusCard}>
             <p style={styles.statusMessage}>Applications are open. Waiting for operators to apply.</p>
+            <button
+              onClick={pauseChallenge}
+              disabled={updating === 'pause'}
+              style={styles.pauseButton}
+            >
+              {updating === 'pause' ? 'Pausing...' : 'Pause Challenge'}
+            </button>
           </div>
 
           <div style={{ marginTop: '24px' }}>
@@ -435,6 +673,13 @@ export default function ManageChallengePage() {
         <div style={{ marginTop: '24px' }}>
           <div style={styles.statusCard}>
             <p style={styles.statusMessage}>Waiting for finalist submissions.</p>
+            <button
+              onClick={pauseChallenge}
+              disabled={updating === 'pause'}
+              style={styles.pauseButton}
+            >
+              {updating === 'pause' ? 'Pausing...' : 'Pause Challenge'}
+            </button>
           </div>
 
           <div style={{ marginTop: '24px' }}>
@@ -672,6 +917,17 @@ export default function ManageChallengePage() {
           </div>
         </div>
       )}
+
+      {/* Actions — Duplicate */}
+      <div style={{ marginTop: '32px', display: 'flex', gap: '12px', flexWrap: 'wrap' as const }}>
+        <button
+          onClick={duplicateChallenge}
+          disabled={duplicating}
+          style={styles.shareLinkButton}
+        >
+          {duplicating ? 'Duplicating...' : 'Duplicate as New Draft'}
+        </button>
+      </div>
 
       {/* Danger zone — Close / Delete */}
       <div style={{ marginTop: '48px', padding: '24px', border: '1px solid #3a2020', borderRadius: '12px', background: 'rgba(235, 87, 87, 0.04)' }}>
@@ -976,5 +1232,55 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '6px 14px',
     cursor: 'pointer',
     fontFamily: 'inherit',
+  },
+  editButton: {
+    fontSize: '13px',
+    fontWeight: 500,
+    color: 'var(--accent)',
+    background: 'transparent',
+    border: '1px solid var(--accent)',
+    borderRadius: '6px',
+    padding: '4px 12px',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    flexShrink: 0,
+  },
+  editFieldGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+  },
+  editLabel: {
+    fontSize: '11px',
+    color: 'var(--text-quaternary)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    fontWeight: 500,
+  },
+  editInput: {
+    padding: '8px 12px',
+    fontSize: '14px',
+    color: 'var(--text-primary)',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-secondary)',
+    borderRadius: '8px',
+    outline: 'none',
+    fontFamily: 'inherit',
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+  pauseButton: {
+    height: '36px',
+    padding: '0 16px',
+    fontSize: '13px',
+    fontWeight: 500,
+    color: '#f0a500',
+    background: 'rgba(240, 165, 0, 0.1)',
+    border: '1px solid rgba(240, 165, 0, 0.3)',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    whiteSpace: 'nowrap',
+    flexShrink: 0,
   },
 }

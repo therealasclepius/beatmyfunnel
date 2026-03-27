@@ -46,6 +46,29 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // Allow access to /verify-email without email check (avoid redirect loop)
+  const isVerifyEmailPage = request.nextUrl.pathname === '/verify-email'
+
+  // Check email verification for authenticated users on protected routes
+  if (user && isProtected && !isVerifyEmailPage) {
+    const emailConfirmedAt = user.email_confirmed_at
+    if (!emailConfirmedAt) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/verify-email'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // If user is on /verify-email but already verified, redirect to dashboard
+  if (user && isVerifyEmailPage) {
+    const emailConfirmedAt = user.email_confirmed_at
+    if (emailConfirmedAt) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/dashboard'
+      return NextResponse.redirect(url)
+    }
+  }
+
   // Redirect to onboarding if not completed (skip if already on onboarding or admin)
   const isOnboardingPage = request.nextUrl.pathname === '/onboarding'
   const isAdminPage = request.nextUrl.pathname.startsWith('/admin')
@@ -68,5 +91,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/challenges/new', '/admin/:path*', '/profile/:path*', '/login', '/signup', '/onboarding'],
+  matcher: ['/dashboard/:path*', '/challenges/new', '/admin/:path*', '/profile/:path*', '/login', '/signup', '/onboarding', '/verify-email'],
 }

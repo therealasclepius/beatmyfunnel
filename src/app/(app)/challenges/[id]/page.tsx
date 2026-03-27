@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import StatusBadge from '@/components/status-badge'
+import WithdrawButton from '@/components/withdraw-button'
 import type { Challenge, Profile, Application, ChallengeStatus, Submission } from '@/types/database'
 
 const formatCurrency = (cents: number) =>
@@ -26,6 +27,14 @@ const FLOW_STEPS: { status: ChallengeStatus; label: string }[] = [
   { status: 'verifying', label: 'Verifying' },
   { status: 'completed', label: 'Completed' },
 ]
+
+const OPERATOR_TIMELINE_STEPS = [
+  { key: 'applied', label: 'Applied' },
+  { key: 'finalist', label: 'Selected as Finalist' },
+  { key: 'submitted', label: 'Submission' },
+  { key: 'testing', label: 'Testing' },
+  { key: 'result', label: 'Result' },
+] as const
 
 export default async function ChallengeDetailPage({
   params,
@@ -105,11 +114,59 @@ export default async function ChallengeDetailPage({
 
   const winnerSubmission = winnerSub as (Submission & { profiles: Pick<Profile, 'display_name'> }) | null
 
+  // Fetch user's own submission (for finalist operators)
+  let userSubmission: Submission | null = null
+  if (typedApplication?.status === 'finalist') {
+    const { data: subData } = await supabase
+      .from('submissions')
+      .select('*')
+      .eq('challenge_id', id)
+      .eq('operator_id', user.id)
+      .single()
+
+    userSubmission = subData as Submission | null
+  }
+
   const isOwner = user.id === typedChallenge.brand_id
   const isOperator = userRole === 'operator'
   const hasApplied = !!typedApplication
+  const isPending = typedApplication?.status === 'pending'
   const isFinalist = typedApplication?.status === 'finalist'
   const currentStepIndex = FLOW_STEPS.findIndex((s) => s.status === typedChallenge.status)
+
+  // Compute operator timeline state
+  const getTimelineStepState = (key: string): 'green' | 'gray' => {
+    switch (key) {
+      case 'applied':
+        return hasApplied ? 'green' : 'gray'
+      case 'finalist':
+        return isFinalist ? 'green' : 'gray'
+      case 'submitted':
+        return userSubmission ? 'green' : 'gray'
+      case 'testing':
+        return userSubmission?.status === 'selected_for_testing' ||
+          userSubmission?.status === 'tested' ||
+          userSubmission?.status === 'winner' ||
+          userSubmission?.status === 'runner_up'
+          ? 'green'
+          : 'gray'
+      case 'result':
+        return typedChallenge.status === 'completed' &&
+          (userSubmission?.status === 'winner' || userSubmission?.status === 'runner_up')
+          ? 'green'
+          : 'gray'
+      default:
+        return 'gray'
+    }
+  }
+
+  const getResultLabel = (): string | null => {
+    if (typedChallenge.status !== 'completed') return null
+    if (userSubmission?.status === 'winner') return 'Won!'
+    if (userSubmission?.status === 'runner_up') return 'Runner Up'
+    if (hasApplied) return 'Did not win'
+    return null
+  }
 
   return (
     <div style={styles.wrapper}>
@@ -225,6 +282,91 @@ export default async function ChallengeDetailPage({
           </div>
         )}
 
+        {/* Operator Challenge Timeline */}
+        {isOperator && hasApplied && (
+          <div style={styles.timelineWrapper}>
+            <span style={styles.timelineSectionLabel}>Your Progress</span>
+            <div style={styles.timeline}>
+              {OPERATOR_TIMELINE_STEPS.map((step, i) => {
+                const state = getTimelineStepState(step.key)
+                const isGreen = state === 'green'
+                const resultLabel = step.key === 'result' ? getResultLabel() : null
+                return (
+                  <div key={step.key} style={styles.timelineStep}>
+                    <div style={styles.timelineDotRow}>
+                      {i > 0 && (
+                        <div
+                          style={{
+                            ...styles.timelineLine,
+                            background: isGreen ? '#2ed573' : 'var(--border-secondary, #333)',
+                          }}
+                        />
+                      )}
+                      <div
+                        style={{
+                          ...styles.timelineDot,
+                          background: isGreen ? '#2ed573' : 'var(--border-secondary, #333)',
+                        }}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: isGreen ? 600 : 400,
+                        color: isGreen ? '#2ed573' : 'var(--text-quaternary)',
+                        textAlign: 'center' as const,
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {step.label}
+                      {resultLabel && (
+                        <>
+                          <br />
+                          <span style={{ fontSize: '10px', fontWeight: 500 }}>{resultLabel}</span>
+                        </>
+                      )}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Your Submission (read-only card for finalists who submitted) */}
+        {isOperator && isFinalist && userSubmission && (
+          <div style={styles.submissionCard}>
+            <span style={styles.submissionSectionLabel}>Your Submission</span>
+            <div style={styles.submissionField}>
+              <span style={styles.submissionLabel}>Description</span>
+              <p style={styles.submissionValue}>{userSubmission.description}</p>
+            </div>
+            {userSubmission.evidence_url && (
+              <div style={styles.submissionField}>
+                <span style={styles.submissionLabel}>Evidence URL</span>
+                <a
+                  href={userSubmission.evidence_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={styles.submissionLink}
+                >
+                  {userSubmission.evidence_url}
+                </a>
+              </div>
+            )}
+            <div style={styles.submissionField}>
+              <span style={styles.submissionLabel}>Status</span>
+              <StatusBadge status={userSubmission.status} variant="submission" />
+            </div>
+            {userSubmission.brand_feedback && (
+              <div style={styles.submissionField}>
+                <span style={styles.submissionLabel}>Brand Feedback</span>
+                <p style={styles.submissionValue}>{userSubmission.brand_feedback}</p>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="challenge-actions" style={styles.actions}>
           {isOwner && (
             <Link href={`/challenges/${id}/manage`} style={styles.primaryButton}>
@@ -239,7 +381,17 @@ export default async function ChallengeDetailPage({
             </Link>
           )}
 
-          {isOperator && typedChallenge.status === 'open' && hasApplied && !isFinalist && (
+          {isOperator && typedChallenge.status === 'open' && hasApplied && isPending && !isFinalist && (
+            <div className="challenge-status-box" style={styles.statusBox}>
+              <p style={styles.statusText}>
+                You applied to this challenge.
+              </p>
+              <StatusBadge status={typedApplication!.status} variant="application" />
+              <WithdrawButton applicationId={typedApplication!.id} />
+            </div>
+          )}
+
+          {isOperator && typedChallenge.status === 'open' && hasApplied && !isPending && !isFinalist && (
             <div className="challenge-status-box" style={styles.statusBox}>
               <p style={styles.statusText}>
                 You applied to this challenge.
@@ -253,9 +405,11 @@ export default async function ChallengeDetailPage({
               <p style={styles.statusText}>
                 You are a finalist!
               </p>
-              <Link href={`/challenges/${id}/submit`} style={styles.primaryButton}>
-                Submit Your Work
-              </Link>
+              {!userSubmission && (
+                <Link href={`/challenges/${id}/submit`} style={styles.primaryButton}>
+                  Submit Your Work
+                </Link>
+              )}
             </div>
           )}
 
@@ -386,6 +540,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
+    flexWrap: 'wrap' as const,
   },
   primaryButton: {
     display: 'inline-flex',
@@ -411,6 +566,7 @@ const styles: Record<string, React.CSSProperties> = {
     border: '1px solid var(--border-primary)',
     borderRadius: '8px',
     width: '100%',
+    flexWrap: 'wrap' as const,
   },
   statusText: {
     fontSize: '14px',
@@ -426,5 +582,99 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     color: 'var(--text-primary)',
     marginBottom: '16px',
+  },
+  // Operator Timeline styles
+  timelineWrapper: {
+    marginTop: '24px',
+    padding: '20px',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-primary)',
+    borderRadius: '10px',
+  },
+  timelineSectionLabel: {
+    fontSize: '11px',
+    color: 'var(--text-quaternary)',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    fontWeight: 500,
+    marginBottom: '16px',
+    display: 'block',
+  },
+  timeline: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  timelineStep: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    gap: '8px',
+    flex: 1,
+  },
+  timelineDotRow: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    position: 'relative' as const,
+    height: '12px',
+  },
+  timelineDot: {
+    width: '12px',
+    height: '12px',
+    borderRadius: '50%',
+    flexShrink: 0,
+    zIndex: 1,
+  },
+  timelineLine: {
+    position: 'absolute' as const,
+    right: '50%',
+    width: '100%',
+    height: '2px',
+    zIndex: 0,
+  },
+  // Submission card styles
+  submissionCard: {
+    marginTop: '24px',
+    padding: '20px',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-primary)',
+    borderRadius: '10px',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '16px',
+  },
+  submissionSectionLabel: {
+    fontSize: '11px',
+    color: 'var(--text-quaternary)',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    fontWeight: 500,
+  },
+  submissionField: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '4px',
+  },
+  submissionLabel: {
+    fontSize: '11px',
+    color: 'var(--text-quaternary)',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    fontWeight: 500,
+  },
+  submissionValue: {
+    fontSize: '14px',
+    color: 'var(--text-secondary)',
+    lineHeight: 1.5,
+    whiteSpace: 'pre-wrap' as const,
+    margin: 0,
+  },
+  submissionLink: {
+    fontSize: '14px',
+    color: 'var(--accent, #8a8fff)',
+    textDecoration: 'none',
+    wordBreak: 'break-all' as const,
   },
 }
